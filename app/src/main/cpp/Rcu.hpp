@@ -35,12 +35,12 @@ class Rcu
     void Connect (const char *address,
                   uint16_t    port);
 
-  void SendKeyPress (uint8_t  report_id,
-                     uint32_t code,
-                     bool     with_release);
+    void SendKeyPress (uint8_t  report_id,
+                       uint32_t code,
+                       bool     with_release);
 
-  void SendKeyRelease (uint8_t  report_id,
-                       uint32_t key_code);
+    void SendKeyRelease (uint8_t  report_id,
+                         uint32_t key_code);
 
   private:
     typedef enum
@@ -62,6 +62,8 @@ class Rcu
 
   private:
     void SendControlKey (uint32_t key_code);
+
+    int GetFamilly (const char *address);
 
   private:
     static const struct foils_hid_handler handler;

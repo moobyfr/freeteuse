@@ -22,6 +22,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <netdb.h>
 #include <fcntl.h>
 
 #include "Log.hpp"
@@ -281,14 +282,39 @@ Rcu::Rcu ()
 }
 
 // ---------------------------------------------------
+int Rcu::GetFamilly (const char *address)
+{
+  struct addrinfo  hints;
+  struct addrinfo *res;
+  int              error;
+  int              familly;
+
+  memset (&hints, 0, sizeof (hints));
+  hints.ai_family = PF_UNSPEC;
+  hints.ai_flags  = AI_NUMERICHOST;
+
+  error = getaddrinfo (address, NULL, &hints, &res);
+  if (error)
+  {
+    LOGE ("Rcu::GetFamilly: %s", gai_strerror (error));
+    return AF_UNSPEC;
+  }
+
+  familly = res->ai_family;
+  freeaddrinfo (res);
+
+  return familly;
+}
+
+// ---------------------------------------------------
 void Rcu::Connect (const char *address,
                    uint16_t    port)
 {
-  struct in_addr addr;
+  unsigned char addr[sizeof (struct in6_addr)];
+  int           familly = GetFamilly (address);
 
-  if (inet_pton (AF_INET,
-                 address,
-                 &addr))
+  if (   (familly != AF_UNSPEC)
+      && inet_pton (familly, address, &addr))
   {
     // Pipe
     {
@@ -334,9 +360,20 @@ void Rcu::Connect (const char *address,
 
     // hid connection
     {
-      foils_hid_client_connect_ipv4 (_hid_client,
-                                     &addr,
-                                     port);
+      if (familly == AF_INET)
+      {
+        LOGI ("IPv4");
+        foils_hid_client_connect_ipv4 (_hid_client,
+                                       (const in_addr *) &addr,
+                                       port);
+      }
+      else if (familly == AF_INET6)
+      {
+        LOGI ("IPv6");
+        foils_hid_client_connect_ipv6 (_hid_client,
+                                       (const in6_addr *) &addr,
+                                       port);
+      }
 
       foils_hid_device_enable (_hid_client,
                                0);

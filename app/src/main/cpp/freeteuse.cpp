@@ -42,7 +42,7 @@ Java_bzh_leroux_yannick_freeteuse_Freebox_jniConnectRcu (JNIEnv           *env,
 
   if (rcu)
   {
-    const char *caddress = env->GetStringUTFChars(jaddress, 0);
+    const char *caddress = env->GetStringUTFChars (jaddress, 0);
 
     rcu->Connect (caddress,
                   (uint16_t) port);
