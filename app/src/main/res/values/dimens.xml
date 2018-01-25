@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="key_size">48dp</dimen>
+    <dimen name="key_text_size">32dp</dimen>
+    <dimen name="key_small_text_size">12dp</dimen>
+    <dimen name="bloc_spacing">20dp</dimen>
+    <dimen name="three_key_size">144dp</dimen>
+    <dimen name="key_very_small_size">6dp</dimen>
+</resources>

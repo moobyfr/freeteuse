@@ -1,0 +1,513 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/RevolutionBgGrey"
+    tools:context="bzh.leroux.yannick.freeteuse.MainActivity">
+
+    <LinearLayout
+        android:id="@+id/key_grid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/Kav"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:background="@color/RevolutionBgGrey"
+                android:scaleType="fitXY"
+                android:src="@drawable/av"
+                android:tag="onClick:0x01:0x63"
+                tools:ignore="ContentDescription"/>
+
+            <TextView
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"/>
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                />
+
+            <TextView
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"/>
+
+            <ImageButton
+                android:id="@+id/Kpower"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:background="@color/RevolutionBgGrey"
+                android:scaleType="fitXY"
+                android:src="@drawable/power"
+                android:tag="onClick:0x01:0x30"
+                tools:ignore="ContentDescription"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/K1"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:background="@color/RevolutionBgGrey"
+                android:scaleType="fitXY"
+                android:src="@drawable/b1"
+                android:tag="onClick:0x02:0x59"
+                tools:ignore="ContentDescription"/>
+
+            <ImageButton
+                android:id="@+id/K2"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:background="@color/RevolutionBgGrey"
+                android:scaleType="fitXY"
+                android:src="@drawable/b2"
+                android:tag="onClick:0x02:0x5a"
+                tools:ignore="ContentDescription"/>
+
+            <ImageButton
+                android:id="@+id/K3"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:background="@color/RevolutionBgGrey"
+                android:scaleType="fitXY"
+                android:src="@drawable/b3"
+                android:tag="onClick:0x02:0x5b"
+                tools:ignore="ContentDescription"/>
+
+            <ImageButton
+                android:id="@+id/K4"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:background="@color/RevolutionBgGrey"
+                android:scaleType="fitXY"
+                android:src="@drawable/b4"
+                android:tag="onClick:0x02:0x5c"
+                tools:ignore="ContentDescription"/>
+
+            <ImageButton
+                android:id="@+id/K5"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:background="@color/RevolutionBgGrey"
+                android:scaleType="fitXY"
+                android:src="@drawable/b5"
+                android:tag="onClick:0x02:0x5d"
+                tools:ignore="ContentDescription"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/K6"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:background="@color/RevolutionBgGrey"
+                android:scaleType="fitXY"
+                android:src="@drawable/b6"
+                android:tag="onClick:0x02:0x5e"
+                tools:ignore="ContentDescription"/>
+
+            <ImageButton
+                android:id="@+id/K7"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:background="@color/RevolutionBgGrey"
+                android:scaleType="fitXY"
+                android:src="@drawable/b7"
+                android:tag="onClick:0x02:0x5f"
+                tools:ignore="ContentDescription"/>
+
+            <ImageButton
+                android:id="@+id/K8"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:background="@color/RevolutionBgGrey"
+                android:scaleType="fitXY"
+                android:src="@drawable/b8"
+                android:tag="onClick:0x02:0x60"
+                tools:ignore="ContentDescription"/>
+
+            <ImageButton
+                android:id="@+id/K9"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:background="@color/RevolutionBgGrey"
+                android:scaleType="fitXY"
+                android:src="@drawable/b9"
+                android:tag="onClick:0x02:0x61"
+                tools:ignore="ContentDescription"/>
+
+            <ImageButton
+                android:id="@+id/K0"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:background="@color/RevolutionBgGrey"
+                android:scaleType="fitXY"
+                android:src="@drawable/b0"
+                android:tag="onClick:0x02:0x62"
+                tools:ignore="ContentDescription"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/key_small_text_size"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"/>
+
+            <ImageButton
+                android:id="@+id/Kback"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:background="@color/RevolutionBgGrey"
+                android:scaleType="fitXY"
+                android:src="@drawable/revert"
+                android:tag="onClick:0x01:0x204"
+                tools:ignore="ContentDescription"/>
+
+            <ImageButton
+                android:id="@+id/Kup"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:background="@color/RevolutionBgGrey"
+                android:scaleType="fitXY"
+                android:src="@drawable/up"
+                android:tag="onTouch:0x02:0x52"
+                tools:ignore="ContentDescription"/>
+
+            <ImageButton
+                android:id="@+id/Ksearch"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:background="@color/RevolutionBgGrey"
+                android:scaleType="fitXY"
+                android:src="@drawable/search"
+                android:tag="onClick:0x01:0x221"
+                tools:ignore="ContentDescription"/>
+
+            <TextView
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/Kmute"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:background="@color/RevolutionBgGrey"
+                android:scaleType="fitXY"
+                android:src="@drawable/mute"
+                android:tag="onClick:0x01:0xe2"
+                tools:ignore="ContentDescription"/>
+
+            <ImageButton
+                android:id="@+id/Kleft"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:background="@color/RevolutionBgGrey"
+                android:scaleType="fitXY"
+                android:src="@drawable/left"
+                android:tag="onTouch:0x02:0x50"
+                tools:ignore="ContentDescription"/>
+
+            <ImageButton
+                android:id="@+id/Kok"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:background="@color/RevolutionBgGrey"
+                android:scaleType="fitXY"
+                android:src="@drawable/ok"
+                android:tag="onClick:0x02:0x28"
+                tools:ignore="ContentDescription"/>
+
+            <ImageButton
+                android:id="@+id/Kright"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:background="@color/RevolutionBgGrey"
+                android:scaleType="fitXY"
+                android:src="@drawable/right"
+                android:tag="onTouch:0x02:0x4f"
+                tools:ignore="ContentDescription"/>
+
+            <ImageButton
+                android:id="@+id/Krecord"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:background="@color/RevolutionBgGrey"
+                android:scaleType="fitXY"
+                android:src="@drawable/record"
+                android:tag="onClick:0x01:0xb2"
+                tools:ignore="ContentDescription"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"/>
+
+            <ImageButton
+                android:id="@+id/Kmenu"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:background="@color/RevolutionBgGrey"
+                android:scaleType="fitXY"
+                android:src="@drawable/menu"
+                android:tag="onClick:0x01:0x40"
+                tools:ignore="ContentDescription"/>
+
+            <ImageButton
+                android:id="@+id/Kdown"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:background="@color/RevolutionBgGrey"
+                android:scaleType="fitXY"
+                android:src="@drawable/down"
+                android:tag="onTouch:0x02:0x51"
+                tools:ignore="ContentDescription"/>
+
+            <ImageButton
+                android:id="@+id/Kinfo"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:background="@color/RevolutionBgGrey"
+                android:scaleType="fitXY"
+                android:src="@drawable/info"
+                android:tag="onClick:0x01:0x209"
+                tools:ignore="ContentDescription"/>
+
+            <TextView
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                />
+
+            <ImageButton
+                android:id="@+id/Kfree"
+                android:layout_width="@dimen/three_key_size"
+                android:layout_height="@dimen/key_size"
+                android:background="@color/RevolutionBgGrey"
+                android:scaleType="fitXY"
+                android:src="@drawable/free"
+                android:tag="onClick:0x01:0x18f"
+                tools:ignore="ContentDescription"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/Kvol_plus"
+                    android:layout_width="@dimen/key_size"
+                    android:layout_height="@dimen/key_size"
+                    android:background="@color/RevolutionBgGrey"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/plus"
+                    android:tag="onTouch:0x01:0xe9"
+                    tools:ignore="ContentDescription"/>
+
+                <TextView
+                    android:layout_width="@dimen/key_size"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="VOL"
+                    android:textColor="@color/RevolutionFgGrey"
+                    android:textSize="@dimen/key_small_text_size"
+                    android:textStyle="normal"
+                    tools:ignore="HardcodedText"/>
+
+                <ImageButton
+                    android:id="@+id/Kvol_minus"
+                    android:layout_width="@dimen/key_size"
+                    android:layout_height="@dimen/key_size"
+                    android:background="@color/RevolutionBgGrey"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/minus"
+                    android:tag="onTouch:0x01:0xea"
+                    tools:ignore="ContentDescription"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/key_very_small_size"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/Kforward"
+                        android:layout_width="@dimen/key_size"
+                        android:layout_height="@dimen/key_size"
+                        android:layout_weight="1"
+                        android:background="@color/RevolutionBgGrey"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/forward"
+                        android:tag="onClick:0x01:0xb3"
+                        tools:ignore="ContentDescription"/>
+
+                    <ImageButton
+                        android:id="@+id/Kplay_pause"
+                        android:layout_width="@dimen/key_size"
+                        android:layout_height="@dimen/key_size"
+                        android:layout_weight="1"
+                        android:background="@color/RevolutionBgGrey"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/play_pause"
+                        android:tag="onClick:0x01:0xcd"
+                        tools:ignore="ContentDescription"/>
+
+                    <ImageButton
+                        android:id="@+id/Krewind"
+                        android:layout_width="@dimen/key_size"
+                        android:layout_height="@dimen/key_size"
+                        android:layout_weight="1"
+                        android:background="@color/RevolutionBgGrey"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/rewind"
+                        android:tag="onClick:0x01:0xb4"
+                        tools:ignore="ContentDescription"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/Kradio"
+                        android:layout_width="@dimen/key_size"
+                        android:layout_height="@dimen/key_size"
+                        android:layout_weight="1"
+                        android:background="@color/RevolutionBgGrey"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/radio"
+                        android:tag="onMultiClick:Kfree+3000+Kright+Kright+Kright+Kright+Kright+Kright+Kleft+Kleft+Kdown+Kdown+Kok"
+                        tools:ignore="ContentDescription"/>
+
+                    <ImageButton
+                        android:id="@+id/Kmusic"
+                        android:layout_width="@dimen/key_size"
+                        android:layout_height="@dimen/key_size"
+                        android:layout_weight="1"
+                        android:background="@color/RevolutionBgGrey"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/music"
+                        android:tag="onMultiClick:Kmenu+Kdown+Kdown+Kdown+Kdown+Kdown+Kdown+Kdown+Kdown+Kdown+Kdown+Kok"
+                        tools:ignore="ContentDescription"/>
+
+                    <ImageButton
+                        android:id="@+id/Kpip"
+                        android:layout_width="@dimen/key_size"
+                        android:layout_height="@dimen/key_size"
+                        android:layout_weight="1"
+                        android:background="@color/RevolutionBgGrey"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/pip"
+                        android:tag="onMultiClick:Kok+Kinfo+1500+Kright+Kright+Kleft+Kok+back+Kback"
+                        tools:ignore="ContentDescription"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/Kprog_plus"
+                    android:layout_width="@dimen/key_size"
+                    android:layout_height="@dimen/key_size"
+                    android:background="@color/RevolutionBgGrey"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/plus"
+                    android:tag="onTouch:0x01:0x9c"
+                    tools:ignore="ContentDescription"/>
+
+                <TextView
+                    android:layout_width="@dimen/key_size"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="PROG"
+                    android:textColor="@color/RevolutionFgGrey"
+                    android:textSize="@dimen/key_small_text_size"
+                    android:textStyle="normal"
+                    tools:ignore="HardcodedText"/>
+
+                <ImageButton
+                    android:id="@+id/Kprog_minus"
+                    android:layout_width="@dimen/key_size"
+                    android:layout_height="@dimen/key_size"
+                    android:background="@color/RevolutionBgGrey"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/minus"
+                    android:tag="onTouch:0x01:0x9d"
+                    tools:ignore="ContentDescription"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

@@ -1,0 +1,9 @@
+.gradle/
+.idea/
+build/
+.externalNativeBuild/
+local.properties
+output.json
+*.swp
+*.iml
+*.apk
