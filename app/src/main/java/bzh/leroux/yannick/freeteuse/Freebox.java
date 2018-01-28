@@ -45,7 +45,9 @@ class Freebox
     mSharedPreferences = sharedPreferences;
 
     mAddress = serviceInfo.getHostAddress ();
+    mAddress = mAddress.replaceAll ("[\\[\\]]", "");
     mPort    = serviceInfo.getPort ();
+    Log.d ("FreeTeuse", mAddress);
   }
 
   // ---------------------------------------------------
