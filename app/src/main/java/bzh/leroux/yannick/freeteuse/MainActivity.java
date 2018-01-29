@@ -83,7 +83,7 @@ public class MainActivity extends    Activity
     connectFreebox (new Freebox (getPreferences(Context.MODE_PRIVATE)));
 
     {
-      mDnsServiceSniffer = new DnsServiceSniffer (this);
+      mDnsServiceSniffer = new DnsServiceSniffer (this, this);
 
       mDnsServiceSniffer.execute ("_hid._udp");
     }

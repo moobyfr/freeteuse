@@ -16,6 +16,8 @@
 
 package bzh.leroux.yannick.freeteuse;
 
+import android.content.Context;
+import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -34,12 +36,24 @@ class DnsServiceSniffer extends    AsyncTask<String, Void, Void>
     void onDnsService (ServiceInfo serviceInfo);
   }
 
-  private ServiceInfo mServiceInfo;
-  private Listener    mListener;
+  private ServiceInfo               mServiceInfo;
+  private Listener                  mListener;
+  private WifiManager.MulticastLock mMulticastLock;
 
   // ---------------------------------------------------
-  DnsServiceSniffer (Listener listener)
+  DnsServiceSniffer (Context  context,
+                     Listener listener)
   {
+    {
+      Context     appContext = context.getApplicationContext();
+      WifiManager wifiMgr    = (WifiManager) appContext.getSystemService(Context.WIFI_SERVICE);
+
+      if (wifiMgr != null)
+      {
+        mMulticastLock = wifiMgr.createMulticastLock (context.getPackageName ());
+      }
+    }
+
     mListener = listener;
   }
 
@@ -48,6 +62,12 @@ class DnsServiceSniffer extends    AsyncTask<String, Void, Void>
   protected Void doInBackground (String... service)
   {
     mServiceInfo = null;
+
+    if (mMulticastLock != null)
+    {
+      mMulticastLock.setReferenceCounted (true);
+      mMulticastLock.acquire ();
+    }
 
     try
     {
@@ -66,6 +86,11 @@ class DnsServiceSniffer extends    AsyncTask<String, Void, Void>
     }
     catch (InterruptedException ignore)
     {
+    }
+
+    if (mMulticastLock != null)
+    {
+      mMulticastLock.release ();
     }
 
     return null;
