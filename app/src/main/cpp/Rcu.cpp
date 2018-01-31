@@ -319,6 +319,8 @@ void Rcu::Connect (const char *address,
   unsigned char addr[sizeof (struct in6_addr)];
   int           familly = GetFamilly (address);
 
+  LOGD ("Rcu::Connect (%s, %d)", address, port);
+
   if (   (familly != AF_UNSPEC)
       && inet_pton (familly, address, &addr))
   {
