@@ -25,7 +25,7 @@
                 android:layout_height="@dimen/key_size"
                 android:background="@color/RevolutionBgGrey"
                 android:scaleType="fitXY"
-                android:src="@drawable/av"
+                android:src="@drawable/xav"
                 android:tag="onClick:0x01:0x63"
                 tools:ignore="ContentDescription"/>
 
@@ -50,7 +50,7 @@
                 android:layout_height="@dimen/key_size"
                 android:background="@color/RevolutionBgGrey"
                 android:scaleType="fitXY"
-                android:src="@drawable/power"
+                android:src="@drawable/xpower"
                 android:tag="onClick:0x01:0x30"
                 tools:ignore="ContentDescription"/>
 
@@ -67,7 +67,7 @@
                 android:layout_height="@dimen/key_size"
                 android:background="@color/RevolutionBgGrey"
                 android:scaleType="fitXY"
-                android:src="@drawable/b1"
+                android:src="@drawable/xb1"
                 android:tag="onClick:0x02:0x59"
                 tools:ignore="ContentDescription"/>
 
@@ -77,7 +77,7 @@
                 android:layout_height="@dimen/key_size"
                 android:background="@color/RevolutionBgGrey"
                 android:scaleType="fitXY"
-                android:src="@drawable/b2"
+                android:src="@drawable/xb2"
                 android:tag="onClick:0x02:0x5a"
                 tools:ignore="ContentDescription"/>
 
@@ -87,7 +87,7 @@
                 android:layout_height="@dimen/key_size"
                 android:background="@color/RevolutionBgGrey"
                 android:scaleType="fitXY"
-                android:src="@drawable/b3"
+                android:src="@drawable/xb3"
                 android:tag="onClick:0x02:0x5b"
                 tools:ignore="ContentDescription"/>
 
@@ -97,7 +97,7 @@
                 android:layout_height="@dimen/key_size"
                 android:background="@color/RevolutionBgGrey"
                 android:scaleType="fitXY"
-                android:src="@drawable/b4"
+                android:src="@drawable/xb4"
                 android:tag="onClick:0x02:0x5c"
                 tools:ignore="ContentDescription"/>
 
@@ -107,7 +107,7 @@
                 android:layout_height="@dimen/key_size"
                 android:background="@color/RevolutionBgGrey"
                 android:scaleType="fitXY"
-                android:src="@drawable/b5"
+                android:src="@drawable/xb5"
                 android:tag="onClick:0x02:0x5d"
                 tools:ignore="ContentDescription"/>
 
@@ -124,7 +124,7 @@
                 android:layout_height="@dimen/key_size"
                 android:background="@color/RevolutionBgGrey"
                 android:scaleType="fitXY"
-                android:src="@drawable/b6"
+                android:src="@drawable/xb6"
                 android:tag="onClick:0x02:0x5e"
                 tools:ignore="ContentDescription"/>
 
@@ -134,7 +134,7 @@
                 android:layout_height="@dimen/key_size"
                 android:background="@color/RevolutionBgGrey"
                 android:scaleType="fitXY"
-                android:src="@drawable/b7"
+                android:src="@drawable/xb7"
                 android:tag="onClick:0x02:0x5f"
                 tools:ignore="ContentDescription"/>
 
@@ -144,7 +144,7 @@
                 android:layout_height="@dimen/key_size"
                 android:background="@color/RevolutionBgGrey"
                 android:scaleType="fitXY"
-                android:src="@drawable/b8"
+                android:src="@drawable/xb8"
                 android:tag="onClick:0x02:0x60"
                 tools:ignore="ContentDescription"/>
 
@@ -154,7 +154,7 @@
                 android:layout_height="@dimen/key_size"
                 android:background="@color/RevolutionBgGrey"
                 android:scaleType="fitXY"
-                android:src="@drawable/b9"
+                android:src="@drawable/xb9"
                 android:tag="onClick:0x02:0x61"
                 tools:ignore="ContentDescription"/>
 
@@ -164,7 +164,7 @@
                 android:layout_height="@dimen/key_size"
                 android:background="@color/RevolutionBgGrey"
                 android:scaleType="fitXY"
-                android:src="@drawable/b0"
+                android:src="@drawable/xb0"
                 android:tag="onClick:0x02:0x62"
                 tools:ignore="ContentDescription"/>
 
@@ -186,7 +186,7 @@
                 android:layout_height="@dimen/key_size"
                 android:background="@color/RevolutionBgGrey"
                 android:scaleType="fitXY"
-                android:src="@drawable/revert"
+                android:src="@drawable/xback"
                 android:tag="onClick:0x01:0x204"
                 tools:ignore="ContentDescription"/>
 
@@ -196,7 +196,7 @@
                 android:layout_height="@dimen/key_size"
                 android:background="@color/RevolutionBgGrey"
                 android:scaleType="fitXY"
-                android:src="@drawable/up"
+                android:src="@drawable/xup"
                 android:tag="onTouch:0x02:0x52"
                 tools:ignore="ContentDescription"/>
 
@@ -206,7 +206,7 @@
                 android:layout_height="@dimen/key_size"
                 android:background="@color/RevolutionBgGrey"
                 android:scaleType="fitXY"
-                android:src="@drawable/search"
+                android:src="@drawable/xsearch"
                 android:tag="onClick:0x01:0x221"
                 tools:ignore="ContentDescription"/>
 
@@ -227,7 +227,7 @@
                 android:layout_height="@dimen/key_size"
                 android:background="@color/RevolutionBgGrey"
                 android:scaleType="fitXY"
-                android:src="@drawable/mute"
+                android:src="@drawable/xmute"
                 android:tag="onClick:0x01:0xe2"
                 tools:ignore="ContentDescription"/>
 
@@ -237,7 +237,7 @@
                 android:layout_height="@dimen/key_size"
                 android:background="@color/RevolutionBgGrey"
                 android:scaleType="fitXY"
-                android:src="@drawable/left"
+                android:src="@drawable/xleft"
                 android:tag="onTouch:0x02:0x50"
                 tools:ignore="ContentDescription"/>
 
@@ -247,7 +247,7 @@
                 android:layout_height="@dimen/key_size"
                 android:background="@color/RevolutionBgGrey"
                 android:scaleType="fitXY"
-                android:src="@drawable/ok"
+                android:src="@drawable/xok"
                 android:tag="onClick:0x02:0x28"
                 tools:ignore="ContentDescription"/>
 
@@ -257,7 +257,7 @@
                 android:layout_height="@dimen/key_size"
                 android:background="@color/RevolutionBgGrey"
                 android:scaleType="fitXY"
-                android:src="@drawable/right"
+                android:src="@drawable/xright"
                 android:tag="onTouch:0x02:0x4f"
                 tools:ignore="ContentDescription"/>
 
@@ -267,7 +267,7 @@
                 android:layout_height="@dimen/key_size"
                 android:background="@color/RevolutionBgGrey"
                 android:scaleType="fitXY"
-                android:src="@drawable/record"
+                android:src="@drawable/xrecord"
                 android:tag="onClick:0x01:0xb2"
                 tools:ignore="ContentDescription"/>
         </LinearLayout>
@@ -287,7 +287,7 @@
                 android:layout_height="@dimen/key_size"
                 android:background="@color/RevolutionBgGrey"
                 android:scaleType="fitXY"
-                android:src="@drawable/menu"
+                android:src="@drawable/xmenu"
                 android:tag="onClick:0x01:0x40"
                 tools:ignore="ContentDescription"/>
 
@@ -297,7 +297,7 @@
                 android:layout_height="@dimen/key_size"
                 android:background="@color/RevolutionBgGrey"
                 android:scaleType="fitXY"
-                android:src="@drawable/down"
+                android:src="@drawable/xdown"
                 android:tag="onTouch:0x02:0x51"
                 tools:ignore="ContentDescription"/>
 
@@ -307,7 +307,7 @@
                 android:layout_height="@dimen/key_size"
                 android:background="@color/RevolutionBgGrey"
                 android:scaleType="fitXY"
-                android:src="@drawable/info"
+                android:src="@drawable/xinfo"
                 android:tag="onClick:0x01:0x209"
                 tools:ignore="ContentDescription"/>
 
@@ -333,7 +333,7 @@
                 android:layout_height="@dimen/key_size"
                 android:background="@color/RevolutionBgGrey"
                 android:scaleType="fitXY"
-                android:src="@drawable/free"
+                android:src="@drawable/xfree"
                 android:tag="onClick:0x01:0x18f"
                 tools:ignore="ContentDescription"/>
 
@@ -355,7 +355,7 @@
                     android:layout_height="@dimen/key_size"
                     android:background="@color/RevolutionBgGrey"
                     android:scaleType="fitXY"
-                    android:src="@drawable/plus"
+                    android:src="@drawable/xplus"
                     android:tag="onTouch:0x01:0xe9"
                     tools:ignore="ContentDescription"/>
 
@@ -375,7 +375,7 @@
                     android:layout_height="@dimen/key_size"
                     android:background="@color/RevolutionBgGrey"
                     android:scaleType="fitXY"
-                    android:src="@drawable/minus"
+                    android:src="@drawable/xminus"
                     android:tag="onTouch:0x01:0xea"
                     tools:ignore="ContentDescription"/>
 
@@ -402,7 +402,7 @@
                         android:layout_weight="1"
                         android:background="@color/RevolutionBgGrey"
                         android:scaleType="fitXY"
-                        android:src="@drawable/forward"
+                        android:src="@drawable/xforward"
                         android:tag="onClick:0x01:0xb3"
                         tools:ignore="ContentDescription"/>
 
@@ -413,7 +413,7 @@
                         android:layout_weight="1"
                         android:background="@color/RevolutionBgGrey"
                         android:scaleType="fitXY"
-                        android:src="@drawable/play_pause"
+                        android:src="@drawable/xplay_pause"
                         android:tag="onClick:0x01:0xcd"
                         tools:ignore="ContentDescription"/>
 
@@ -424,7 +424,7 @@
                         android:layout_weight="1"
                         android:background="@color/RevolutionBgGrey"
                         android:scaleType="fitXY"
-                        android:src="@drawable/rewind"
+                        android:src="@drawable/xrewind"
                         android:tag="onClick:0x01:0xb4"
                         tools:ignore="ContentDescription"/>
                 </LinearLayout>
@@ -441,7 +441,7 @@
                         android:layout_weight="1"
                         android:background="@color/RevolutionBgGrey"
                         android:scaleType="fitXY"
-                        android:src="@drawable/radio"
+                        android:src="@drawable/xradio"
                         android:tag="onMultiClick:Kfree+3000+Kright+Kright+Kright+Kright+Kright+Kright+Kleft+Kleft+Kdown+Kdown+Kok"
                         tools:ignore="ContentDescription"/>
 
@@ -452,7 +452,7 @@
                         android:layout_weight="1"
                         android:background="@color/RevolutionBgGrey"
                         android:scaleType="fitXY"
-                        android:src="@drawable/music"
+                        android:src="@drawable/xmusic"
                         android:tag="onMultiClick:Kmenu+Kdown+Kdown+Kdown+Kdown+Kdown+Kdown+Kdown+Kdown+Kdown+Kdown+Kok"
                         tools:ignore="ContentDescription"/>
 
@@ -463,7 +463,7 @@
                         android:layout_weight="1"
                         android:background="@color/RevolutionBgGrey"
                         android:scaleType="fitXY"
-                        android:src="@drawable/pip"
+                        android:src="@drawable/xpip"
                         android:tag="onMultiClick:Kok+Kinfo+1500+Kright+Kright+Kleft+Kok+back+Kback"
                         tools:ignore="ContentDescription"/>
                 </LinearLayout>
@@ -481,7 +481,7 @@
                     android:layout_height="@dimen/key_size"
                     android:background="@color/RevolutionBgGrey"
                     android:scaleType="fitXY"
-                    android:src="@drawable/plus"
+                    android:src="@drawable/xplus"
                     android:tag="onTouch:0x01:0x9c"
                     tools:ignore="ContentDescription"/>
 
@@ -501,7 +501,7 @@
                     android:layout_height="@dimen/key_size"
                     android:background="@color/RevolutionBgGrey"
                     android:scaleType="fitXY"
-                    android:src="@drawable/minus"
+                    android:src="@drawable/xminus"
                     android:tag="onTouch:0x01:0x9d"
                     tools:ignore="ContentDescription"/>
             </LinearLayout>
