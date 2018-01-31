@@ -47,6 +47,7 @@ public class MainActivity extends    Activity
   MultiClicker              mMultiClicker;
   Wifi                      mWifi;
   View                      mProgressBar;
+  ScreenFitter              mScreenFitter;
 
   // ---------------------------------------------------
   @Override
@@ -64,6 +65,9 @@ public class MainActivity extends    Activity
         actionBar.hide ();
       }
     }
+
+    mScreenFitter = new ScreenFitter (findViewById (R.id.key_grid),
+                                      getWindowManager().getDefaultDisplay());
 
     mProgressBar = findViewById (R.id.progressBar);
 

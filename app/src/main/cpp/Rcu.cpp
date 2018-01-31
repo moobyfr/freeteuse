@@ -211,24 +211,27 @@ void Rcu::SendKeyPress (uint8_t  report_id,
                         uint32_t key_code,
                         bool     with_release)
 {
-  Key *key;
+  if (_key_press_trigger)
+  {
+    Key *key;
 
-  if (with_release)
-  {
-    key = new Key (KEY_PRESS_RELEASE,
-                   report_id,
-                   key_code);
-  }
-  else
-  {
-    key = new Key (KEY_PRESS,
-                   report_id,
-                   key_code);
-  }
+    if (with_release)
+    {
+      key = new Key (KEY_PRESS_RELEASE,
+                     report_id,
+                     key_code);
+    }
+    else
+    {
+      key = new Key (KEY_PRESS,
+                     report_id,
+                     key_code);
+    }
 
-  if (write (_looper_pipe_wfd, &key, sizeof (Key *)) == -1)
-  {
-    LOGE ("Rcu::SendKeyPress: %s", strerror (errno));
+    if (write (_looper_pipe_wfd, &key, sizeof (Key *)) == -1)
+    {
+      LOGE ("Rcu::SendKeyPress: %s", strerror (errno));
+    }
   }
 }
 
@@ -236,13 +239,16 @@ void Rcu::SendKeyPress (uint8_t  report_id,
 void Rcu::SendKeyRelease (uint8_t  report_id,
                           uint32_t key_code)
 {
-  Key *key = new Key (KEY_RELEASE,
-                      report_id,
-                      key_code);
-
-  if (write (_looper_pipe_wfd, &key, sizeof (Key *)) == -1)
+  if (_key_press_trigger)
   {
-    LOGE ("Rcu::SendKeyPress: %s", strerror (errno));
+    Key *key = new Key (KEY_RELEASE,
+                        report_id,
+                        key_code);
+
+    if (write (_looper_pipe_wfd, &key, sizeof (Key *)) == -1)
+    {
+      LOGE ("Rcu::SendKeyPress: %s", strerror (errno));
+    }
   }
 }
 
