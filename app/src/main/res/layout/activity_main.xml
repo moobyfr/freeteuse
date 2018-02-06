@@ -27,22 +27,21 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/xav"
                 android:tag="onClick:0x01:0x63"
-                tools:ignore="ContentDescription"/>
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:layout_width="@dimen/key_size"
-                android:layout_height="@dimen/key_size"/>
+                android:layout_height="@dimen/key_size" />
 
             <ProgressBar
                 android:id="@+id/progressBar"
                 style="?android:attr/progressBarStyle"
                 android:layout_width="@dimen/key_size"
-                android:layout_height="@dimen/key_size"
-                />
+                android:layout_height="@dimen/key_size" />
 
             <TextView
                 android:layout_width="@dimen/key_size"
-                android:layout_height="@dimen/key_size"/>
+                android:layout_height="@dimen/key_size" />
 
             <ImageButton
                 android:id="@+id/Kpower"
@@ -52,7 +51,7 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/xpower"
                 android:tag="onClick:0x01:0x30"
-                tools:ignore="ContentDescription"/>
+                tools:ignore="ContentDescription" />
 
         </LinearLayout>
 
@@ -69,7 +68,7 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/xb1"
                 android:tag="onClick:0x02:0x59"
-                tools:ignore="ContentDescription"/>
+                tools:ignore="ContentDescription" />
 
             <ImageButton
                 android:id="@+id/K2"
@@ -79,7 +78,7 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/xb2"
                 android:tag="onClick:0x02:0x5a"
-                tools:ignore="ContentDescription"/>
+                tools:ignore="ContentDescription" />
 
             <ImageButton
                 android:id="@+id/K3"
@@ -89,7 +88,7 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/xb3"
                 android:tag="onClick:0x02:0x5b"
-                tools:ignore="ContentDescription"/>
+                tools:ignore="ContentDescription" />
 
             <ImageButton
                 android:id="@+id/K4"
@@ -99,7 +98,7 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/xb4"
                 android:tag="onClick:0x02:0x5c"
-                tools:ignore="ContentDescription"/>
+                tools:ignore="ContentDescription" />
 
             <ImageButton
                 android:id="@+id/K5"
@@ -109,7 +108,7 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/xb5"
                 android:tag="onClick:0x02:0x5d"
-                tools:ignore="ContentDescription"/>
+                tools:ignore="ContentDescription" />
 
         </LinearLayout>
 
@@ -126,7 +125,7 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/xb6"
                 android:tag="onClick:0x02:0x5e"
-                tools:ignore="ContentDescription"/>
+                tools:ignore="ContentDescription" />
 
             <ImageButton
                 android:id="@+id/K7"
@@ -136,7 +135,7 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/xb7"
                 android:tag="onClick:0x02:0x5f"
-                tools:ignore="ContentDescription"/>
+                tools:ignore="ContentDescription" />
 
             <ImageButton
                 android:id="@+id/K8"
@@ -146,7 +145,7 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/xb8"
                 android:tag="onClick:0x02:0x60"
-                tools:ignore="ContentDescription"/>
+                tools:ignore="ContentDescription" />
 
             <ImageButton
                 android:id="@+id/K9"
@@ -156,7 +155,7 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/xb9"
                 android:tag="onClick:0x02:0x61"
-                tools:ignore="ContentDescription"/>
+                tools:ignore="ContentDescription" />
 
             <ImageButton
                 android:id="@+id/K0"
@@ -166,7 +165,7 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/xb0"
                 android:tag="onClick:0x02:0x62"
-                tools:ignore="ContentDescription"/>
+                tools:ignore="ContentDescription" />
 
         </LinearLayout>
 
@@ -178,7 +177,7 @@
 
             <TextView
                 android:layout_width="@dimen/key_size"
-                android:layout_height="@dimen/key_size"/>
+                android:layout_height="@dimen/key_size" />
 
             <ImageButton
                 android:id="@+id/Kback"
@@ -188,7 +187,7 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/xback"
                 android:tag="onClick:0x01:0x204"
-                tools:ignore="ContentDescription"/>
+                tools:ignore="ContentDescription" />
 
             <ImageButton
                 android:id="@+id/Kup"
@@ -198,7 +197,7 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/xup"
                 android:tag="onTouch:0x02:0x52"
-                tools:ignore="ContentDescription"/>
+                tools:ignore="ContentDescription" />
 
             <ImageButton
                 android:id="@+id/Ksearch"
@@ -208,11 +207,11 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/xsearch"
                 android:tag="onClick:0x01:0x221"
-                tools:ignore="ContentDescription"/>
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:layout_width="@dimen/key_size"
-                android:layout_height="@dimen/key_size"/>
+                android:layout_height="@dimen/key_size" />
 
         </LinearLayout>
 
@@ -229,7 +228,7 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/xmute"
                 android:tag="onClick:0x01:0xe2"
-                tools:ignore="ContentDescription"/>
+                tools:ignore="ContentDescription" />
 
             <ImageButton
                 android:id="@+id/Kleft"
@@ -239,7 +238,7 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/xleft"
                 android:tag="onTouch:0x02:0x50"
-                tools:ignore="ContentDescription"/>
+                tools:ignore="ContentDescription" />
 
             <ImageButton
                 android:id="@+id/Kok"
@@ -249,7 +248,7 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/xok"
                 android:tag="onClick:0x02:0x28"
-                tools:ignore="ContentDescription"/>
+                tools:ignore="ContentDescription" />
 
             <ImageButton
                 android:id="@+id/Kright"
@@ -259,7 +258,7 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/xright"
                 android:tag="onTouch:0x02:0x4f"
-                tools:ignore="ContentDescription"/>
+                tools:ignore="ContentDescription" />
 
             <ImageButton
                 android:id="@+id/Krecord"
@@ -269,7 +268,7 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/xrecord"
                 android:tag="onClick:0x01:0xb2"
-                tools:ignore="ContentDescription"/>
+                tools:ignore="ContentDescription" />
         </LinearLayout>
 
         <LinearLayout
@@ -279,7 +278,7 @@
 
             <TextView
                 android:layout_width="@dimen/key_size"
-                android:layout_height="@dimen/key_size"/>
+                android:layout_height="@dimen/key_size" />
 
             <ImageButton
                 android:id="@+id/Kmenu"
@@ -289,7 +288,7 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/xmenu"
                 android:tag="onClick:0x01:0x40"
-                tools:ignore="ContentDescription"/>
+                tools:ignore="ContentDescription" />
 
             <ImageButton
                 android:id="@+id/Kdown"
@@ -299,7 +298,7 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/xdown"
                 android:tag="onTouch:0x02:0x51"
-                tools:ignore="ContentDescription"/>
+                tools:ignore="ContentDescription" />
 
             <ImageButton
                 android:id="@+id/Kinfo"
@@ -309,11 +308,11 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/xinfo"
                 android:tag="onClick:0x01:0x209"
-                tools:ignore="ContentDescription"/>
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:layout_width="@dimen/key_size"
-                android:layout_height="@dimen/key_size"/>
+                android:layout_height="@dimen/key_size" />
 
         </LinearLayout>
 
@@ -322,10 +321,17 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <TextView
+            <ImageButton
+                android:id="@+id/Kprevious_box"
                 android:layout_width="@dimen/key_size"
                 android:layout_height="@dimen/key_size"
-                />
+                android:background="@color/RevolutionBgGrey"
+                android:onClick="onPreviousFreebox"
+                android:scaleType="fitXY"
+                android:src="@drawable/xprevious"
+                android:tag="onTouch:0x01:0xe9"
+                android:visibility="invisible"
+                tools:ignore="ContentDescription" />
 
             <ImageButton
                 android:id="@+id/Kfree"
@@ -333,9 +339,20 @@
                 android:layout_height="@dimen/key_size"
                 android:background="@color/RevolutionBgGrey"
                 android:scaleType="fitXY"
-                android:src="@drawable/xfree"
+                android:src="@drawable/xfree1"
                 android:tag="onClick:0x01:0x18f"
-                tools:ignore="ContentDescription"/>
+                tools:ignore="ContentDescription" />
+
+            <ImageButton
+                android:id="@+id/Knext_box"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:background="@color/RevolutionBgGrey"
+                android:onClick="onNextFreebox"
+                android:scaleType="fitXY"
+                android:src="@drawable/xnext"
+                android:tag="onTouch:0x01:0xe9"
+                tools:ignore="ContentDescription" />
 
         </LinearLayout>
 
@@ -357,7 +374,7 @@
                     android:scaleType="fitXY"
                     android:src="@drawable/xplus"
                     android:tag="onTouch:0x01:0xe9"
-                    tools:ignore="ContentDescription"/>
+                    tools:ignore="ContentDescription" />
 
                 <TextView
                     android:layout_width="@dimen/key_size"
@@ -367,7 +384,7 @@
                     android:textColor="@color/RevolutionFgGrey"
                     android:textSize="@dimen/key_small_text_size"
                     android:textStyle="normal"
-                    tools:ignore="HardcodedText"/>
+                    tools:ignore="HardcodedText" />
 
                 <ImageButton
                     android:id="@+id/Kvol_minus"
@@ -377,7 +394,7 @@
                     android:scaleType="fitXY"
                     android:src="@drawable/xminus"
                     android:tag="onTouch:0x01:0xea"
-                    tools:ignore="ContentDescription"/>
+                    tools:ignore="ContentDescription" />
 
             </LinearLayout>
 
@@ -388,7 +405,7 @@
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/key_very_small_size"/>
+                    android:layout_height="@dimen/key_very_small_size" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -404,7 +421,7 @@
                         android:scaleType="fitXY"
                         android:src="@drawable/xforward"
                         android:tag="onClick:0x01:0xb3"
-                        tools:ignore="ContentDescription"/>
+                        tools:ignore="ContentDescription" />
 
                     <ImageButton
                         android:id="@+id/Kplay_pause"
@@ -415,7 +432,7 @@
                         android:scaleType="fitXY"
                         android:src="@drawable/xplay_pause"
                         android:tag="onClick:0x01:0xcd"
-                        tools:ignore="ContentDescription"/>
+                        tools:ignore="ContentDescription" />
 
                     <ImageButton
                         android:id="@+id/Krewind"
@@ -426,7 +443,7 @@
                         android:scaleType="fitXY"
                         android:src="@drawable/xrewind"
                         android:tag="onClick:0x01:0xb4"
-                        tools:ignore="ContentDescription"/>
+                        tools:ignore="ContentDescription" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -443,7 +460,7 @@
                         android:scaleType="fitXY"
                         android:src="@drawable/xradio"
                         android:tag="onMultiClick:Kfree+3000+Kright+Kright+Kright+Kright+Kright+Kright+Kleft+Kleft+Kdown+Kdown+Kok"
-                        tools:ignore="ContentDescription"/>
+                        tools:ignore="ContentDescription" />
 
                     <ImageButton
                         android:id="@+id/Kmusic"
@@ -454,7 +471,7 @@
                         android:scaleType="fitXY"
                         android:src="@drawable/xmusic"
                         android:tag="onMultiClick:Kmenu+Kdown+Kdown+Kdown+Kdown+Kdown+Kdown+Kdown+Kdown+Kdown+Kdown+Kok"
-                        tools:ignore="ContentDescription"/>
+                        tools:ignore="ContentDescription" />
 
                     <ImageButton
                         android:id="@+id/Kpip"
@@ -465,7 +482,7 @@
                         android:scaleType="fitXY"
                         android:src="@drawable/xpip"
                         android:tag="onMultiClick:Kok+Kinfo+1500+Kright+Kright+Kleft+Kok+back+Kback"
-                        tools:ignore="ContentDescription"/>
+                        tools:ignore="ContentDescription" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -483,7 +500,7 @@
                     android:scaleType="fitXY"
                     android:src="@drawable/xplus"
                     android:tag="onTouch:0x01:0x9c"
-                    tools:ignore="ContentDescription"/>
+                    tools:ignore="ContentDescription" />
 
                 <TextView
                     android:layout_width="@dimen/key_size"
@@ -493,7 +510,7 @@
                     android:textColor="@color/RevolutionFgGrey"
                     android:textSize="@dimen/key_small_text_size"
                     android:textStyle="normal"
-                    tools:ignore="HardcodedText"/>
+                    tools:ignore="HardcodedText" />
 
                 <ImageButton
                     android:id="@+id/Kprog_minus"
@@ -503,7 +520,7 @@
                     android:scaleType="fitXY"
                     android:src="@drawable/xminus"
                     android:tag="onTouch:0x01:0x9d"
-                    tools:ignore="ContentDescription"/>
+                    tools:ignore="ContentDescription" />
             </LinearLayout>
 
         </LinearLayout>

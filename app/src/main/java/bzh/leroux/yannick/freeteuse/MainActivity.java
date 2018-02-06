@@ -111,7 +111,6 @@ public class MainActivity extends    Activity
   }
 
   // ---------------------------------------------------
-  @Override
   public void onClick (View view)
   {
     if (mMultiClicker.stopped ())
@@ -127,6 +126,48 @@ public class MainActivity extends    Activity
       else if (tags[0].equals("onMultiClick"))
       {
         mMultiClicker.start (tags[1]);
+      }
+    }
+  }
+
+
+  // ---------------------------------------------------
+  public void onPreviousFreebox (View view)
+  {
+    if (mMultiClicker.stopped ())
+    {
+      {
+        ImageButton button = findViewById(R.id.Kfree);
+
+        button.setImageResource(R.drawable.xfree1);
+      }
+
+      {
+        View next_arrow = findViewById (R.id.Knext_box);
+
+        next_arrow.setVisibility (View.VISIBLE);
+        view.setVisibility(View.INVISIBLE);
+      }
+    }
+  }
+
+
+  // ---------------------------------------------------
+  public void onNextFreebox (View view)
+  {
+    if (mMultiClicker.stopped ())
+    {
+      {
+        ImageButton button = findViewById(R.id.Kfree);
+
+        button.setImageResource(R.drawable.xfree2);
+      }
+
+      {
+        View previous_arrow = findViewById (R.id.Kprevious_box);
+
+        previous_arrow.setVisibility (View.VISIBLE);
+        view.setVisibility(View.INVISIBLE);
       }
     }
   }
