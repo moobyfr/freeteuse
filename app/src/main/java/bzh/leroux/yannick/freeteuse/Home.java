@@ -18,6 +18,7 @@ package bzh.leroux.yannick.freeteuse;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -39,15 +40,17 @@ class Home implements FreeboxSniffer.Listener
   private SharedPreferences mPreferences;
   private List<Freebox>     mBoxes;
   private Listener          mListener;
+  private Painter           mPainter;
 
   // ---------------------------------------------------
-  Home (Context context,
-        Listener listener,
+  Home (Context           context,
+        Listener          listener,
         SharedPreferences preferences)
   {
     mContext     = context;
     mListener    = listener;
     mPreferences = preferences;
+    mPainter     = new Painter ();
     mBoxes       = new ArrayList<> ();
   }
 
@@ -70,6 +73,7 @@ class Home implements FreeboxSniffer.Listener
 
           if (freebox.isConsistent ())
           {
+            mPainter.useColor (freebox.getColor ());
             mBoxes.add (freebox);
 
             if (freebox.hasFocus () || (focus == null))
@@ -124,6 +128,7 @@ class Home implements FreeboxSniffer.Listener
       if (json != null)
       {
         array.put (json);
+        Log.e ("FreeTeuse", String.valueOf (json));
       }
     }
   }
@@ -140,6 +145,10 @@ class Home implements FreeboxSniffer.Listener
       }
     }
 
+    if (freebox.getColor () == null)
+    {
+      freebox.setColor (mPainter.getColor ());
+    }
     mBoxes.add (freebox);
     mListener.onFreeboxDetected (freebox);
   }

@@ -89,6 +89,18 @@ class Freebox
   }
 
   // ---------------------------------------------------
+  String getColor ()
+  {
+    return mColor;
+  }
+
+  // ---------------------------------------------------
+  void setColor (String color)
+  {
+    mColor = color;
+  }
+
+  // ---------------------------------------------------
   boolean equals (Freebox freebox)
   {
     //noinspection SimplifiableIfStatement
@@ -109,7 +121,8 @@ class Freebox
     {
       json.put ("port",    mPort);
       json.put ("address", mAddress);
-      json.put ("address", mHasFocus);
+      json.put ("focus",   mHasFocus);
+      json.put ("color",   mColor);
     }
     catch (JSONException e)
     {
