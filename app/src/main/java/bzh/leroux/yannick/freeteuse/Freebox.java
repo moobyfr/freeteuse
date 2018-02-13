@@ -31,6 +31,7 @@ class Freebox
   private int     mPort;
   private boolean mHasFocus;
   private boolean mReachable;
+  private String  mColor;
 
   // ---------------------------------------------------
   Freebox (JSONObject json)
@@ -40,6 +41,7 @@ class Freebox
       mPort     = json.getInt     ("port");
       mAddress  = json.getString  ("address");
       mHasFocus = json.getBoolean ("focus");
+      mColor    = json.getString  ("color");
     }
     catch (JSONException e)
     {
@@ -56,6 +58,16 @@ class Freebox
     mAddress = mAddress.replaceAll ("[\\[\\]]", "");
     mPort    = serviceInfo.getPort ();
     Log.d ("FreeTeuse", mAddress);
+  }
+
+  // ---------------------------------------------------
+  Freebox (String address,
+           int    port)
+  {
+    mReachable = true;
+
+    mAddress = address;
+    mPort    = port;
   }
 
   // ---------------------------------------------------

@@ -18,19 +18,14 @@ package bzh.leroux.yannick.freeteuse;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import javax.jmdns.ServiceInfo;
-
-class Home implements DnsServiceSniffer.Listener
-
+class Home implements FreeboxSniffer.Listener
 {
   public interface Listener
   {
@@ -39,6 +34,7 @@ class Home implements DnsServiceSniffer.Listener
   }
 
   private DnsServiceSniffer mDnsServiceSniffer;
+  private Simulator         mSimulator;
   private Context           mContext;
   private SharedPreferences mPreferences;
   private List<Freebox>     mBoxes;
@@ -101,13 +97,17 @@ class Home implements DnsServiceSniffer.Listener
     recoverSavedBoxes ();
 
     mDnsServiceSniffer = new DnsServiceSniffer (mContext, this);
-    mDnsServiceSniffer.execute ("_hid._udp");
+    mDnsServiceSniffer.start ();
+
+    mSimulator = new Simulator (mContext, this);
+    mSimulator.start ();
   }
 
   // ---------------------------------------------------
   void stopDiscovering ()
   {
-    mDnsServiceSniffer.cancel (true);
+    mDnsServiceSniffer.stop ();
+    mSimulator.stop ();
 
     save ();
   }
@@ -130,26 +130,18 @@ class Home implements DnsServiceSniffer.Listener
 
   // ---------------------------------------------------
   @Override
-  public void onDnsService (ServiceInfo serviceInfo)
+  public void onFreeboxDetected (Freebox freebox)
   {
-    if (serviceInfo != null)
+    for (Freebox box : mBoxes)
     {
-      Log.d ("FreeTeuse", Arrays.toString (serviceInfo.getHostAddresses ())
-              + ":" + serviceInfo.getPort ());
-
-      Freebox detected_box = new Freebox (serviceInfo);
-
-      for (Freebox box : mBoxes)
+      if (freebox.equals (box))
       {
-        if (detected_box.equals (box))
-        {
-          return;
-        }
+        return;
       }
-
-      mBoxes.add (detected_box);
-      mListener.onFreeboxDetected (detected_box);
     }
+
+    mBoxes.add (freebox);
+    mListener.onFreeboxDetected (freebox);
   }
 
   // ---------------------------------------------------
