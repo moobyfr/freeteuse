@@ -39,6 +39,7 @@ class Home implements DnsServiceSniffer.Listener
   }
 
   private DnsServiceSniffer mDnsServiceSniffer;
+  private Simulator         mSimulator;
   private Context           mContext;
   private SharedPreferences mPreferences;
   private List<Freebox>     mBoxes;
@@ -102,12 +103,16 @@ class Home implements DnsServiceSniffer.Listener
 
     mDnsServiceSniffer = new DnsServiceSniffer (mContext, this);
     mDnsServiceSniffer.execute ("_hid._udp");
+
+    mSimulator = new Simulator (mContext);
+    mSimulator.start ();
   }
 
   // ---------------------------------------------------
   void stopDiscovering ()
   {
     mDnsServiceSniffer.cancel (true);
+    mSimulator.cancel ();
 
     save ();
   }
