@@ -16,33 +16,41 @@
 
 package bzh.leroux.yannick.freeteuse;
 
-import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.KeyEvent;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import javax.jmdns.ServiceInfo;
 
 class Freebox
 {
-  private long              mRcu;
-  private SharedPreferences mSharedPreferences;
-  private String            mAddress;
-  private int               mPort;
+  private long    mRcu;
+  private String  mAddress;
+  private int     mPort;
+  private boolean mHasFocus;
+  private boolean mReachable;
 
   // ---------------------------------------------------
-  Freebox (SharedPreferences sharedPreferences)
+  Freebox (JSONObject json)
   {
-    mSharedPreferences = sharedPreferences;
-
-    mPort    = mSharedPreferences.getInt    ("port", 0);
-    mAddress = mSharedPreferences.getString ("address", null);
+    try
+    {
+      mPort     = json.getInt     ("port");
+      mAddress  = json.getString  ("address");
+      mHasFocus = json.getBoolean ("focus");
+    }
+    catch (JSONException e)
+    {
+      e.printStackTrace ();
+    }
   }
 
   // ---------------------------------------------------
-  Freebox (SharedPreferences sharedPreferences,
-           ServiceInfo       serviceInfo)
+  Freebox (ServiceInfo serviceInfo)
   {
-    mSharedPreferences = sharedPreferences;
+    mReachable = true;
 
     mAddress = serviceInfo.getHostAddress ();
     mAddress = mAddress.replaceAll ("[\\[\\]]", "");
@@ -51,7 +59,25 @@ class Freebox
   }
 
   // ---------------------------------------------------
-  boolean Is (Freebox freebox)
+  boolean hasFocus ()
+  {
+    return mHasFocus;
+  }
+
+  // ---------------------------------------------------
+  boolean isConsistent ()
+  {
+    return mAddress != null;
+  }
+
+  // ---------------------------------------------------
+  boolean isReachable ()
+  {
+    return mReachable;
+  }
+
+  // ---------------------------------------------------
+  boolean equals (Freebox freebox)
   {
     //noinspection SimplifiableIfStatement
     if (freebox == null)
@@ -63,15 +89,23 @@ class Freebox
   }
 
   // ---------------------------------------------------
-  void saveAddress ()
+  JSONObject getJson ()
   {
-    SharedPreferences.Editor editor = mSharedPreferences.edit ();
+    JSONObject json = new JSONObject ();
 
-    editor.putInt    ("port",    mPort);
-    editor.putString ("address", mAddress);
-    editor.commit ();
+    try
+    {
+      json.put ("port",    mPort);
+      json.put ("address", mAddress);
+      json.put ("address", mHasFocus);
+    }
+    catch (JSONException e)
+    {
+      e.printStackTrace ();
+      return null;
+    }
 
-    Log.i ("FreeTeuse", "<<Address saved>>");
+    return json;
   }
 
   // ---------------------------------------------------
@@ -150,6 +184,18 @@ class Freebox
   void disconnect ()
   {
     jniDisconnectRcu (mRcu);
+  }
+
+  // ---------------------------------------------------
+  void grabFocus ()
+  {
+    mHasFocus = true;
+  }
+
+  // ---------------------------------------------------
+  void releaseFocus ()
+  {
+    mHasFocus = false;
   }
 
   // ---------------------------------------------------

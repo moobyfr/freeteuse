@@ -16,10 +16,12 @@
 
 package bzh.leroux.yannick.freeteuse;
 
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,7 +34,8 @@ class Home implements DnsServiceSniffer.Listener
 {
   public interface Listener
   {
-    void onNewFreebox (Freebox freebox);
+    void onFreeboxSelected (Freebox freebox);
+    void onFreeboxDetected (Freebox freebox);
   }
 
   private DnsServiceSniffer mDnsServiceSniffer;
@@ -42,8 +45,8 @@ class Home implements DnsServiceSniffer.Listener
   private Listener          mListener;
 
   // ---------------------------------------------------
-  Home (Context           context,
-        Listener          listener,
+  Home (Context context,
+        Listener listener,
         SharedPreferences preferences)
   {
     mContext     = context;
@@ -53,17 +56,76 @@ class Home implements DnsServiceSniffer.Listener
   }
 
   // ---------------------------------------------------
+  private void recoverSavedBoxes ()
+  {
+    String freeboxPool = mPreferences.getString ("freebox_pool", null);
+
+    if (freeboxPool != null)
+    {
+      Freebox focus = null;
+
+      try
+      {
+        JSONArray array = new JSONArray (freeboxPool);
+
+        for (int i = 0; i < array.length (); i++)
+        {
+          Freebox freebox = new Freebox (array.getJSONObject (i));
+
+          if (freebox.isConsistent ())
+          {
+            mBoxes.add (freebox);
+
+            if (freebox.hasFocus () || (focus == null))
+            {
+              focus = freebox;
+            }
+          }
+        }
+      }
+      catch (org.json.JSONException e)
+      {
+        e.printStackTrace ();
+      }
+
+      if (focus != null)
+      {
+        mListener.onFreeboxSelected (focus);
+      }
+    }
+  }
+
+  // ---------------------------------------------------
   void startDiscovering ()
   {
-    mDnsServiceSniffer = new DnsServiceSniffer (mContext, this);
+    recoverSavedBoxes ();
 
-    mDnsServiceSniffer.execute("_hid._udp");
+    mDnsServiceSniffer = new DnsServiceSniffer (mContext, this);
+    mDnsServiceSniffer.execute ("_hid._udp");
   }
 
   // ---------------------------------------------------
   void stopDiscovering ()
   {
     mDnsServiceSniffer.cancel (true);
+
+    save ();
+  }
+
+  // ---------------------------------------------------
+  private void save ()
+  {
+    JSONArray array = new JSONArray ();
+
+    for (Freebox box : mBoxes)
+    {
+      JSONObject json = box.getJson ();
+
+      if (json != null)
+      {
+        array.put (json);
+      }
+    }
   }
 
   // ---------------------------------------------------
@@ -73,22 +135,62 @@ class Home implements DnsServiceSniffer.Listener
     if (serviceInfo != null)
     {
       Log.d ("FreeTeuse", Arrays.toString (serviceInfo.getHostAddresses ())
-                              + ":" + serviceInfo.getPort ());
+              + ":" + serviceInfo.getPort ());
 
-      Freebox detected_box = new Freebox (mPreferences, serviceInfo);
+      Freebox detected_box = new Freebox (serviceInfo);
 
       for (Freebox box : mBoxes)
       {
-        if (detected_box.Is (box))
+        if (detected_box.equals (box))
         {
           return;
         }
       }
 
       mBoxes.add (detected_box);
-      detected_box.saveAddress ();
-
-      mListener.onNewFreebox (detected_box);
+      mListener.onFreeboxDetected (detected_box);
     }
+  }
+
+  // ---------------------------------------------------
+  Freebox GetNextReachable (Freebox of)
+  {
+    boolean found = false;
+
+    for (Freebox box : mBoxes)
+    {
+      if (found && box.isReachable ())
+      {
+        return box;
+      }
+
+      if (box == of)
+      {
+        found = true;
+      }
+    }
+
+    return null;
+  }
+
+  // ---------------------------------------------------
+  Freebox GetPreviousReachable (Freebox of)
+  {
+    Freebox previous = null;
+
+    for (Freebox box : mBoxes)
+    {
+      if (box == of)
+      {
+        break;
+      }
+
+      if (box.isReachable ())
+      {
+        previous = box;
+      }
+    }
+
+    return previous;
   }
 }

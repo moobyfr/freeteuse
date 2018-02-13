@@ -32,18 +32,18 @@ import android.widget.ImageButton;
 import java.util.Hashtable;
 
 public class MainActivity extends    Activity
-                          implements MultiClicker.Listener,
-                                     Home.Listener,
+                          implements Home.Listener,
+                                     MultiClicker.Listener,
                                      View.OnClickListener,
                                      View.OnTouchListener
 {
-  private Freebox           mActiveFreebox;
-  Hashtable<Integer, View>  mKeys;
-  MultiClicker              mMultiClicker;
-  Wifi                      mWifi;
-  View                      mProgressBar;
-  ScreenFitter              mScreenFitter;
-  Home                      mHome;
+  private Freebox          mActiveFreebox;
+  Hashtable<Integer, View> mKeys;
+  MultiClicker             mMultiClicker;
+  Wifi                     mWifi;
+  View                     mProgressBar;
+  ScreenFitter             mScreenFitter;
+  Home                     mHome;
 
   // ---------------------------------------------------
   @Override
@@ -84,8 +84,6 @@ public class MainActivity extends    Activity
   {
     super.onResume ();
 
-    connectFreebox (new Freebox (getPreferences(Context.MODE_PRIVATE)));
-
     mHome.startDiscovering ();
 
     mMultiClicker = new MultiClicker (this);
@@ -101,6 +99,7 @@ public class MainActivity extends    Activity
     mHome.stopDiscovering ();
     mMultiClicker.stop ();
     mWifi.stop ();
+
     disconnectFreebox ();
 
     super.onPause ();
@@ -254,12 +253,37 @@ public class MainActivity extends    Activity
 
   // ---------------------------------------------------
   @Override
-  public void onNewFreebox (Freebox freebox)
+  public void onFreeboxSelected (Freebox freebox)
   {
-    if (mActiveFreebox != null)
+    connectFreebox (freebox);
+  }
+
+  // ---------------------------------------------------
+  @Override
+  public void onFreeboxDetected (Freebox freebox)
+  {
+    if (mActiveFreebox == null)
     {
-      mActiveFreebox = freebox;
-      connectFreebox (mActiveFreebox);
+      connectFreebox (freebox);
+    }
+
+    setFreeboxSelector (mHome.GetNextReachable (mActiveFreebox),
+                        findViewById (R.id.Knext_box));
+    setFreeboxSelector (mHome.GetPreviousReachable (mActiveFreebox),
+                        findViewById (R.id.Kprevious_box));
+  }
+
+  // ---------------------------------------------------
+  private void setFreeboxSelector (Freebox concurentFreebox,
+                                   View    selector)
+  {
+    if (concurentFreebox == null)
+    {
+      selector.setVisibility (View.INVISIBLE);
+    }
+    else
+    {
+      selector.setVisibility (View.VISIBLE);
     }
   }
 
@@ -298,10 +322,15 @@ public class MainActivity extends    Activity
   // ---------------------------------------------------
   private void connectFreebox (Freebox freebox)
   {
-    disconnectFreebox ();
+    if (mActiveFreebox != null)
+    {
+      mActiveFreebox.releaseFocus ();
+      disconnectFreebox ();
+    }
 
     mActiveFreebox = freebox;
-    mActiveFreebox.connect();
+    mActiveFreebox.grabFocus ();
+    mActiveFreebox.connect ();
   }
 
   // ---------------------------------------------------
