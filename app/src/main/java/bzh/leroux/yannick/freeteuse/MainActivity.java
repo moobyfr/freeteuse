@@ -108,7 +108,7 @@ public class MainActivity extends    Activity
   // ---------------------------------------------------
   public void onClick (View view)
   {
-    if (mMultiClicker.stopped ())
+    if (mMultiClicker.stopped () && (mActiveFreebox != null))
     {
       String[] tags = ((String) view.getTag ()).split (":");
 
@@ -131,18 +131,7 @@ public class MainActivity extends    Activity
   {
     if (mMultiClicker.stopped ())
     {
-      {
-        ImageButton button = findViewById(R.id.Kfree);
-
-        button.setImageResource(R.drawable.xfree1);
-      }
-
-      {
-        View next_arrow = findViewById (R.id.Knext_box);
-
-        next_arrow.setVisibility (View.VISIBLE);
-        view.setVisibility(View.INVISIBLE);
-      }
+      onFreeboxSelected (mHome.getPreviousReachable (mActiveFreebox));
     }
   }
 
@@ -152,18 +141,7 @@ public class MainActivity extends    Activity
   {
     if (mMultiClicker.stopped ())
     {
-      {
-        ImageButton button = findViewById(R.id.Kfree);
-
-        button.setImageResource(R.drawable.xfree2);
-      }
-
-      {
-        View previous_arrow = findViewById (R.id.Kprevious_box);
-
-        previous_arrow.setVisibility (View.VISIBLE);
-        view.setVisibility(View.INVISIBLE);
-      }
+      onFreeboxSelected (mHome.getNextReachable (mActiveFreebox));
     }
   }
 
@@ -173,7 +151,7 @@ public class MainActivity extends    Activity
   public boolean onTouch (View        view,
                           MotionEvent motionEvent)
   {
-    if (mMultiClicker.stopped ())
+    if (mMultiClicker.stopped () && (mActiveFreebox != null))
     {
       String[] tags = ((String) view.getTag()).split(":");
 
@@ -236,7 +214,7 @@ public class MainActivity extends    Activity
       int       id           = resources.getIdentifier (key_name, "id", package_name);
       View      view         = findViewById (id);
 
-      if (view != null)
+      if ((view != null) && (mActiveFreebox != null))
       {
         String[] tags = ((String) view.getTag ()).split (":");
 
@@ -256,6 +234,11 @@ public class MainActivity extends    Activity
   public void onFreeboxSelected (Freebox freebox)
   {
     connectFreebox (freebox);
+
+    mHome.paintBoxButtons (mActiveFreebox,
+                           (ImageButton) findViewById (R.id.Kprevious_box),
+                           (ImageButton) findViewById (R.id.Kfree),
+                           (ImageButton) findViewById (R.id.Knext_box));
   }
 
   // ---------------------------------------------------
@@ -267,24 +250,10 @@ public class MainActivity extends    Activity
       connectFreebox (freebox);
     }
 
-    setFreeboxSelector (mHome.GetNextReachable (mActiveFreebox),
-                        findViewById (R.id.Knext_box));
-    setFreeboxSelector (mHome.GetPreviousReachable (mActiveFreebox),
-                        findViewById (R.id.Kprevious_box));
-  }
-
-  // ---------------------------------------------------
-  private void setFreeboxSelector (Freebox concurentFreebox,
-                                   View    selector)
-  {
-    if (concurentFreebox == null)
-    {
-      selector.setVisibility (View.INVISIBLE);
-    }
-    else
-    {
-      selector.setVisibility (View.VISIBLE);
-    }
+    mHome.paintBoxButtons (mActiveFreebox,
+                           (ImageButton) findViewById (R.id.Kprevious_box),
+                           (ImageButton) findViewById (R.id.Kfree),
+                           (ImageButton) findViewById (R.id.Knext_box));
   }
 
   // ---------------------------------------------------
@@ -300,18 +269,23 @@ public class MainActivity extends    Activity
       }
       else if (child instanceof ImageButton)
       {
-        String[] tags = ((String) child.getTag()).split(":");
+        String tag = (String) child.getTag ();
 
-        switch (tags[0])
+        if (tag != null)
         {
-          case "onClick":
-          case "onMultiClick":
-            child.setOnClickListener(this);
-            break;
+          String[] tags = tag.split (":");
 
-          case "onTouch":
-            child.setOnTouchListener(this);
-            break;
+          switch (tags[0])
+          {
+            case "onClick":
+            case "onMultiClick":
+              child.setOnClickListener (this);
+              break;
+
+            case "onTouch":
+              child.setOnTouchListener (this);
+              break;
+          }
         }
 
         mKeys.put (child.getId (), child);
@@ -322,15 +296,18 @@ public class MainActivity extends    Activity
   // ---------------------------------------------------
   private void connectFreebox (Freebox freebox)
   {
-    if (mActiveFreebox != null)
+    if (freebox != null)
     {
-      mActiveFreebox.releaseFocus ();
-      disconnectFreebox ();
-    }
+      if (mActiveFreebox != null)
+      {
+        mActiveFreebox.releaseFocus ();
+        disconnectFreebox ();
+      }
 
-    mActiveFreebox = freebox;
-    mActiveFreebox.grabFocus ();
-    mActiveFreebox.connect ();
+      mActiveFreebox = freebox;
+      mActiveFreebox.grabFocus ();
+      mActiveFreebox.connect ();
+    }
   }
 
   // ---------------------------------------------------

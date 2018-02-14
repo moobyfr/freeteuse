@@ -16,19 +16,24 @@
 
 package bzh.leroux.yannick.freeteuse;
 
+import android.content.Context;
+import android.content.res.Resources;
+
 import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.List;
 
 class Painter
 {
-  private final List<String> mColors = Arrays.asList ("YELLOW", "GREEN", "BLUE", "RED");
+  private final List<String> mColors = Arrays.asList ("yellow", "green", "blue", "red");
 
+  private Context                    mContext;
   private Hashtable<String, Integer> mColorTable;
 
   // ---------------------------------------------------
-  Painter ()
+  Painter (Context context)
   {
+    mContext    = context;
     mColorTable = new Hashtable<> ();
 
     for (String color : mColors)
@@ -69,5 +74,27 @@ class Painter
     useColor (bestColor);
 
     return bestColor;
+  }
+
+  // ---------------------------------------------------
+  int getResourceId (String name,
+                     String color)
+  {
+    int id = -1;
+
+    try
+    {
+      Resources resources = mContext.getResources ();
+
+      id = resources.getIdentifier ("x" + name + color,
+                                    "drawable",
+                                     mContext.getPackageName ());
+    }
+    catch (Exception e)
+    {
+      e.printStackTrace ();
+    }
+
+    return id;
   }
 }

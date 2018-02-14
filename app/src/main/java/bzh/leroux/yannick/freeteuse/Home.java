@@ -19,6 +19,8 @@ package bzh.leroux.yannick.freeteuse;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -50,7 +52,7 @@ class Home implements FreeboxSniffer.Listener
     mContext     = context;
     mListener    = listener;
     mPreferences = preferences;
-    mPainter     = new Painter ();
+    mPainter     = new Painter (context);
     mBoxes       = new ArrayList<> ();
   }
 
@@ -154,7 +156,36 @@ class Home implements FreeboxSniffer.Listener
   }
 
   // ---------------------------------------------------
-  Freebox GetNextReachable (Freebox of)
+  void paintBoxButtons (Freebox     middle,
+                        ImageButton leftSelector,
+                        ImageButton middleSelector,
+                        ImageButton rightSelector)
+  {
+    Freebox rightBox = getNextReachable     (middle);
+    Freebox leftBox  = getPreviousReachable (middle);
+
+    rightSelector.setVisibility (View.INVISIBLE);
+    if (rightBox != null)
+    {
+      rightSelector.setVisibility    (View.VISIBLE);
+      rightSelector.setImageResource (mPainter.getResourceId ("next",
+                                                              rightBox.getColor ()));
+    }
+
+    middleSelector.setImageResource (mPainter.getResourceId ("free",
+                                                             middle.getColor ()));
+
+    leftSelector.setVisibility  (View.INVISIBLE);
+    if (leftBox != null)
+    {
+      leftSelector.setVisibility    (View.VISIBLE);
+      leftSelector.setImageResource (mPainter.getResourceId ("previous",
+                                                             leftBox.getColor ()));
+    }
+  }
+
+  // ---------------------------------------------------
+  Freebox getNextReachable (Freebox of)
   {
     boolean found = false;
 
@@ -175,7 +206,7 @@ class Home implements FreeboxSniffer.Listener
   }
 
   // ---------------------------------------------------
-  Freebox GetPreviousReachable (Freebox of)
+  Freebox getPreviousReachable (Freebox of)
   {
     Freebox previous = null;
 

@@ -328,10 +328,9 @@
                 android:background="@color/RevolutionBgGrey"
                 android:onClick="onPreviousFreebox"
                 android:scaleType="fitXY"
-                android:src="@drawable/xprevious"
-                android:tag="onTouch:0x01:0xe9"
+                android:src="@drawable/xpreviousred"
                 android:visibility="invisible"
-                tools:ignore="ContentDescription" />
+                tools:ignore="ContentDescription"/>
 
             <ImageButton
                 android:id="@+id/Kfree"
@@ -339,7 +338,7 @@
                 android:layout_height="@dimen/key_size"
                 android:background="@color/RevolutionBgGrey"
                 android:scaleType="fitXY"
-                android:src="@drawable/xfree1"
+                android:src="@drawable/xfreered"
                 android:tag="onClick:0x01:0x18f"
                 tools:ignore="ContentDescription" />
 
@@ -350,9 +349,9 @@
                 android:background="@color/RevolutionBgGrey"
                 android:onClick="onNextFreebox"
                 android:scaleType="fitXY"
-                android:src="@drawable/xnext"
-                android:tag="onTouch:0x01:0xe9"
-                tools:ignore="ContentDescription" />
+                android:src="@drawable/xnextblue"
+                android:visibility="invisible"
+                tools:ignore="ContentDescription"/>
 
         </LinearLayout>
 

@@ -23,7 +23,6 @@ class FreeboxSniffer
     void onFreeboxDetected (Freebox freebox);
   }
 
-  private int      mFreeboxCount;
   private Listener mListener;
 
   // ---------------------------------------------------
@@ -35,10 +34,6 @@ class FreeboxSniffer
   // ---------------------------------------------------
   void onFreeboxDetected (Freebox freebox)
   {
-    if (mFreeboxCount < 4)
-    {
-      mFreeboxCount++;
-      mListener.onFreeboxDetected (freebox);
-    }
+    mListener.onFreeboxDetected (freebox);
   }
 }
