@@ -111,14 +111,14 @@ class DnsServiceSniffer extends    FreeboxSniffer
   {
     ServiceInfo info = event.getInfo ();
 
-    Log.d ("FreeTeuse", "DnsServiceSniffer::serviceAdded: " + info.getName ());
+    Log.d (Freeteuse.TAG, "DnsServiceSniffer::serviceAdded: " + info.getName ());
   }
 
   // ---------------------------------------------------
   @Override
   public void serviceRemoved (ServiceEvent event)
   {
-    Log.d ("FreeTeuse", "DnsServiceSniffer::serviceRemoved: " + event.getInfo ());
+    Log.d (Freeteuse.TAG, "DnsServiceSniffer::serviceRemoved: " + event.getInfo ());
   }
 
   // ---------------------------------------------------
@@ -138,7 +138,7 @@ class DnsServiceSniffer extends    FreeboxSniffer
       }
     });
 
-    Log.d ("FreeTeuse", Arrays.toString (serviceInfo.getHostAddresses ())
+    Log.d (Freeteuse.TAG, Arrays.toString (serviceInfo.getHostAddresses ())
             + ":" + serviceInfo.getPort ());
   }
 }

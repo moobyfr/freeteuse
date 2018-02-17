@@ -71,7 +71,7 @@ class ScreenFitter
     }
     else
     {
-      Log.e ("FreeTeuse", "view.setScale not availlable on this device.");
+      Log.e (Freeteuse.TAG, "view.setScale not availlable on this device.");
     }
   }
 }

@@ -57,7 +57,7 @@ class Freebox
     mAddress = serviceInfo.getHostAddress ();
     mAddress = mAddress.replaceAll ("[\\[\\]]", "");
     mPort    = serviceInfo.getPort ();
-    Log.d ("FreeTeuse", mAddress);
+    Log.d (Freeteuse.TAG, mAddress);
   }
 
   // ---------------------------------------------------
@@ -86,6 +86,12 @@ class Freebox
   boolean isReachable ()
   {
     return mReachable;
+  }
+
+  // ---------------------------------------------------
+  void detected ()
+  {
+    mReachable = true;
   }
 
   // ---------------------------------------------------
@@ -192,7 +198,7 @@ class Freebox
     }
     catch (NumberFormatException e)
     {
-      Log.e ("FreeTeuse", String.valueOf(e));
+      Log.e (Freeteuse.TAG, String.valueOf(e));
     }
   }
 

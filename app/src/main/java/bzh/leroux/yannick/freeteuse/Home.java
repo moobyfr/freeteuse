@@ -65,6 +65,8 @@ class Home implements FreeboxSniffer.Listener
     {
       Freebox focus = null;
 
+      Log.d (Freeteuse.TAG, String.valueOf (freeboxPool));
+
       try
       {
         JSONArray array = new JSONArray (freeboxPool);
@@ -121,7 +123,8 @@ class Home implements FreeboxSniffer.Listener
   // ---------------------------------------------------
   private void save ()
   {
-    JSONArray array = new JSONArray ();
+    SharedPreferences.Editor editor = mPreferences.edit ();
+    JSONArray                array  = new JSONArray ();
 
     for (Freebox box : mBoxes)
     {
@@ -129,10 +132,13 @@ class Home implements FreeboxSniffer.Listener
 
       if (json != null)
       {
+        Log.e (Freeteuse.TAG, String.valueOf (json));
         array.put (json);
-        Log.e ("FreeTeuse", String.valueOf (json));
       }
     }
+
+    editor.putString ("freebox_pool", String.valueOf (array));
+    editor.commit ();
   }
 
   // ---------------------------------------------------
@@ -143,6 +149,8 @@ class Home implements FreeboxSniffer.Listener
     {
       if (freebox.equals (box))
       {
+        box.detected ();
+        mListener.onFreeboxDetected (box);
         return;
       }
     }
