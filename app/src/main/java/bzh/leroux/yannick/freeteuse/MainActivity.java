@@ -35,7 +35,7 @@ public class MainActivity extends    Activity
                           implements Home.Listener,
                                      MultiClicker.Listener,
                                      View.OnClickListener,
-                                     View.OnTouchListener
+                                     View.OnTouchListener, Freebox.Listener
 {
   private Freebox          mActiveFreebox;
   Hashtable<Integer, View> mKeys;
@@ -257,6 +257,13 @@ public class MainActivity extends    Activity
   }
 
   // ---------------------------------------------------
+  @Override
+  public void onFreeboxStatus (String status)
+  {
+
+  }
+
+  // ---------------------------------------------------
   private void listenToTouchEvent (ViewGroup parent)
   {
     for (int i = 0; i < parent.getChildCount (); i++)
@@ -306,7 +313,7 @@ public class MainActivity extends    Activity
 
       mActiveFreebox = freebox;
       mActiveFreebox.grabFocus ();
-      mActiveFreebox.connect ();
+      mActiveFreebox.connect (this);
     }
   }
 

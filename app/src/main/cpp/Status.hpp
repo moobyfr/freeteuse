@@ -16,35 +16,22 @@
 
 #pragma once
 
-#include <stdio.h>
+#include <stdint.h>
+extern "C"
+{
+#include <foils/hid.h>
+}
 #include "Message.hpp"
 
-struct foils_hid;
-
-class Key : public Message
+class Status : public Message
 {
   public:
-    Key (uint32_t command,
-         uint8_t  report,
-         uint32_t code);
+    Status (enum foils_hid_state code);
 
-    virtual ~Key ();
+    virtual ~Status ();
 
-    bool Is (const uint32_t command);
-
-    void Dump (const char *text);
-
-    void Press (struct foils_hid *hid_client);
-
-    void Release (struct foils_hid *hid_client);
+    enum foils_hid_state GetCode ();
 
   private:
-    static const size_t DEVICE_INDEX = 0;
-
-    uint32_t _command;
-    uint8_t  _report;
-    uint32_t _code;
-
-    void ReportSend (struct foils_hid *hid_client,
-                     uint32_t          code);
+    enum foils_hid_state _code;
 };

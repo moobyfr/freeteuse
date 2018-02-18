@@ -106,3 +106,23 @@ Java_bzh_leroux_yannick_freeteuse_Freebox_jniReleaseRcuKey (JNIEnv  __unused *en
                          (uint32_t) key_code);
   }
 }
+
+// ---------------------------------------------------
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_bzh_leroux_yannick_freeteuse_Freebox_jniReadRcuStatus (JNIEnv  *env,
+                                                            jobject  j_freebox,
+                                                            jlong    jrcu)
+{
+  Rcu *rcu = (Rcu *) jrcu;
+
+  if (rcu)
+  {
+    const char *status  = rcu->ReadStatus ();
+    jstring     jstatus = env->NewStringUTF (status);
+
+    return jstatus;
+  }
+
+  return NULL;
+}

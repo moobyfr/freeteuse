@@ -37,7 +37,7 @@
                 android:id="@+id/progressBar"
                 style="?android:attr/progressBarStyle"
                 android:layout_width="@dimen/key_size"
-                android:layout_height="@dimen/key_size" />
+                android:layout_height="@dimen/key_size"/>
 
             <TextView
                 android:layout_width="@dimen/key_size"

@@ -14,37 +14,22 @@
 //   You should have received a copy of the GNU General Public License
 //   along with Freeteuse.  If not, see <http://www.gnu.org/licenses/>.
 
-#pragma once
+#include "Status.hpp"
 
-#include <stdio.h>
-#include "Message.hpp"
-
-struct foils_hid;
-
-class Key : public Message
+// ---------------------------------------------------
+Status::Status (enum foils_hid_state code)
 {
-  public:
-    Key (uint32_t command,
-         uint8_t  report,
-         uint32_t code);
+  _code = code;
+}
 
-    virtual ~Key ();
+// ---------------------------------------------------
+Status::~Status ()
+{
+}
 
-    bool Is (const uint32_t command);
+// ---------------------------------------------------
+enum foils_hid_state Status::GetCode ()
+{
+  return _code;
+}
 
-    void Dump (const char *text);
-
-    void Press (struct foils_hid *hid_client);
-
-    void Release (struct foils_hid *hid_client);
-
-  private:
-    static const size_t DEVICE_INDEX = 0;
-
-    uint32_t _command;
-    uint8_t  _report;
-    uint32_t _code;
-
-    void ReportSend (struct foils_hid *hid_client,
-                     uint32_t          code);
-};

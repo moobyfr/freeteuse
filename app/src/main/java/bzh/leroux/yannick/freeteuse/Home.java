@@ -65,7 +65,8 @@ class Home implements FreeboxSniffer.Listener
     {
       Freebox focus = null;
 
-      Log.d (Freeteuse.TAG, String.valueOf (freeboxPool));
+      Log.d (Freeteuse.TAG,
+             String.valueOf (freeboxPool).replace ("},", "},\n"));
 
       try
       {
@@ -204,7 +205,7 @@ class Home implements FreeboxSniffer.Listener
         return box;
       }
 
-      if (box == of)
+      if (box.equals (of))
       {
         found = true;
       }
@@ -220,7 +221,7 @@ class Home implements FreeboxSniffer.Listener
 
     for (Freebox box : mBoxes)
     {
-      if (box == of)
+      if (box.equals (of))
       {
         break;
       }

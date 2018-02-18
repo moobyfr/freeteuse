@@ -71,7 +71,7 @@ void Key::Release (struct foils_hid *hid_client)
 void Key::ReportSend (struct foils_hid *hid_client,
                       uint32_t          code)
 {
-#if 1
+#if 0
   uint16_t code16 = (uint16_t) code;
 
   foils_hid_input_report_send (hid_client,

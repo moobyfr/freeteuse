@@ -16,35 +16,17 @@
 
 #pragma once
 
-#include <stdio.h>
-#include "Message.hpp"
+#include <stddef.h>
 
-struct foils_hid;
-
-class Key : public Message
+class Message
 {
   public:
-    Key (uint32_t command,
-         uint8_t  report,
-         uint32_t code);
+    Message (const char *klass = NULL);
 
-    virtual ~Key ();
+    virtual ~Message ();
 
-    bool Is (const uint32_t command);
-
-    void Dump (const char *text);
-
-    void Press (struct foils_hid *hid_client);
-
-    void Release (struct foils_hid *hid_client);
+    bool Is (const char *klass);
 
   private:
-    static const size_t DEVICE_INDEX = 0;
-
-    uint32_t _command;
-    uint8_t  _report;
-    uint32_t _code;
-
-    void ReportSend (struct foils_hid *hid_client,
-                     uint32_t          code);
+    char *_klass;
 };

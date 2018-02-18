@@ -26,12 +26,20 @@ import javax.jmdns.ServiceInfo;
 
 class Freebox
 {
-  private long    mRcu;
-  private String  mAddress;
-  private int     mPort;
-  private boolean mHasFocus;
-  private boolean mReachable;
-  private String  mColor;
+  public interface Listener
+  {
+    void onFreeboxStatus (String status);
+  }
+
+  private long     mRcu;
+  private String   mAddress;
+  private int      mPort;
+  private boolean  mHasFocus;
+  private boolean  mReachable;
+  private String   mColor;
+  private Thread   mStatusLooper;
+  private Listener mListener;
+
 
   // ---------------------------------------------------
   Freebox (JSONObject json)
@@ -140,8 +148,10 @@ class Freebox
   }
 
   // ---------------------------------------------------
-  void connect ()
+  void connect (Listener listener)
   {
+    mListener = listener;
+
     if ((mAddress != null) && (mPort != 0))
     {
       mRcu = jniCreateRcu ();
@@ -149,7 +159,43 @@ class Freebox
       jniConnectRcu (mRcu,
                      mAddress,
                      mPort);
+
+      mStatusLooper = new Thread (new Runnable ()
+      {
+        @Override
+        public void run ()
+        {
+          while (true)
+          {
+            String status = jniReadRcuStatus (mRcu);
+
+            Log.d (Freeteuse.TAG, ">>> " + status + " <<<");
+            if (status.equals ("EXIT"))
+            {
+              break;
+            }
+          }
+        }
+      });
+      mStatusLooper.start ();
     }
+  }
+
+  // ---------------------------------------------------
+  void disconnect ()
+  {
+    jniDisconnectRcu (mRcu);
+
+    try
+    {
+      mStatusLooper.join ();
+    }
+    catch (InterruptedException e)
+    {
+      e.printStackTrace ();
+    }
+
+    mListener = null;
   }
 
   // ---------------------------------------------------
@@ -212,12 +258,6 @@ class Freebox
   }
 
   // ---------------------------------------------------
-  void disconnect ()
-  {
-    jniDisconnectRcu (mRcu);
-  }
-
-  // ---------------------------------------------------
   void grabFocus ()
   {
     mHasFocus = true;
@@ -230,9 +270,10 @@ class Freebox
   }
 
   // ---------------------------------------------------
-  private native long jniCreateRcu     ();
-  private native void jniConnectRcu    (long rcu, String address, int port);
-  private native void jniDisconnectRcu (long rcu);
-  private native void jniPressRcuKey   (long rcu, int report_id, int key_code, boolean with_key_release);
-  private native void jniReleaseRcuKey (long rcu, int report_id, int key_code);
+  private native long   jniCreateRcu     ();
+  private native void   jniConnectRcu    (long rcu, String address, int port);
+  private native void   jniDisconnectRcu (long rcu);
+  private native void   jniPressRcuKey   (long rcu, int report_id, int key_code, boolean with_key_release);
+  private native void   jniReleaseRcuKey (long rcu, int report_id, int key_code);
+  private native String jniReadRcuStatus (long rcu);
 }

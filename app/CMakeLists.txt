@@ -8,6 +8,9 @@ add_library (freeteuse SHARED
              src/main/cpp/freeteuse.cpp
              src/main/cpp/Rcu.cpp
              src/main/cpp/Key.cpp
+             src/main/cpp/Pipe.cpp
+             src/main/cpp/Message.cpp
+             src/main/cpp/Status.cpp
              )
 
 # -- freebxsdk --------------------

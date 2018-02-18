@@ -16,35 +16,22 @@
 
 #pragma once
 
-#include <stdio.h>
 #include "Message.hpp"
 
-struct foils_hid;
-
-class Key : public Message
+class Pipe
 {
   public:
-    Key (uint32_t command,
-         uint8_t  report,
-         uint32_t code);
+    Pipe ();
 
-    virtual ~Key ();
+    ~Pipe ();
 
-    bool Is (const uint32_t command);
+    int GetReadEnd ();
 
-    void Dump (const char *text);
+    Message *Read ();
 
-    void Press (struct foils_hid *hid_client);
-
-    void Release (struct foils_hid *hid_client);
+    void Write (Message *message);
 
   private:
-    static const size_t DEVICE_INDEX = 0;
-
-    uint32_t _command;
-    uint8_t  _report;
-    uint32_t _code;
-
-    void ReportSend (struct foils_hid *hid_client,
-                     uint32_t          code);
+    int _read_fd;
+    int _write_fd;
 };
