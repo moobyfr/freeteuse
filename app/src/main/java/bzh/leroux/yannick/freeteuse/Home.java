@@ -74,7 +74,8 @@ class Home implements FreeboxSniffer.Listener
 
         for (int i = 0; i < array.length (); i++)
         {
-          Freebox freebox = new Freebox (array.getJSONObject (i));
+          Freebox freebox = new Freebox (mContext,
+                                         array.getJSONObject (i));
 
           if (freebox.isConsistent ())
           {

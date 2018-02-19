@@ -35,12 +35,16 @@ class DnsServiceSniffer extends    FreeboxSniffer
   private Thread                    mThread;
   private WifiManager.MulticastLock mMulticastLock;
   private Handler                   mListenerHandler;
+  private Context                   mContext;
+
 
   // ---------------------------------------------------
   DnsServiceSniffer (Context  context,
                      Listener listener)
   {
     super (listener);
+
+    mContext = context;
 
     {
       Context     appContext = context.getApplicationContext ();
@@ -132,7 +136,8 @@ class DnsServiceSniffer extends    FreeboxSniffer
       @Override
       public void run ()
       {
-        final Freebox freebox = new Freebox (serviceInfo);
+        final Freebox freebox = new Freebox (mContext,
+                                             serviceInfo);
 
         onFreeboxDetected (freebox);
       }

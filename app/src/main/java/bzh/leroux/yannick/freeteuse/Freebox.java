@@ -16,6 +16,8 @@
 
 package bzh.leroux.yannick.freeteuse;
 
+import android.content.Context;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.KeyEvent;
 
@@ -38,12 +40,16 @@ class Freebox
   private boolean  mReachable;
   private String   mColor;
   private Thread   mStatusLooper;
+  private Vibrator mVibrator;
   private Listener mListener;
 
 
   // ---------------------------------------------------
-  Freebox (JSONObject json)
+  Freebox (Context    context,
+           JSONObject json)
   {
+    mVibrator = (Vibrator) context.getSystemService (Context.VIBRATOR_SERVICE);
+
     try
     {
       mPort     = json.getInt     ("port");
@@ -58,9 +64,12 @@ class Freebox
   }
 
   // ---------------------------------------------------
-  Freebox (ServiceInfo serviceInfo)
+  Freebox (Context     context,
+           ServiceInfo serviceInfo)
   {
     mReachable = true;
+
+    mVibrator = (Vibrator) context.getSystemService (Context.VIBRATOR_SERVICE);
 
     mAddress = serviceInfo.getHostAddress ();
     mAddress = mAddress.replaceAll ("[\\[\\]]", "");
@@ -235,6 +244,8 @@ class Freebox
                     String  key_code,
                     boolean with_release)
   {
+    mVibrator.vibrate (30);
+
     try
     {
       jniPressRcuKey (mRcu,
