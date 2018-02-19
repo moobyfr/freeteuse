@@ -21,6 +21,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -99,10 +100,20 @@ class Home implements FreeboxSniffer.Listener
         mListener.onFreeboxSelected (focus);
       }
     }
+
+    if (BuildConfig.BUILD_TYPE.equals ("debug"))
+    {
+      CharSequence text = String.valueOf (mBoxes.size ());
+
+      Toast toast = Toast.makeText (mContext,
+                                    text,
+                                    Toast.LENGTH_SHORT);
+      toast.show ();
+    }
   }
 
   // ---------------------------------------------------
-  void startDiscovering ()
+  void discloseBoxes ()
   {
     recoverSavedBoxes ();
 
@@ -114,12 +125,14 @@ class Home implements FreeboxSniffer.Listener
   }
 
   // ---------------------------------------------------
-  void stopDiscovering ()
+  void concealBoxes ()
   {
     mDnsServiceSniffer.stop ();
     mSimulator.stop ();
 
     save ();
+
+    mBoxes.clear ();
   }
 
   // ---------------------------------------------------
