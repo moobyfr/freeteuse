@@ -332,15 +332,32 @@
                 android:visibility="invisible"
                 tools:ignore="ContentDescription"/>
 
-            <ImageButton
-                android:id="@+id/Kfree"
+            <RelativeLayout
                 android:layout_width="@dimen/three_key_size"
-                android:layout_height="@dimen/key_size"
-                android:background="@color/RevolutionBgGrey"
-                android:scaleType="fitXY"
-                android:src="@drawable/xfreered"
-                android:tag="onClick:0x01:0x18f"
-                tools:ignore="ContentDescription" />
+                android:layout_height="@dimen/key_size">
+
+                <ImageButton
+                    android:id="@+id/Kfree"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/RevolutionBgGrey"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/xfreered"
+                    android:tag="onClick:0x01:0x18f"
+                    android:visibility="visible"
+                    tools:ignore="ContentDescription"/>
+
+                <ImageView
+                    android:id="@+id/status"
+                    android:layout_width="match_parent"
+                    android:layout_height="16dp"
+                    android:layout_marginRight="6dp"
+                    android:layout_marginTop="6dp"
+                    android:scaleType="fitEnd"
+                    android:src="@drawable/wireless"
+                    tools:ignore="ContentDescription"/>
+
+            </RelativeLayout>
 
             <ImageButton
                 android:id="@+id/Knext_box"

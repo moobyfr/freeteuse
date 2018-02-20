@@ -106,7 +106,7 @@ class Home implements FreeboxSniffer.Listener
       CharSequence text = String.valueOf (mBoxes.size ());
 
       Toast toast = Toast.makeText (mContext,
-                                    text,
+                                    text + " Freebox",
                                     Toast.LENGTH_SHORT);
       toast.show ();
     }
@@ -115,6 +115,8 @@ class Home implements FreeboxSniffer.Listener
   // ---------------------------------------------------
   void discloseBoxes ()
   {
+    mBoxes.clear ();
+
     recoverSavedBoxes ();
 
     mDnsServiceSniffer = new DnsServiceSniffer (mContext, this);

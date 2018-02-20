@@ -23,11 +23,13 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import java.util.Hashtable;
 
@@ -37,13 +39,14 @@ public class MainActivity extends    Activity
                                      View.OnClickListener,
                                      View.OnTouchListener, Freebox.Listener
 {
-  private Freebox          mActiveFreebox;
-  Hashtable<Integer, View> mKeys;
-  MultiClicker             mMultiClicker;
-  Wifi                     mWifi;
-  View                     mProgressBar;
-  ScreenFitter             mScreenFitter;
-  Home                     mHome;
+  private Freebox                  mActiveFreebox;
+  private Hashtable<Integer, View> mKeys;
+  private MultiClicker             mMultiClicker;
+  private Wifi                     mWifi;
+  private View                     mProgressBar;
+  private ScreenFitter             mScreenFitter;
+  private Home                     mHome;
+  private View                     mStatusView;
 
   // ---------------------------------------------------
   @Override
@@ -61,6 +64,8 @@ public class MainActivity extends    Activity
         actionBar.hide ();
       }
     }
+
+    mStatusView = findViewById (R.id.status);
 
     mScreenFitter = new ScreenFitter (findViewById (R.id.key_grid),
                                       getWindowManager().getDefaultDisplay());
@@ -260,7 +265,18 @@ public class MainActivity extends    Activity
   @Override
   public void onFreeboxStatus (String status)
   {
+    View view = findViewById (R.id.status);
 
+    Log.e (Freeteuse.TAG, ">>> " + status + " <<<");
+
+    if (status.equals ("connected"))
+    {
+      view.setVisibility (View.INVISIBLE);
+    }
+    else
+    {
+      view.setVisibility (View.VISIBLE);
+    }
   }
 
   // ---------------------------------------------------
@@ -324,6 +340,8 @@ public class MainActivity extends    Activity
     {
       mActiveFreebox.disconnect ();
       mActiveFreebox = null;
+
+      mStatusView.setVisibility (View.VISIBLE);
     }
   }
 

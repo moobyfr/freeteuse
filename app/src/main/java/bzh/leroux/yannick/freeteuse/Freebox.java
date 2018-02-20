@@ -17,6 +17,7 @@
 package bzh.leroux.yannick.freeteuse;
 
 import android.content.Context;
+import android.os.Handler;
 import android.os.Vibrator;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -41,8 +42,6 @@ class Freebox
   private String   mColor;
   private Thread   mStatusLooper;
   private Vibrator mVibrator;
-  private Listener mListener;
-
 
   // ---------------------------------------------------
   Freebox (Context    context,
@@ -157,12 +156,12 @@ class Freebox
   }
 
   // ---------------------------------------------------
-  void connect (Listener listener)
+  void connect (final Listener listener)
   {
-    mListener = listener;
-
     if ((mAddress != null) && (mPort != 0))
     {
+      final Handler listenerHandler = new Handler ();
+
       mRcu = jniCreateRcu ();
 
       jniConnectRcu (mRcu,
@@ -176,9 +175,20 @@ class Freebox
         {
           while (true)
           {
-            String status = jniReadRcuStatus (mRcu);
+            final String status = jniReadRcuStatus (mRcu);
 
-            Log.d (Freeteuse.TAG, ">>> " + status + " <<<");
+            if (listener != null)
+            {
+              listenerHandler.post (new Runnable ()
+              {
+                @Override
+                public void run ()
+                {
+                  listener.onFreeboxStatus (status);
+                }
+              });
+            }
+
             if (status.equals ("EXIT"))
             {
               break;
@@ -203,8 +213,6 @@ class Freebox
     {
       e.printStackTrace ();
     }
-
-    mListener = null;
   }
 
   // ---------------------------------------------------
