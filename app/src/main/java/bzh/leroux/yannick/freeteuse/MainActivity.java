@@ -17,11 +17,9 @@
 package bzh.leroux.yannick.freeteuse;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -29,7 +27,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 
 import java.util.Hashtable;
 
@@ -54,16 +51,6 @@ public class MainActivity extends    Activity
   {
     super.onCreate (savedInstanceState);
     setContentView (R.layout.activity_main);
-
-    if (Build.VERSION.SDK_INT >= 11)
-    {
-      ActionBar actionBar = getActionBar ();
-
-      if (actionBar != null)
-      {
-        actionBar.hide ();
-      }
-    }
 
     mStatusView = findViewById (R.id.status);
 

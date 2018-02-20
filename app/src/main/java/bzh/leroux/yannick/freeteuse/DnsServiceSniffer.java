@@ -37,7 +37,6 @@ class DnsServiceSniffer extends    FreeboxSniffer
   private Handler                   mListenerHandler;
   private Context                   mContext;
 
-
   // ---------------------------------------------------
   DnsServiceSniffer (Context  context,
                      Listener listener)
@@ -63,6 +62,8 @@ class DnsServiceSniffer extends    FreeboxSniffer
       @Override
       public void run ()
       {
+        JmDNS jmdns = null;
+
         if (mMulticastLock != null)
         {
           mMulticastLock.setReferenceCounted (true);
@@ -71,7 +72,7 @@ class DnsServiceSniffer extends    FreeboxSniffer
 
         try
         {
-          JmDNS jmdns = JmDNS.create ();
+          jmdns = JmDNS.create ("FreeTeuse");
 
           jmdns.addServiceListener ("_hid._udp.local.",
                                     DnsServiceSniffer.this);
@@ -89,12 +90,23 @@ class DnsServiceSniffer extends    FreeboxSniffer
         {
         }
 
+        if (jmdns != null)
+        {
+          try
+          {
+            jmdns.close ();
+          }
+          catch (IOException ignore)
+          {
+          }
+        }
+
         if (mMulticastLock != null)
         {
           mMulticastLock.release ();
         }
       }
-    });
+    }, "DnsServiceSniffer");
   }
 
   // ---------------------------------------------------

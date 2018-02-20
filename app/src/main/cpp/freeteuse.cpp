@@ -110,9 +110,9 @@ Java_bzh_leroux_yannick_freeteuse_Freebox_jniReleaseRcuKey (JNIEnv  __unused *en
 // ---------------------------------------------------
 extern "C"
 JNIEXPORT jstring JNICALL
-Java_bzh_leroux_yannick_freeteuse_Freebox_jniReadRcuStatus (JNIEnv  *env,
-                                                            jobject  j_freebox,
-                                                            jlong    jrcu)
+Java_bzh_leroux_yannick_freeteuse_Freebox_jniReadRcuStatus (JNIEnv           *env,
+                                                            jobject __unused  j_freebox,
+                                                            jlong             jrcu)
 {
   Rcu *rcu = (Rcu *) jrcu;
 

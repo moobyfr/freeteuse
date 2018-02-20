@@ -497,7 +497,7 @@
                         android:background="@color/RevolutionBgGrey"
                         android:scaleType="fitXY"
                         android:src="@drawable/xpip"
-                        android:tag="onMultiClick:Kok+Kinfo+1500+Kright+Kright+Kleft+Kok+back+Kback"
+                        android:tag="onMultiClick:Kdown+Kinfo+1500+Kright+Kright+Kleft+Kok+back+Kback"
                         tools:ignore="ContentDescription" />
                 </LinearLayout>
 

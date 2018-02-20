@@ -77,10 +77,13 @@ class Freebox
   }
 
   // ---------------------------------------------------
-  Freebox (String address,
-           int    port)
+  Freebox (Context context,
+           String  address,
+           int     port)
   {
     mReachable = true;
+
+    mVibrator = (Vibrator) context.getSystemService (Context.VIBRATOR_SERVICE);
 
     mAddress = address;
     mPort    = port;
@@ -195,7 +198,7 @@ class Freebox
             }
           }
         }
-      });
+      }, "Freebox(" + mAddress + ")");
       mStatusLooper.start ();
     }
   }
