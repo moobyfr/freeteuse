@@ -19,6 +19,7 @@
 #include <pthread.h>
 
 #include "Key.hpp"
+#include "Pipe.hpp"
 
 extern "C"
 {
@@ -42,27 +43,28 @@ class Rcu
     void SendKeyRelease (uint8_t  report_id,
                          uint32_t key_code);
 
+    const char *ReadStatus ();
+
   private:
     typedef enum
     {
-      EXIT_LOOPER_CODE,
       KEY_PRESS,
       KEY_PRESS_RELEASE,
       KEY_RELEASE
     } Command;
 
+    static Rcu *_current_rcu;
+
     pthread_t                _looper_thread;
     struct ela_el           *_looper;
     struct foils_hid        *_hid_client;
     Key                     *_pending_release;
-    int                      _looper_pipe_rfd;
-    int                      _looper_pipe_wfd;
+    Pipe                    *_looper_pipe;
+    Pipe                    *_status_pipe;
     struct ela_event_source *_key_press_trigger;
     struct ela_event_source *_key_release_trigger;
 
   private:
-    void SendControlKey (uint32_t key_code);
-
     int GetFamilly (const char *address);
 
   private:
@@ -71,21 +73,7 @@ class Rcu
     static void OnStatus (struct foils_hid     *client,
                           enum foils_hid_state  state);
 
-    static void OnFeatureReport (struct foils_hid *client,
-                                 uint32_t          device_id,
-                                 uint8_t           report_id,
-                                 const void       *data,
-                                 size_t            datalen);
-
-    static void OnOutputReport (struct foils_hid *client,
-                                uint32_t          device_id,
-                                uint8_t           report_id,
-                                const void       *data,
-                                size_t            datalen);
-
-    static void OnFeatureReportSollicit (struct foils_hid *client,
-                                         uint32_t          device_id,
-                                         uint8_t           report_id);
+    static void Stub ();
 
     static void OnKeyAvailable (struct ela_event_source *source,
                                 int                      fd,

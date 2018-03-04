@@ -79,7 +79,7 @@ class Wifi extends BroadcastReceiver
         }
       }
 
-      displayAlert ("La télécommande n'est pas utilisable sans connection réseau",
+      displayAlert ("La télécommande n'est pas utilisable sans connexion réseau",
                     "Se connecter au réseau");
     }
   }

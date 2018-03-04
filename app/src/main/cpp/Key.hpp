@@ -17,15 +17,16 @@
 #pragma once
 
 #include <stdio.h>
+#include "Message.hpp"
 
 struct foils_hid;
 
-class Key
+class Key : public Message
 {
   public:
     Key (uint32_t command,
-         uint8_t  report = 0,
-         uint32_t code   = 0);
+         uint8_t  report,
+         uint32_t code);
 
     virtual ~Key ();
 

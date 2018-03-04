@@ -17,11 +17,9 @@
 package bzh.leroux.yannick.freeteuse;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -30,24 +28,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
-import java.util.Arrays;
 import java.util.Hashtable;
 
-import javax.jmdns.ServiceInfo;
-
 public class MainActivity extends    Activity
-                          implements DnsServiceSniffer.Listener,
+                          implements Home.Listener,
                                      MultiClicker.Listener,
                                      View.OnClickListener,
-                                     View.OnTouchListener
+                                     View.OnTouchListener, Freebox.Listener
 {
-  private DnsServiceSniffer mDnsServiceSniffer;
-  private Freebox           mFreebox;
-  Hashtable<Integer, View>  mKeys;
-  MultiClicker              mMultiClicker;
-  Wifi                      mWifi;
-  View                      mProgressBar;
-  ScreenFitter              mScreenFitter;
+  private Freebox                  mActiveFreebox;
+  private Hashtable<Integer, View> mKeys;
+  private MultiClicker             mMultiClicker;
+  private Wifi                     mWifi;
+  private View                     mProgressBar;
+  private ScreenFitter             mScreenFitter;
+  private Home                     mHome;
+  private View                     mStatusView;
 
   // ---------------------------------------------------
   @Override
@@ -56,15 +52,7 @@ public class MainActivity extends    Activity
     super.onCreate (savedInstanceState);
     setContentView (R.layout.activity_main);
 
-    if (Build.VERSION.SDK_INT >= 11)
-    {
-      ActionBar actionBar = getActionBar ();
-
-      if (actionBar != null)
-      {
-        actionBar.hide ();
-      }
-    }
+    mStatusView = findViewById (R.id.status);
 
     mScreenFitter = new ScreenFitter (findViewById (R.id.key_grid),
                                       getWindowManager().getDefaultDisplay());
@@ -76,6 +64,10 @@ public class MainActivity extends    Activity
 
       listenToTouchEvent((ViewGroup) findViewById(R.id.key_grid));
     }
+
+    mHome = new Home (this,
+                      this,
+                      getPreferences (Context.MODE_PRIVATE));
   }
 
   // ---------------------------------------------------
@@ -84,13 +76,7 @@ public class MainActivity extends    Activity
   {
     super.onResume ();
 
-    connectFreebox (new Freebox (getPreferences(Context.MODE_PRIVATE)));
-
-    {
-      mDnsServiceSniffer = new DnsServiceSniffer (this, this);
-
-      mDnsServiceSniffer.execute ("_hid._udp");
-    }
+    mHome.discloseBoxes ();
 
     mMultiClicker = new MultiClicker (this);
     mWifi         = new Wifi (this);
@@ -102,32 +88,52 @@ public class MainActivity extends    Activity
   @Override
   protected void onPause ()
   {
-    mDnsServiceSniffer.cancel (true);
+    mHome.concealBoxes ();
     mMultiClicker.stop ();
     mWifi.stop ();
+
     disconnectFreebox ();
 
     super.onPause ();
   }
 
   // ---------------------------------------------------
-  @Override
   public void onClick (View view)
   {
-    if (mMultiClicker.stopped ())
+    if (mMultiClicker.stopped () && (mActiveFreebox != null))
     {
       String[] tags = ((String) view.getTag ()).split (":");
 
       if (tags[0].equals("onClick"))
       {
-        mFreebox.pressRcuKey (tags[1],
-                              tags[2],
-                              true);
+        mActiveFreebox.pressRcuKey (tags[1],
+                                    tags[2],
+                                   true);
       }
       else if (tags[0].equals("onMultiClick"))
       {
         mMultiClicker.start (tags[1]);
       }
+    }
+  }
+
+
+  // ---------------------------------------------------
+  public void onPreviousFreebox (View view)
+  {
+    if (mMultiClicker.stopped ())
+    {
+      onFreeboxSelected (mHome.getPreviousReachable (mActiveFreebox));
+    }
+  }
+
+
+  // ---------------------------------------------------
+  public void onNextFreebox (View view)
+  {
+    if (mMultiClicker.stopped ())
+    {
+      onFreeboxSelected (mHome.getNextReachable (mActiveFreebox));
     }
   }
 
@@ -137,20 +143,20 @@ public class MainActivity extends    Activity
   public boolean onTouch (View        view,
                           MotionEvent motionEvent)
   {
-    if (mMultiClicker.stopped ())
+    if (mMultiClicker.stopped () && (mActiveFreebox != null))
     {
       String[] tags = ((String) view.getTag()).split(":");
 
       if (motionEvent.getAction () == MotionEvent.ACTION_DOWN)
       {
-        mFreebox.pressRcuKey (tags[1],
-                              tags[2],
-                              false);
+        mActiveFreebox.pressRcuKey (tags[1],
+                                    tags[2],
+                                   false);
       }
       else if (motionEvent.getAction () == MotionEvent.ACTION_UP)
       {
-        mFreebox.releaseRcuKey (tags[1],
-                                tags[2]);
+        mActiveFreebox.releaseRcuKey (tags[1],
+                                      tags[2]);
       }
     }
 
@@ -165,18 +171,18 @@ public class MainActivity extends    Activity
     {
       case KeyEvent.KEYCODE_VOLUME_UP:
       case KeyEvent.KEYCODE_VOLUME_DOWN:
-        if (mFreebox != null)
+        if (mActiveFreebox != null)
         {
           if (event.getAction () == KeyEvent.ACTION_DOWN)
           {
             if (event.getRepeatCount () == 0)
             {
-              mFreebox.onVolumePressed (event.getKeyCode ());
+              mActiveFreebox.onVolumePressed (event.getKeyCode ());
             }
           }
           else if (event.getAction () == KeyEvent.ACTION_UP)
           {
-            mFreebox.onVolumeReleased (event.getKeyCode ());
+            mActiveFreebox.onVolumeReleased (event.getKeyCode ());
           }
         }
         return true;
@@ -200,15 +206,15 @@ public class MainActivity extends    Activity
       int       id           = resources.getIdentifier (key_name, "id", package_name);
       View      view         = findViewById (id);
 
-      if (view != null)
+      if ((view != null) && (mActiveFreebox != null))
       {
         String[] tags = ((String) view.getTag ()).split (":");
 
         if (tags[0].equals ("onClick") || tags[0].equals ("onTouch"))
         {
-          mFreebox.pressRcuKey (tags[1],
-                                tags[2],
-                                true);
+          mActiveFreebox.pressRcuKey (tags[1],
+                                      tags[2],
+                                     true);
         }
       }
       mProgressBar.setVisibility (View.VISIBLE);
@@ -217,21 +223,46 @@ public class MainActivity extends    Activity
 
   // ---------------------------------------------------
   @Override
-  public void onDnsService (ServiceInfo serviceInfo)
+  public void onFreeboxSelected (Freebox freebox)
   {
-    if (serviceInfo != null)
+    connectFreebox (freebox);
+
+    mHome.paintBoxButtons (mActiveFreebox,
+                           (ImageButton) findViewById (R.id.Kprevious_box),
+                           (ImageButton) findViewById (R.id.Kfree),
+                           (ImageButton) findViewById (R.id.Knext_box));
+  }
+
+  // ---------------------------------------------------
+  @Override
+  public void onFreeboxDetected (Freebox freebox)
+  {
+    if (mActiveFreebox == null)
     {
-      Log.d ("FreeTeuse", Arrays.toString (serviceInfo.getHostAddresses ())
-                               + ":" + serviceInfo.getPort ());
+      connectFreebox (freebox);
+    }
 
-      Freebox detected_box = new Freebox (getPreferences (Context.MODE_PRIVATE),
-                                          serviceInfo);
+    mHome.paintBoxButtons (mActiveFreebox,
+                           (ImageButton) findViewById (R.id.Kprevious_box),
+                           (ImageButton) findViewById (R.id.Kfree),
+                           (ImageButton) findViewById (R.id.Knext_box));
+  }
 
-      if (!detected_box.Is (mFreebox))
-      {
-        connectFreebox(detected_box);
-        detected_box.saveAddress();
-      }
+  // ---------------------------------------------------
+  @Override
+  public void onFreeboxStatus (String status)
+  {
+    View view = findViewById (R.id.status);
+
+    Log.e (Freeteuse.TAG, ">>> " + status + " <<<");
+
+    if (status.equals ("connected"))
+    {
+      view.setVisibility (View.INVISIBLE);
+    }
+    else
+    {
+      view.setVisibility (View.VISIBLE);
     }
   }
 
@@ -248,18 +279,23 @@ public class MainActivity extends    Activity
       }
       else if (child instanceof ImageButton)
       {
-        String[] tags = ((String) child.getTag()).split(":");
+        String tag = (String) child.getTag ();
 
-        switch (tags[0])
+        if (tag != null)
         {
-          case "onClick":
-          case "onMultiClick":
-            child.setOnClickListener(this);
-            break;
+          String[] tags = tag.split (":");
 
-          case "onTouch":
-            child.setOnTouchListener(this);
-            break;
+          switch (tags[0])
+          {
+            case "onClick":
+            case "onMultiClick":
+              child.setOnClickListener (this);
+              break;
+
+            case "onTouch":
+              child.setOnTouchListener (this);
+              break;
+          }
         }
 
         mKeys.put (child.getId (), child);
@@ -270,19 +306,29 @@ public class MainActivity extends    Activity
   // ---------------------------------------------------
   private void connectFreebox (Freebox freebox)
   {
-    disconnectFreebox ();
+    if (freebox != null)
+    {
+      if (mActiveFreebox != null)
+      {
+        mActiveFreebox.releaseFocus ();
+        disconnectFreebox ();
+      }
 
-    mFreebox = freebox;
-    mFreebox.connect();
+      mActiveFreebox = freebox;
+      mActiveFreebox.grabFocus ();
+      mActiveFreebox.connect (this);
+    }
   }
 
   // ---------------------------------------------------
   private void disconnectFreebox ()
   {
-    if (mFreebox != null)
+    if (mActiveFreebox != null)
     {
-      mFreebox.disconnect ();
-      mFreebox = null;
+      mActiveFreebox.disconnect ();
+      mActiveFreebox = null;
+
+      mStatusView.setVisibility (View.VISIBLE);
     }
   }
 

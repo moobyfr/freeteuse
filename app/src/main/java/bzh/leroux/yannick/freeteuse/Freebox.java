@@ -16,42 +16,117 @@
 
 package bzh.leroux.yannick.freeteuse;
 
-import android.content.SharedPreferences;
+import android.content.Context;
+import android.os.Handler;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.KeyEvent;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import javax.jmdns.ServiceInfo;
 
 class Freebox
 {
-  private long              mRcu;
-  private SharedPreferences mSharedPreferences;
-  private String            mAddress;
-  private int               mPort;
+  public interface Listener
+  {
+    void onFreeboxStatus (String status);
+  }
+
+  private long     mRcu;
+  private String   mAddress;
+  private int      mPort;
+  private boolean  mHasFocus;
+  private boolean  mReachable;
+  private String   mColor;
+  private Thread   mStatusLooper;
+  private Vibrator mVibrator;
 
   // ---------------------------------------------------
-  Freebox (SharedPreferences sharedPreferences)
+  Freebox (Context    context,
+           JSONObject json)
   {
-    mSharedPreferences = sharedPreferences;
+    mVibrator = (Vibrator) context.getSystemService (Context.VIBRATOR_SERVICE);
 
-    mPort    = mSharedPreferences.getInt    ("port", 0);
-    mAddress = mSharedPreferences.getString ("address", null);
+    try
+    {
+      mPort     = json.getInt     ("port");
+      mAddress  = json.getString  ("address");
+      mHasFocus = json.getBoolean ("focus");
+      mColor    = json.getString  ("color");
+    }
+    catch (JSONException e)
+    {
+      e.printStackTrace ();
+    }
   }
 
   // ---------------------------------------------------
-  Freebox (SharedPreferences sharedPreferences,
-           ServiceInfo       serviceInfo)
+  Freebox (Context     context,
+           ServiceInfo serviceInfo)
   {
-    mSharedPreferences = sharedPreferences;
+    mReachable = true;
+
+    mVibrator = (Vibrator) context.getSystemService (Context.VIBRATOR_SERVICE);
 
     mAddress = serviceInfo.getHostAddress ();
     mAddress = mAddress.replaceAll ("[\\[\\]]", "");
     mPort    = serviceInfo.getPort ();
-    Log.d ("FreeTeuse", mAddress);
+    Log.d (Freeteuse.TAG, mAddress);
   }
 
   // ---------------------------------------------------
-  boolean Is (Freebox freebox)
+  Freebox (Context context,
+           String  address,
+           int     port)
+  {
+    mReachable = true;
+
+    mVibrator = (Vibrator) context.getSystemService (Context.VIBRATOR_SERVICE);
+
+    mAddress = address;
+    mPort    = port;
+  }
+
+  // ---------------------------------------------------
+  boolean hasFocus ()
+  {
+    return mHasFocus;
+  }
+
+  // ---------------------------------------------------
+  boolean isConsistent ()
+  {
+    return mAddress != null;
+  }
+
+  // ---------------------------------------------------
+  boolean isReachable ()
+  {
+    return mReachable;
+  }
+
+  // ---------------------------------------------------
+  void detected ()
+  {
+    mReachable = true;
+  }
+
+  // ---------------------------------------------------
+  String getColor ()
+  {
+    return mColor;
+  }
+
+  // ---------------------------------------------------
+  void setColor (String color)
+  {
+    mColor = color;
+  }
+
+  // ---------------------------------------------------
+  boolean equals (Freebox freebox)
   {
     //noinspection SimplifiableIfStatement
     if (freebox == null)
@@ -63,27 +138,83 @@ class Freebox
   }
 
   // ---------------------------------------------------
-  void saveAddress ()
+  JSONObject getJson ()
   {
-    SharedPreferences.Editor editor = mSharedPreferences.edit ();
+    JSONObject json = new JSONObject ();
 
-    editor.putInt    ("port",    mPort);
-    editor.putString ("address", mAddress);
-    editor.commit ();
+    try
+    {
+      json.put ("port",    mPort);
+      json.put ("address", mAddress);
+      json.put ("focus",   mHasFocus);
+      json.put ("color",   mColor);
+    }
+    catch (JSONException e)
+    {
+      e.printStackTrace ();
+      return null;
+    }
 
-    Log.i ("FreeTeuse", "<<Address saved>>");
+    return json;
   }
 
   // ---------------------------------------------------
-  void connect ()
+  void connect (final Listener listener)
   {
     if ((mAddress != null) && (mPort != 0))
     {
+      final Handler listenerHandler = new Handler ();
+
       mRcu = jniCreateRcu ();
 
       jniConnectRcu (mRcu,
                      mAddress,
                      mPort);
+
+      mStatusLooper = new Thread (new Runnable ()
+      {
+        @Override
+        public void run ()
+        {
+          while (true)
+          {
+            final String status = jniReadRcuStatus (mRcu);
+
+            if (listener != null)
+            {
+              listenerHandler.post (new Runnable ()
+              {
+                @Override
+                public void run ()
+                {
+                  listener.onFreeboxStatus (status);
+                }
+              });
+            }
+
+            if (status.equals ("EXIT"))
+            {
+              break;
+            }
+          }
+        }
+      }, "Freebox(" + mAddress + ")");
+      mStatusLooper.start ();
+    }
+  }
+
+  // ---------------------------------------------------
+  void disconnect ()
+  {
+    jniDisconnectRcu (mRcu);
+
+    try
+    {
+      mStatusLooper.join ();
+    }
+    catch (InterruptedException e)
+    {
+      e.printStackTrace ();
     }
   }
 
@@ -124,6 +255,8 @@ class Freebox
                     String  key_code,
                     boolean with_release)
   {
+    mVibrator.vibrate (30);
+
     try
     {
       jniPressRcuKey (mRcu,
@@ -133,7 +266,7 @@ class Freebox
     }
     catch (NumberFormatException e)
     {
-      Log.e ("FreeTeuse", String.valueOf(e));
+      Log.e (Freeteuse.TAG, String.valueOf(e));
     }
   }
 
@@ -147,15 +280,22 @@ class Freebox
   }
 
   // ---------------------------------------------------
-  void disconnect ()
+  void grabFocus ()
   {
-    jniDisconnectRcu (mRcu);
+    mHasFocus = true;
   }
 
   // ---------------------------------------------------
-  private native long jniCreateRcu     ();
-  private native void jniConnectRcu    (long rcu, String address, int port);
-  private native void jniDisconnectRcu (long rcu);
-  private native void jniPressRcuKey   (long rcu, int report_id, int key_code, boolean with_key_release);
-  private native void jniReleaseRcuKey (long rcu, int report_id, int key_code);
+  void releaseFocus ()
+  {
+    mHasFocus = false;
+  }
+
+  // ---------------------------------------------------
+  private native long   jniCreateRcu     ();
+  private native void   jniConnectRcu    (long rcu, String address, int port);
+  private native void   jniDisconnectRcu (long rcu);
+  private native void   jniPressRcuKey   (long rcu, int report_id, int key_code, boolean with_key_release);
+  private native void   jniReleaseRcuKey (long rcu, int report_id, int key_code);
+  private native String jniReadRcuStatus (long rcu);
 }

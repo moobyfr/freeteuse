@@ -27,10 +27,13 @@
 
 #include "Log.hpp"
 #include "Rcu.hpp"
+#include "Status.hpp"
 
 #pragma clang diagnostic push
 #pragma ide   diagnostic ignored "OCUnusedMacroInspection"
 #pragma clang diagnostic ignored "-Wunused-parameter"
+
+Rcu *Rcu::_current_rcu = NULL;
 
 // ---------------------------------------------------
 static const uint8_t rcu_report_descriptor[] =
@@ -78,65 +81,24 @@ static const struct foils_hid_device_descriptor descriptors[] =
 const struct foils_hid_handler Rcu::handler =
 {
   .status                  = Rcu::OnStatus,
-  .feature_report          = Rcu::OnFeatureReport,
-  .output_report           = Rcu::OnOutputReport,
-  .feature_report_sollicit = Rcu::OnFeatureReportSollicit
+  .feature_report          = (void (*) (foils_hid *, uint32_t, uint8_t, const void *, size_t)) Rcu::Stub,
+  .output_report           = (void (*) (foils_hid *, uint32_t, uint8_t, const void *, size_t)) Rcu::Stub,
+  .feature_report_sollicit = (void (*) (foils_hid *, uint32_t, uint8_t)) Rcu::Stub
 };
 
 // ---------------------------------------------------
 void Rcu::OnStatus (struct foils_hid       *client,
                     enum   foils_hid_state  state)
 {
-  const char *st = NULL;
+  Status *status = new Status (state);
 
-  switch (state)
-  {
-    case FOILS_HID_IDLE:
-    st = "idle";
-    break;
-    case FOILS_HID_CONNECTING:
-    st = "connecting";
-    break;
-    case FOILS_HID_CONNECTED:
-    st = "connected";
-    break;
-    case FOILS_HID_RESOLVE_FAILED:
-    st = "resolve failed";
-    break;
-    case FOILS_HID_DROPPED:
-    st = "dropped";
-    break;
-  }
-
-  LOGI ("Status ===>> %s", st);
+  _current_rcu->_status_pipe->Write (status);
 }
 
 // ---------------------------------------------------
-void Rcu::OnFeatureReport (struct foils_hid *client,
-                           uint32_t          device_id,
-                           uint8_t           report_id,
-                           const void       *data,
-                           size_t            datalen)
+void Rcu::Stub ()
 {
-  LOGI ("OnFeatureReport");
-}
-
-// ---------------------------------------------------
-void Rcu::OnOutputReport (struct foils_hid *client,
-                          uint32_t          device_id,
-                          uint8_t           report_id,
-                          const void       *data,
-                          size_t            datalen)
-{
-  LOGI ("OnOutputReport");
-}
-
-// ---------------------------------------------------
-void Rcu::OnFeatureReportSollicit (struct foils_hid *client,
-                                   uint32_t          device_id,
-                                   uint8_t           report_id)
-{
-  LOGI ("OnFeatureReportSollicit");
+  LOGI ("Stub");
 }
 
 // ---------------------------------------------------
@@ -145,14 +107,17 @@ void Rcu::OnKeyAvailable (struct ela_event_source *source,
                           uint32_t                 mask,
                           Rcu                     *rcu)
 {
-  Key *key;
+  Message *message = rcu->_looper_pipe->Read ();
 
-  if (read (rcu->_looper_pipe_rfd, &key, sizeof (Key *)) == -1)
+  if (message)
   {
-    LOGE ("Rcu::OnKeyAvailable: %s", strerror (errno));
-  }
-  else
-  {
+    Key *key = dynamic_cast<Key *> (message);
+
+    if (message->Is ("CLOSE_PIPE"))
+    {
+      ela_exit (rcu->_looper);
+    }
+
     // Release previous key
     if (rcu->_pending_release)
     {
@@ -162,29 +127,29 @@ void Rcu::OnKeyAvailable (struct ela_event_source *source,
                     rcu);
     }
 
-    if (key->Is (EXIT_LOOPER_CODE))
+    if (key)
     {
-      ela_exit (rcu->_looper);
-    }
-    else if (key->Is (KEY_RELEASE))
-    {
-      key->Release (rcu->_hid_client);
-    }
-    else
-    {
-      key->Press (rcu->_hid_client);
-
-      // Schedule key release
-      if (key->Is (KEY_PRESS_RELEASE))
+      if (key->Is (KEY_RELEASE))
       {
-        rcu->_pending_release = key;
+        key->Release (rcu->_hid_client);
+      }
+      else
+      {
+        key->Press (rcu->_hid_client);
 
-        ela_add (rcu->_looper,
-                 rcu->_key_release_trigger);
-        return;
+        // Schedule key release
+        if (key->Is (KEY_PRESS_RELEASE))
+        {
+          rcu->_pending_release = key;
+
+          ela_add (rcu->_looper,
+                   rcu->_key_release_trigger);
+          return;
+        }
       }
     }
-    delete key;
+
+    delete message;
   }
 }
 
@@ -228,10 +193,7 @@ void Rcu::SendKeyPress (uint8_t  report_id,
                      key_code);
     }
 
-    if (write (_looper_pipe_wfd, &key, sizeof (Key *)) == -1)
-    {
-      LOGE ("Rcu::SendKeyPress: %s", strerror (errno));
-    }
+    _looper_pipe->Write (key);
   }
 }
 
@@ -245,27 +207,61 @@ void Rcu::SendKeyRelease (uint8_t  report_id,
                         report_id,
                         key_code);
 
-    if (write (_looper_pipe_wfd, &key, sizeof (Key *)) == -1)
-    {
-      LOGE ("Rcu::SendKeyPress: %s", strerror (errno));
-    }
+    _looper_pipe->Write (key);
   }
 }
 
 // ---------------------------------------------------
-void Rcu::SendControlKey (uint32_t key_code)
+const char *Rcu::ReadStatus ()
 {
-  Key *key = new Key (key_code);
+  const char *result  = NULL;
+  Message    *message = _status_pipe->Read ();
 
-  if (write (_looper_pipe_wfd, &key, sizeof (Key *)) == -1)
+  if (message)
   {
-    LOGE ("Rcu::SendControlKey: %s", strerror (errno));
+    if (message->Is ("CLOSE_PIPE"))
+    {
+      result = "EXIT";
+    }
+    else
+    {
+      Status *status = dynamic_cast<Status *> (message);
+
+      switch (status->GetCode ())
+      {
+        case FOILS_HID_IDLE:
+          result = "idle";
+          break;
+
+        case FOILS_HID_CONNECTING:
+          result = "connecting";
+          break;
+
+        case FOILS_HID_CONNECTED:
+          result = "connected";
+          break;
+
+        case FOILS_HID_RESOLVE_FAILED:
+          result = "resolve failed";
+          break;
+
+        case FOILS_HID_DROPPED:
+          result = "dropped";
+          break;
+      }
+    }
+
+    delete message;
   }
+
+  return result;
 }
 
 // ---------------------------------------------------
 Rcu::Rcu ()
 {
+  _current_rcu = this;
+
   _pending_release     = NULL;
   _key_press_trigger   = NULL;
   _key_release_trigger = NULL;
@@ -324,19 +320,8 @@ void Rcu::Connect (const char *address,
   if (   (familly != AF_UNSPEC)
       && inet_pton (familly, address, &addr))
   {
-    // Pipe
-    {
-      int fd[2];
-
-      if (pipe (fd) < 0)
-      {
-        LOGE ("Rcu::Connect: %s", strerror (errno));
-        return;
-      }
-
-      _looper_pipe_rfd = fd[0];
-      _looper_pipe_wfd = fd[1];
-    }
+    _looper_pipe = new Pipe ();
+    _status_pipe = new Pipe ();
 
     // Key press
     {
@@ -346,7 +331,7 @@ void Rcu::Connect (const char *address,
                         &_key_press_trigger);
       ela_set_fd (_looper,
                   _key_press_trigger,
-                  _looper_pipe_rfd,
+                  _looper_pipe->GetReadEnd (),
                   ELA_EVENT_READABLE);
       ela_add (_looper,
                _key_press_trigger);
@@ -399,12 +384,12 @@ Rcu::~Rcu ()
 {
   if (_key_press_trigger)
   {
-    SendControlKey (EXIT_LOOPER_CODE);
-    pthread_join (_looper_thread,
-                  NULL);
+    _looper_pipe->Write (new Message ("CLOSE_PIPE"));
+    pthread_join (_looper_thread, NULL);
+    delete _looper_pipe;
 
-    close (_looper_pipe_wfd);
-    close (_looper_pipe_rfd);
+    _status_pipe->Write (new Message ("CLOSE_PIPE"));
+    delete _status_pipe;
 
     ela_remove      (_looper, _key_release_trigger);
     ela_source_free (_looper, _key_release_trigger);
@@ -422,6 +407,8 @@ Rcu::~Rcu ()
   {
     delete (_pending_release);
   }
+
+  _current_rcu = NULL;
 }
 
 #pragma clang diagnostic pop

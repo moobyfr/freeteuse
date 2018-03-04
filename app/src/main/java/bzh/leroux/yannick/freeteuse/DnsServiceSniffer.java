@@ -18,35 +18,36 @@ package bzh.leroux.yannick.freeteuse;
 
 import android.content.Context;
 import android.net.wifi.WifiManager;
-import android.os.AsyncTask;
+import android.os.Handler;
 import android.util.Log;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import javax.jmdns.JmDNS;
 import javax.jmdns.ServiceEvent;
 import javax.jmdns.ServiceInfo;
 import javax.jmdns.ServiceListener;
 
-class DnsServiceSniffer extends    AsyncTask<String, Void, Void>
+class DnsServiceSniffer extends    FreeboxSniffer
                         implements ServiceListener
 {
-  public interface Listener
-  {
-    void onDnsService (ServiceInfo serviceInfo);
-  }
-
-  private ServiceInfo               mServiceInfo;
-  private Listener                  mListener;
+  private Thread                    mThread;
   private WifiManager.MulticastLock mMulticastLock;
+  private Handler                   mListenerHandler;
+  private Context                   mContext;
 
   // ---------------------------------------------------
   DnsServiceSniffer (Context  context,
                      Listener listener)
   {
+    super (listener);
+
+    mContext = context;
+
     {
-      Context     appContext = context.getApplicationContext();
-      WifiManager wifiMgr    = (WifiManager) appContext.getSystemService(Context.WIFI_SERVICE);
+      Context     appContext = context.getApplicationContext ();
+      WifiManager wifiMgr    = (WifiManager) appContext.getSystemService (Context.WIFI_SERVICE);
 
       if (wifiMgr != null)
       {
@@ -54,46 +55,70 @@ class DnsServiceSniffer extends    AsyncTask<String, Void, Void>
       }
     }
 
-    mListener = listener;
+    mListenerHandler = new Handler ();
+
+    mThread = new Thread (new Runnable ()
+    {
+      @Override
+      public void run ()
+      {
+        JmDNS jmdns = null;
+
+        if (mMulticastLock != null)
+        {
+          mMulticastLock.setReferenceCounted (true);
+          mMulticastLock.acquire ();
+        }
+
+        try
+        {
+          jmdns = JmDNS.create ("FreeTeuse");
+
+          jmdns.addServiceListener ("_hid._udp.local.",
+                                    DnsServiceSniffer.this);
+        }
+        catch (IOException e)
+        {
+          e.printStackTrace ();
+        }
+
+        try
+        {
+          Thread.sleep (Long.MAX_VALUE);
+        }
+        catch (InterruptedException ignore)
+        {
+        }
+
+        if (jmdns != null)
+        {
+          try
+          {
+            jmdns.close ();
+          }
+          catch (IOException ignore)
+          {
+          }
+        }
+
+        if (mMulticastLock != null)
+        {
+          mMulticastLock.release ();
+        }
+      }
+    }, "DnsServiceSniffer");
   }
 
   // ---------------------------------------------------
-  @Override
-  protected Void doInBackground (String... service)
+  void start ()
   {
-    mServiceInfo = null;
+    mThread.start ();
+  }
 
-    if (mMulticastLock != null)
-    {
-      mMulticastLock.setReferenceCounted (true);
-      mMulticastLock.acquire ();
-    }
-
-    try
-    {
-      JmDNS jmdns = JmDNS.create ();
-
-      jmdns.addServiceListener (service[0] + ".local.", this);
-    }
-    catch (IOException e)
-    {
-      e.printStackTrace ();
-    }
-
-    try
-    {
-      Thread.sleep (Long.MAX_VALUE);
-    }
-    catch (InterruptedException ignore)
-    {
-    }
-
-    if (mMulticastLock != null)
-    {
-      mMulticastLock.release ();
-    }
-
-    return null;
+  // ---------------------------------------------------
+  void stop ()
+  {
+    mThread.interrupt ();
   }
 
   // ---------------------------------------------------
@@ -102,35 +127,35 @@ class DnsServiceSniffer extends    AsyncTask<String, Void, Void>
   {
     ServiceInfo info = event.getInfo ();
 
-    Log.d ("FreeTeuse", "DnsServiceSniffer::serviceAdded: " + info.getName ());
+    Log.d (Freeteuse.TAG, "DnsServiceSniffer::serviceAdded: " + info.getName ());
   }
 
   // ---------------------------------------------------
   @Override
   public void serviceRemoved (ServiceEvent event)
   {
-    Log.d ("FreeTeuse", "DnsServiceSniffer::serviceRemoved: " + event.getInfo ());
+    Log.d (Freeteuse.TAG, "DnsServiceSniffer::serviceRemoved: " + event.getInfo ());
   }
 
   // ---------------------------------------------------
   @Override
   public void serviceResolved (ServiceEvent event)
   {
-    mServiceInfo = event.getInfo ();
-    cancel (true);
-  }
+    final ServiceInfo serviceInfo = event.getInfo ();
 
-  // ---------------------------------------------------
-  @Override
-  protected void onPostExecute (Void result)
-  {
-    mListener.onDnsService (mServiceInfo);
-  }
+    mListenerHandler.post (new Runnable ()
+    {
+      @Override
+      public void run ()
+      {
+        final Freebox freebox = new Freebox (mContext,
+                                             serviceInfo);
 
-  // ---------------------------------------------------
-  @Override
-  protected void onCancelled ()
-  {
-    mListener.onDnsService (mServiceInfo);
+        onFreeboxDetected (freebox);
+      }
+    });
+
+    Log.d (Freeteuse.TAG, Arrays.toString (serviceInfo.getHostAddresses ())
+            + ":" + serviceInfo.getPort ());
   }
 }

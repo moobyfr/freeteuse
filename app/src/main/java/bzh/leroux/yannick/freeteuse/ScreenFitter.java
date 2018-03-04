@@ -45,9 +45,10 @@ class ScreenFitter
   // ---------------------------------------------------
   private void onViewDisplayed (View view)
   {
-    float         metricsAR;
-    float         viewAR;
-    float         scale;
+    final float    screenPortion = 0.9f;
+    float          metricsAR;
+    float          viewAR;
+    float          scale;
     DisplayMetrics metrics = new DisplayMetrics ();
 
     mDisplay.getMetrics (metrics);
@@ -57,11 +58,11 @@ class ScreenFitter
 
     if (metricsAR > viewAR)
     {
-      scale = (float) metrics.heightPixels * 0.8f / (float) view.getHeight ();
+      scale = (float) metrics.heightPixels * screenPortion / (float) view.getHeight ();
     }
     else
     {
-      scale = metrics.widthPixels * 0.8f / view.getWidth ();
+      scale = metrics.widthPixels * screenPortion / view.getWidth ();
     }
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
@@ -71,7 +72,7 @@ class ScreenFitter
     }
     else
     {
-      Log.e ("FreeTeuse", "view.setScale not availlable on this device.");
+      Log.e (Freeteuse.TAG, "view.setScale not availlable on this device.");
     }
   }
 }
