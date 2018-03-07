@@ -26,6 +26,8 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 
 import java.util.Hashtable;
@@ -51,6 +53,12 @@ public class MainActivity extends    Activity
   {
     super.onCreate (savedInstanceState);
     setContentView (R.layout.activity_main);
+
+    {
+      Window win = getWindow ();
+
+      win.addFlags (WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+    }
 
     mStatusView = findViewById (R.id.status);
 
