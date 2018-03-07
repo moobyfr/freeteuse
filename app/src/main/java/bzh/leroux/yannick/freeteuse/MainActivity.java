@@ -30,22 +30,20 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 
-import java.util.Hashtable;
-
 public class MainActivity extends    Activity
                           implements Home.Listener,
                                      MultiClicker.Listener,
                                      View.OnClickListener,
-                                     View.OnTouchListener, Freebox.Listener
+                                     View.OnTouchListener,
+                                     Freebox.Listener
 {
-  private Freebox                  mActiveFreebox;
-  private Hashtable<Integer, View> mKeys;
-  private MultiClicker             mMultiClicker;
-  private Wifi                     mWifi;
-  private View                     mProgressBar;
-  private ScreenFitter             mScreenFitter;
-  private Home                     mHome;
-  private View                     mStatusView;
+  private Freebox      mActiveFreebox;
+  private MultiClicker mMultiClicker;
+  private Wifi         mWifi;
+  private View         mProgressBar;
+  private ScreenFitter mScreenFitter;
+  private Home         mHome;
+  private View         mStatusView;
 
   // ---------------------------------------------------
   @Override
@@ -67,11 +65,7 @@ public class MainActivity extends    Activity
 
     mProgressBar = findViewById (R.id.progressBar);
 
-    {
-      mKeys = new Hashtable<> ();
-
-      listenToTouchEvent((ViewGroup) findViewById(R.id.key_grid));
-    }
+    listenToTouchEvent((ViewGroup) findViewById(R.id.key_grid));
 
     mHome = new Home (this,
                       this,
@@ -305,8 +299,6 @@ public class MainActivity extends    Activity
               break;
           }
         }
-
-        mKeys.put (child.getId (), child);
       }
     }
   }
