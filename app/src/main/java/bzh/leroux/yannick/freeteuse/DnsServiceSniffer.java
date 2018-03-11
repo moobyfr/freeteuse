@@ -18,11 +18,17 @@ package bzh.leroux.yannick.freeteuse;
 
 import android.content.Context;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
 
 import java.io.IOException;
+import java.net.Inet6Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Enumeration;
 
 import javax.jmdns.JmDNS;
 import javax.jmdns.ServiceEvent;
@@ -52,61 +58,56 @@ class DnsServiceSniffer extends    FreeboxSniffer
       if (wifiMgr != null)
       {
         mMulticastLock = wifiMgr.createMulticastLock (context.getPackageName ());
+
+        mListenerHandler = new Handler ();
+
+        mThread = new Thread (new Runnable ()
+        {
+          @Override
+          public void run ()
+          {
+            JmDNS jmdns;
+
+            if (mMulticastLock != null)
+            {
+              mMulticastLock.setReferenceCounted (true);
+              mMulticastLock.acquire ();
+            }
+
+            jmdns = getJmDns ();
+            if (jmdns != null)
+            {
+              jmdns.addServiceListener ("_hid._udp.local.",
+                                        DnsServiceSniffer.this);
+            }
+
+            try
+            {
+              Thread.sleep (Long.MAX_VALUE);
+            }
+            catch (InterruptedException ignore)
+            {
+            }
+
+            if (jmdns != null)
+            {
+              try
+              {
+                jmdns.close ();
+              }
+              catch (IOException ignore)
+              {
+              }
+            }
+
+            if (mMulticastLock != null)
+            {
+              mMulticastLock.release ();
+            }
+          }
+        }, "DnsServiceSniffer");
       }
     }
-
-    mListenerHandler = new Handler ();
-
-    mThread = new Thread (new Runnable ()
-    {
-      @Override
-      public void run ()
-      {
-        JmDNS jmdns = null;
-
-        if (mMulticastLock != null)
-        {
-          mMulticastLock.setReferenceCounted (true);
-          mMulticastLock.acquire ();
-        }
-
-        try
-        {
-          jmdns = JmDNS.create ("FreeTeuse");
-
-          jmdns.addServiceListener ("_hid._udp.local.",
-                                    DnsServiceSniffer.this);
-        }
-        catch (IOException e)
-        {
-          e.printStackTrace ();
-        }
-
-        try
-        {
-          Thread.sleep (Long.MAX_VALUE);
-        }
-        catch (InterruptedException ignore)
-        {
-        }
-
-        if (jmdns != null)
-        {
-          try
-          {
-            jmdns.close ();
-          }
-          catch (IOException ignore)
-          {
-          }
-        }
-
-        if (mMulticastLock != null)
-        {
-          mMulticastLock.release ();
-        }
-      }
-    }, "DnsServiceSniffer");
   }
 
   // ---------------------------------------------------
@@ -119,6 +120,63 @@ class DnsServiceSniffer extends    FreeboxSniffer
   void stop ()
   {
     mThread.interrupt ();
+  }
+
+  // ---------------------------------------------------
+  private int getIpVersion (InetAddress address)
+  {
+    if (address instanceof Inet6Address)
+    {
+      return 6;
+    }
+
+    return  4;
+  }
+
+  // ---------------------------------------------------
+  private JmDNS getJmDns ()
+  {
+    try
+    {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD)
+      {
+
+        InetAddress                   ipAddress  = InetAddress.getLocalHost ();
+        int                           ipVersion  = getIpVersion (ipAddress);
+        Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces ();
+
+        for (NetworkInterface iface : Collections.list (interfaces))
+        {
+          Log.e (Freeteuse.TAG, iface.toString () + " ====>> " + iface.isUp ());
+
+          if (!iface.isLoopback () && iface.isUp ())
+          {
+            for (InetAddress address : Collections.list (iface.getInetAddresses ()))
+            {
+              if (getIpVersion (address) == ipVersion)
+              {
+                JmDNS jmdns = JmDNS.create (address,
+                                            "FreeTeuse:"
+                                                    + iface.getDisplayName ()
+                                                    + address);
+                Log.e (Freeteuse.TAG, " ...... " + address);
+                return jmdns;
+              }
+            }
+          }
+        }
+      }
+      else
+      {
+        return JmDNS.create ("FreeTeuse:");
+      }
+    }
+    catch (IOException e)
+    {
+      e.printStackTrace ();
+    }
+
+    return null;
   }
 
   // ---------------------------------------------------
