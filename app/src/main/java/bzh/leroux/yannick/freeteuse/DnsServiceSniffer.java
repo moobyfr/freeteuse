@@ -16,7 +16,9 @@
 
 package bzh.leroux.yannick.freeteuse;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Handler;
@@ -26,9 +28,12 @@ import java.io.IOException;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.List;
+import java.util.Locale;
 
 import javax.jmdns.JmDNS;
 import javax.jmdns.ServiceEvent;
@@ -42,6 +47,9 @@ class DnsServiceSniffer extends    FreeboxSniffer
   private WifiManager.MulticastLock mMulticastLock;
   private Handler                   mListenerHandler;
   private Context                   mContext;
+  private AlertDialog               mAlert;
+  private List<String>              mLogs;
+  private CheatCode                 mCheatCode;
 
   // ---------------------------------------------------
   DnsServiceSniffer (Context  context,
@@ -49,7 +57,9 @@ class DnsServiceSniffer extends    FreeboxSniffer
   {
     super (listener);
 
-    mContext = context;
+    mContext   = context;
+    mLogs      = new ArrayList<> ();
+    mCheatCode = new CheatCode ();
 
     {
       Context     appContext = context.getApplicationContext ();
@@ -119,6 +129,7 @@ class DnsServiceSniffer extends    FreeboxSniffer
   // ---------------------------------------------------
   void stop ()
   {
+    hideAlert ();
     mThread.interrupt ();
   }
 
@@ -140,14 +151,16 @@ class DnsServiceSniffer extends    FreeboxSniffer
     {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD)
       {
-
         InetAddress                   ipAddress  = InetAddress.getLocalHost ();
         int                           ipVersion  = getIpVersion (ipAddress);
         Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces ();
 
         for (NetworkInterface iface : Collections.list (interfaces))
         {
-          Log.e (Freeteuse.TAG, iface.toString () + " ====>> " + iface.isUp ());
+          Log (String.format (Locale.FRENCH, "(1) %s ==>> %d/%d",
+                              iface.toString (),
+                              iface.isUp ()?1:0,
+                              iface.isLoopback ()?1:0));
 
           if (!iface.isLoopback () && iface.isUp ())
           {
@@ -159,7 +172,8 @@ class DnsServiceSniffer extends    FreeboxSniffer
                                             "FreeTeuse:"
                                                     + iface.getDisplayName ()
                                                     + address);
-                Log.e (Freeteuse.TAG, " ...... " + address);
+
+                Log ("(2) " + address);
                 return jmdns;
               }
             }
@@ -185,14 +199,14 @@ class DnsServiceSniffer extends    FreeboxSniffer
   {
     ServiceInfo info = event.getInfo ();
 
-    Log.d (Freeteuse.TAG, "DnsServiceSniffer::serviceAdded: " + info.getName ());
+    Log ("(3) " + info.getName ());
   }
 
   // ---------------------------------------------------
   @Override
   public void serviceRemoved (ServiceEvent event)
   {
-    Log.d (Freeteuse.TAG, "DnsServiceSniffer::serviceRemoved: " + event.getInfo ());
+    Log ("(4) " + event.getInfo ());
   }
 
   // ---------------------------------------------------
@@ -213,7 +227,58 @@ class DnsServiceSniffer extends    FreeboxSniffer
       }
     });
 
-    Log.d (Freeteuse.TAG, Arrays.toString (serviceInfo.getHostAddresses ())
+    Log ("(5) " + Arrays.toString (serviceInfo.getHostAddresses ())
             + ":" + serviceInfo.getPort ());
+  }
+
+  // ---------------------------------------------------
+  private void Log (String log)
+  {
+    Log.d (Freeteuse.TAG, log);
+    mLogs.add (log);
+  }
+
+  // ---------------------------------------------------
+  void onClick (String tag)
+  {
+    hideAlert ();
+
+    if (mCheatCode.discovered (tag))
+    {
+      StringBuilder       description = new StringBuilder ();
+      AlertDialog.Builder builder     = new AlertDialog.Builder (mContext);
+
+      builder.setTitle ("LOG");
+
+      for (String log: mLogs)
+      {
+        description.append (log);
+        description.append ("\n");
+      }
+
+      builder.setMessage (description);
+
+      builder.setPositiveButton ("Fermer", new DialogInterface.OnClickListener()
+      {
+        public void onClick (DialogInterface dialog,
+                             int              which)
+        {
+          hideAlert ();
+        }
+      });
+
+      mAlert = builder.create ();
+      mAlert.show ();
+    }
+  }
+
+  // ---------------------------------------------------
+  private void hideAlert ()
+  {
+    if (mAlert != null)
+    {
+      mAlert.dismiss ();
+      mAlert = null;
+    }
   }
 }

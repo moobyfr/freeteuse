@@ -250,4 +250,10 @@ class Home implements FreeboxSniffer.Listener
 
     return previous;
   }
+
+  // ---------------------------------------------------
+  void onClick (String tag)
+  {
+    mDnsServiceSniffer.onClick (tag);
+  }
 }

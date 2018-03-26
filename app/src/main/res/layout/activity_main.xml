@@ -447,7 +447,7 @@
                 android:background="@color/RevolutionBgGrey"
                 android:scaleType="fitXY"
                 android:src="@drawable/xdeezer"
-                android:tag="onMultiClick:Kfree+3000+Kright+Kright+Kright+Kright+Kright+Kright+Kleft+Kleft+Kdown+Kdown+Kok"
+                android:tag="onMultiClick:Kfree+3000+Kright+Kright+Kright+Kright+Kright+Kright+Kleft+Kleft+Kdown+Kok"
                 tools:ignore="ContentDescription"/>
 
             <ImageButton
@@ -474,11 +474,10 @@
                 android:id="@+id/Kpip"
                 android:layout_width="@dimen/key_size"
                 android:layout_height="@dimen/key_size"
-                android:layout_weight="1"
                 android:background="@color/RevolutionBgGrey"
                 android:scaleType="fitXY"
                 android:src="@drawable/xpip"
-                android:tag="onMultiClick:Kdown+Kinfo+1500+Kright+Kright+Kleft+Kok+Kback+Kback"
+                android:tag="onMultiClick:Kdown+2000+Kinfo+Kright+Kright+Kleft+Kok+Kback+Kback"
                 tools:ignore="ContentDescription"/>
         </LinearLayout>
 

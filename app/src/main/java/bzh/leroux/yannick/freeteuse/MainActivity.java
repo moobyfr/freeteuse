@@ -111,6 +111,7 @@ public class MainActivity extends    Activity
         mActiveFreebox.pressRcuKey (tags[1],
                                     tags[2],
                                    true);
+        mHome.onClick (tags[2]);
       }
       else if (tags[0].equals("onMultiClick"))
       {

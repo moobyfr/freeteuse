@@ -30,8 +30,8 @@ import android.provider.Settings;
 
 class Wifi extends BroadcastReceiver
 {
-  private Context mContext;
-  AlertDialog     mAlert;
+  private Context     mContext;
+  private AlertDialog mAlert;
 
   // ---------------------------------------------------
   Wifi (Context context)
@@ -85,10 +85,11 @@ class Wifi extends BroadcastReceiver
   }
 
   // ---------------------------------------------------
-  public void displayAlert (String description,
-                            String action)
+  void displayAlert (String description,
+                     String action)
   {
-    if (mAlert == null)
+    hideAlert ();
+
     {
       AlertDialog.Builder builder = new AlertDialog.Builder (mContext);
 
