@@ -175,9 +175,15 @@
             android:layout_marginTop="@dimen/key_small_text_size"
             android:orientation="horizontal">
 
-            <TextView
+            <ImageButton
+                android:id="@+id/Kvol_plus"
                 android:layout_width="@dimen/key_size"
-                android:layout_height="@dimen/key_size" />
+                android:layout_height="@dimen/key_size"
+                android:background="@color/RevolutionBgGrey"
+                android:scaleType="fitXY"
+                android:src="@drawable/xplus"
+                android:tag="onTouch:0x01:0xe9"
+                tools:ignore="ContentDescription" />
 
             <ImageButton
                 android:id="@+id/Kback"
@@ -209,9 +215,15 @@
                 android:tag="onClick:0x01:0x221"
                 tools:ignore="ContentDescription" />
 
-            <TextView
+            <ImageButton
+                android:id="@+id/Kprog_plus"
                 android:layout_width="@dimen/key_size"
-                android:layout_height="@dimen/key_size" />
+                android:layout_height="@dimen/key_size"
+                android:background="@color/RevolutionBgGrey"
+                android:scaleType="fitXY"
+                android:src="@drawable/xplus"
+                android:tag="onTouch:0x01:0x9c"
+                tools:ignore="ContentDescription" />
 
         </LinearLayout>
 
@@ -276,9 +288,15 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <TextView
+            <ImageButton
+                android:id="@+id/Kvol_minus"
                 android:layout_width="@dimen/key_size"
-                android:layout_height="@dimen/key_size" />
+                android:layout_height="@dimen/key_size"
+                android:background="@color/RevolutionBgGrey"
+                android:scaleType="fitXY"
+                android:src="@drawable/xminus"
+                android:tag="onTouch:0x01:0xea"
+                tools:ignore="ContentDescription" />
 
             <ImageButton
                 android:id="@+id/Kmenu"
@@ -310,10 +328,15 @@
                 android:tag="onClick:0x01:0x209"
                 tools:ignore="ContentDescription" />
 
-            <TextView
+            <ImageButton
+                android:id="@+id/Kprog_minus"
                 android:layout_width="@dimen/key_size"
-                android:layout_height="@dimen/key_size" />
-
+                android:layout_height="@dimen/key_size"
+                android:background="@color/RevolutionBgGrey"
+                android:scaleType="fitXY"
+                android:src="@drawable/xminus"
+                android:tag="onTouch:0x01:0x9d"
+                tools:ignore="ContentDescription" />
         </LinearLayout>
 
         <LinearLayout
@@ -377,168 +400,85 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+            <TextView
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"/>
 
-                <ImageButton
-                    android:id="@+id/Kvol_plus"
-                    android:layout_width="@dimen/key_size"
-                    android:layout_height="@dimen/key_size"
-                    android:background="@color/RevolutionBgGrey"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/xplus"
-                    android:tag="onTouch:0x01:0xe9"
-                    tools:ignore="ContentDescription" />
+            <ImageButton
+                android:id="@+id/Krewind"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:background="@color/RevolutionBgGrey"
+                android:scaleType="fitXY"
+                android:src="@drawable/xrewind"
+                android:tag="onClick:0x01:0xb4"
+                tools:ignore="ContentDescription"/>
 
-                <TextView
-                    android:layout_width="@dimen/key_size"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:text="VOL"
-                    android:textColor="@color/RevolutionFgGrey"
-                    android:textSize="@dimen/key_small_text_size"
-                    android:textStyle="normal"
-                    tools:ignore="HardcodedText" />
+            <ImageButton
+                android:id="@+id/Kplay_pause"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:background="@color/RevolutionBgGrey"
+                android:scaleType="fitXY"
+                android:src="@drawable/xplay_pause"
+                android:tag="onClick:0x01:0xcd"
+                tools:ignore="ContentDescription"/>
 
-                <ImageButton
-                    android:id="@+id/Kvol_minus"
-                    android:layout_width="@dimen/key_size"
-                    android:layout_height="@dimen/key_size"
-                    android:background="@color/RevolutionBgGrey"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/xminus"
-                    android:tag="onTouch:0x01:0xea"
-                    tools:ignore="ContentDescription" />
+            <ImageButton
+                android:id="@+id/Kforward"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:background="@color/RevolutionBgGrey"
+                android:scaleType="fitXY"
+                android:src="@drawable/xforward"
+                android:tag="onClick:0x01:0xb3"
+                tools:ignore="ContentDescription"/>
+        </LinearLayout>
 
-            </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+            <ImageButton
+                android:id="@+id/Kdeezer"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:background="@color/RevolutionBgGrey"
+                android:scaleType="fitXY"
+                android:src="@drawable/xdeezer"
+                android:tag="onMultiClick:Kfree+3000+Kright+Kright+Kright+Kright+Kright+Kright+Kleft+Kleft+Kdown+Kok"
+                tools:ignore="ContentDescription"/>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/key_very_small_size" />
+            <ImageButton
+                android:id="@+id/Kradio"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:background="@color/RevolutionBgGrey"
+                android:scaleType="fitXY"
+                android:src="@drawable/xradio"
+                android:tag="onMultiClick:Kfree+3000+Kright+Kright+Kright+Kright+Kright+Kright+Kleft+Kleft+Kdown+Kdown+Kok"
+                tools:ignore="ContentDescription"/>
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+            <ImageButton
+                android:id="@+id/Kmusic"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:background="@color/RevolutionBgGrey"
+                android:scaleType="fitXY"
+                android:src="@drawable/xmusic"
+                android:tag="onMultiClick:Kmenu+Kdown+Kdown+Kdown+Kdown+Kdown+Kdown+Kdown+Kdown+Kdown+Kdown+Kok"
+                tools:ignore="ContentDescription"/>
 
-                    <ImageButton
-                        android:id="@+id/Kforward"
-                        android:layout_width="@dimen/key_size"
-                        android:layout_height="@dimen/key_size"
-                        android:layout_weight="1"
-                        android:background="@color/RevolutionBgGrey"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/xforward"
-                        android:tag="onClick:0x01:0xb3"
-                        tools:ignore="ContentDescription" />
-
-                    <ImageButton
-                        android:id="@+id/Kplay_pause"
-                        android:layout_width="@dimen/key_size"
-                        android:layout_height="@dimen/key_size"
-                        android:layout_weight="1"
-                        android:background="@color/RevolutionBgGrey"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/xplay_pause"
-                        android:tag="onClick:0x01:0xcd"
-                        tools:ignore="ContentDescription" />
-
-                    <ImageButton
-                        android:id="@+id/Krewind"
-                        android:layout_width="@dimen/key_size"
-                        android:layout_height="@dimen/key_size"
-                        android:layout_weight="1"
-                        android:background="@color/RevolutionBgGrey"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/xrewind"
-                        android:tag="onClick:0x01:0xb4"
-                        tools:ignore="ContentDescription" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <ImageButton
-                        android:id="@+id/Kradio"
-                        android:layout_width="@dimen/key_size"
-                        android:layout_height="@dimen/key_size"
-                        android:layout_weight="1"
-                        android:background="@color/RevolutionBgGrey"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/xradio"
-                        android:tag="onMultiClick:Kfree+3000+Kright+Kright+Kright+Kright+Kright+Kright+Kleft+Kleft+Kdown+Kdown+Kok"
-                        tools:ignore="ContentDescription" />
-
-                    <ImageButton
-                        android:id="@+id/Kmusic"
-                        android:layout_width="@dimen/key_size"
-                        android:layout_height="@dimen/key_size"
-                        android:layout_weight="1"
-                        android:background="@color/RevolutionBgGrey"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/xmusic"
-                        android:tag="onMultiClick:Kmenu+Kdown+Kdown+Kdown+Kdown+Kdown+Kdown+Kdown+Kdown+Kdown+Kdown+Kok"
-                        tools:ignore="ContentDescription" />
-
-                    <ImageButton
-                        android:id="@+id/Kpip"
-                        android:layout_width="@dimen/key_size"
-                        android:layout_height="@dimen/key_size"
-                        android:layout_weight="1"
-                        android:background="@color/RevolutionBgGrey"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/xpip"
-                        android:tag="onMultiClick:Kdown+Kinfo+1500+Kright+Kright+Kleft+Kok+back+Kback"
-                        tools:ignore="ContentDescription" />
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <ImageButton
-                    android:id="@+id/Kprog_plus"
-                    android:layout_width="@dimen/key_size"
-                    android:layout_height="@dimen/key_size"
-                    android:background="@color/RevolutionBgGrey"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/xplus"
-                    android:tag="onTouch:0x01:0x9c"
-                    tools:ignore="ContentDescription" />
-
-                <TextView
-                    android:layout_width="@dimen/key_size"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:text="PROG"
-                    android:textColor="@color/RevolutionFgGrey"
-                    android:textSize="@dimen/key_small_text_size"
-                    android:textStyle="normal"
-                    tools:ignore="HardcodedText" />
-
-                <ImageButton
-                    android:id="@+id/Kprog_minus"
-                    android:layout_width="@dimen/key_size"
-                    android:layout_height="@dimen/key_size"
-                    android:background="@color/RevolutionBgGrey"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/xminus"
-                    android:tag="onTouch:0x01:0x9d"
-                    tools:ignore="ContentDescription" />
-            </LinearLayout>
-
+            <ImageButton
+                android:id="@+id/Kpip"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:background="@color/RevolutionBgGrey"
+                android:scaleType="fitXY"
+                android:src="@drawable/xpip"
+                android:tag="onMultiClick:Kdown+Kinfo+2500+Kright+Kright+Kleft+Kok+Kback+Kback"
+                tools:ignore="ContentDescription"/>
         </LinearLayout>
 
     </LinearLayout>
