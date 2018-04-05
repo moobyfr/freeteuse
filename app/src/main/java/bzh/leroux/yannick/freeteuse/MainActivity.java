@@ -102,20 +102,27 @@ public class MainActivity extends    Activity
   // ---------------------------------------------------
   public void onClick (View view)
   {
-    if (mMultiClicker.stopped () && (mActiveFreebox != null))
+    if (mMultiClicker.stopped ())
     {
       String[] tags = ((String) view.getTag ()).split (":");
 
-      if (tags[0].equals("onClick"))
+      if (mActiveFreebox != null)
       {
-        mActiveFreebox.pressRcuKey (tags[1],
-                                    tags[2],
-                                    true);
-        mHome.onClick (tags[2]);
+        if (tags[0].equals ("onClick"))
+        {
+          mActiveFreebox.pressRcuKey (tags[1],
+                                      tags[2],
+                                      true);
+        }
+        else if (tags[0].equals ("onMultiClick"))
+        {
+          mMultiClicker.start (tags[1]);
+        }
       }
-      else if (tags[0].equals("onMultiClick"))
+
+      if (tags[0].equals ("onClick"))
       {
-        mMultiClicker.start (tags[1]);
+        mHome.onClick (tags[2]);
       }
     }
   }

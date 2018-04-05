@@ -157,12 +157,13 @@ class DnsServiceSniffer extends    FreeboxSniffer
 
         for (NetworkInterface iface : Collections.list (interfaces))
         {
-          Log (String.format (Locale.FRENCH, "(1) %s ==>> %d/%d",
+          Log (String.format (Locale.FRENCH, "(1) %s <%d/%d/%d>",
                               iface.toString (),
+                              !iface.isLoopback ()?1:0,
                               iface.isUp ()?1:0,
-                              iface.isLoopback ()?1:0));
+                              iface.supportsMulticast ()?1:0));
 
-          if (!iface.isLoopback () && iface.isUp ())
+          if (!iface.isLoopback () && iface.isUp () && iface.supportsMulticast ())
           {
             for (InetAddress address : Collections.list (iface.getInetAddresses ()))
             {
