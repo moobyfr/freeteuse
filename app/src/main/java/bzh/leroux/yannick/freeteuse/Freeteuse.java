@@ -16,7 +16,7 @@ package bzh.leroux.yannick.freeteuse;
 //   You should have received a copy of the GNU General Public License
 //   along with Freeteuse.  If not, see <http://www.gnu.org/licenses/>.
 
-class Freeteuse
+public class Freeteuse
 {
-  static final String TAG = "FreeTeuse";
+  public static final String TAG = "FreeTeuse";
 }

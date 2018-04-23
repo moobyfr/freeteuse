@@ -29,6 +29,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import bzh.leroux.yannick.freeteuse.sniffers.DnsServiceSniffer;
+import bzh.leroux.yannick.freeteuse.sniffers.FreeboxSniffer;
+import bzh.leroux.yannick.freeteuse.sniffers.Simulator;
+
 class Home implements FreeboxSniffer.Listener
 {
   public interface Listener
@@ -75,8 +79,7 @@ class Home implements FreeboxSniffer.Listener
 
         for (int i = 0; i < array.length (); i++)
         {
-          Freebox freebox = new Freebox (mContext,
-                                         array.getJSONObject (i));
+          Freebox freebox = new Freebox (array.getJSONObject (i));
 
           if (freebox.isConsistent ())
           {

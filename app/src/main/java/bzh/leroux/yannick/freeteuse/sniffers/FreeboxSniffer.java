@@ -14,11 +14,13 @@
 //   You should have received a copy of the GNU General Public License
 //   along with Freeteuse.  If not, see <http://www.gnu.org/licenses/>.
 
-package bzh.leroux.yannick.freeteuse;
+package bzh.leroux.yannick.freeteuse.sniffers;
 
-class FreeboxSniffer
+import bzh.leroux.yannick.freeteuse.Freebox;
+
+public class FreeboxSniffer
 {
-  interface Listener
+  public interface Listener
   {
     void onFreeboxDetected (Freebox freebox);
   }

@@ -14,7 +14,7 @@
 //   You should have received a copy of the GNU General Public License
 //   along with Freeteuse.  If not, see <http://www.gnu.org/licenses/>.
 
-package bzh.leroux.yannick.freeteuse;
+package bzh.leroux.yannick.freeteuse.sniffers;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -40,8 +40,12 @@ import javax.jmdns.ServiceEvent;
 import javax.jmdns.ServiceInfo;
 import javax.jmdns.ServiceListener;
 
-class DnsServiceSniffer extends    FreeboxSniffer
-                        implements ServiceListener
+import bzh.leroux.yannick.freeteuse.CheatCode;
+import bzh.leroux.yannick.freeteuse.Freebox;
+import bzh.leroux.yannick.freeteuse.Freeteuse;
+
+public class DnsServiceSniffer extends    FreeboxSniffer
+                               implements ServiceListener
 {
   private Thread                    mThread;
   private WifiManager.MulticastLock mMulticastLock;
@@ -52,8 +56,8 @@ class DnsServiceSniffer extends    FreeboxSniffer
   private CheatCode                 mCheatCode;
 
   // ---------------------------------------------------
-  DnsServiceSniffer (Context  context,
-                     Listener listener)
+  public DnsServiceSniffer (Context context,
+                            Listener listener)
   {
     super (listener);
 
@@ -121,13 +125,13 @@ class DnsServiceSniffer extends    FreeboxSniffer
   }
 
   // ---------------------------------------------------
-  void start ()
+  public void start ()
   {
     mThread.start ();
   }
 
   // ---------------------------------------------------
-  void stop ()
+  public void stop ()
   {
     hideAlert ();
     mThread.interrupt ();
@@ -221,8 +225,7 @@ class DnsServiceSniffer extends    FreeboxSniffer
       @Override
       public void run ()
       {
-        final Freebox freebox = new Freebox (mContext,
-                                             serviceInfo);
+        final Freebox freebox = new Freebox (serviceInfo);
 
         onFreeboxDetected (freebox);
       }
@@ -240,7 +243,7 @@ class DnsServiceSniffer extends    FreeboxSniffer
   }
 
   // ---------------------------------------------------
-  void onClick (String tag)
+  public void onClick (String tag)
   {
     hideAlert ();
 

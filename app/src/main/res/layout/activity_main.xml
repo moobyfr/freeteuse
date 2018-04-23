@@ -479,7 +479,17 @@
                 android:src="@drawable/xpip"
                 android:tag="onMultiClick:Kdown+Kinfo+2500+Kright+Kright+Kleft+Kok+Kback+Kback"
                 tools:ignore="ContentDescription"/>
-        </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/Kkeyboard"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:background="@color/RevolutionBgGrey"
+                android:scaleType="fitXY"
+                android:src="@drawable/xkeyboard"
+                android:onClick="onKeyboardClick"
+                tools:ignore="ContentDescription"/>
+          </LinearLayout>
 
     </LinearLayout>
 

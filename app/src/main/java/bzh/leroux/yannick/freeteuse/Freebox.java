@@ -16,9 +16,7 @@
 
 package bzh.leroux.yannick.freeteuse;
 
-import android.content.Context;
 import android.os.Handler;
-import android.os.Vibrator;
 import android.util.Log;
 import android.view.KeyEvent;
 
@@ -27,28 +25,24 @@ import org.json.JSONObject;
 
 import javax.jmdns.ServiceInfo;
 
-class Freebox
+public class Freebox
 {
   public interface Listener
   {
     void onFreeboxStatus (String status);
   }
 
-  private long     mRcu;
-  private String   mAddress;
-  private int      mPort;
-  private boolean  mHasFocus;
-  private boolean  mReachable;
-  private String   mColor;
-  private Thread   mStatusLooper;
-  private Vibrator mVibrator;
+  private long    mRcu;
+  private String  mAddress;
+  private int     mPort;
+  private boolean mHasFocus;
+  private boolean mReachable;
+  private String  mColor;
+  private Thread  mStatusLooper;
 
   // ---------------------------------------------------
-  Freebox (Context    context,
-           JSONObject json)
+  Freebox (JSONObject json)
   {
-    mVibrator = (Vibrator) context.getSystemService (Context.VIBRATOR_SERVICE);
-
     try
     {
       mPort     = json.getInt     ("port");
@@ -63,12 +57,9 @@ class Freebox
   }
 
   // ---------------------------------------------------
-  Freebox (Context     context,
-           ServiceInfo serviceInfo)
+  public Freebox (ServiceInfo serviceInfo)
   {
     mReachable = true;
-
-    mVibrator = (Vibrator) context.getSystemService (Context.VIBRATOR_SERVICE);
 
     mAddress = serviceInfo.getHostAddress ();
     mAddress = mAddress.replaceAll ("[\\[\\]]", "");
@@ -77,16 +68,12 @@ class Freebox
   }
 
   // ---------------------------------------------------
-  Freebox (Context context,
-           String  address,
-           int     port)
+  public Freebox (String address,
+                  int port)
   {
     mReachable = true;
-
-    mVibrator = (Vibrator) context.getSystemService (Context.VIBRATOR_SERVICE);
-
-    mAddress = address;
-    mPort    = port;
+    mAddress   = address;
+    mPort      = port;
   }
 
   // ---------------------------------------------------
@@ -219,7 +206,7 @@ class Freebox
   }
 
   // ---------------------------------------------------
-  void onVolumePressed (int keyCode)
+  void onSpecialKeyPressed (int keyCode)
   {
     if (keyCode == KeyEvent.KEYCODE_VOLUME_UP)
     {
@@ -233,10 +220,16 @@ class Freebox
                    "0xea",
                    false);
     }
+    else if (keyCode == KeyEvent.KEYCODE_DEL)
+    {
+      pressRcuKey ("0x02",
+                   "0x2a",
+                   false);
+    }
   }
 
   // ---------------------------------------------------
-  void onVolumeReleased (int keyCode)
+  void onSpecialKeyReleased (int keyCode)
   {
     if (keyCode == KeyEvent.KEYCODE_VOLUME_UP)
     {
@@ -248,6 +241,11 @@ class Freebox
       releaseRcuKey ("0x01",
                      "0xea");
     }
+    else if (keyCode == KeyEvent.KEYCODE_DEL)
+    {
+      releaseRcuKey ("0x02",
+                     "0x2a");
+    }
   }
 
   // ---------------------------------------------------
@@ -255,19 +253,27 @@ class Freebox
                     String  key_code,
                     boolean with_release)
   {
-    mVibrator.vibrate (30);
-
     try
     {
-      jniPressRcuKey (mRcu,
-                      Integer.decode(report_id),
-                      Integer.decode(key_code),
-                      with_release);
+      pressRcuKey (Integer.decode(report_id),
+                   Integer.decode(key_code),
+                   with_release);
     }
     catch (NumberFormatException e)
     {
       Log.e (Freeteuse.TAG, String.valueOf(e));
     }
+  }
+
+  // ---------------------------------------------------
+  void pressRcuKey (int report_id,
+                    int key_code,
+                    boolean with_release)
+  {
+    jniPressRcuKey (mRcu,
+                    report_id,
+                    key_code,
+                    with_release);
   }
 
   // ---------------------------------------------------

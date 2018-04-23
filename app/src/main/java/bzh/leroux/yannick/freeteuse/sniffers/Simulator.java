@@ -14,21 +14,23 @@
 //   You should have received a copy of the GNU General Public License
 //   along with Freeteuse.  If not, see <http://www.gnu.org/licenses/>.
 
-package bzh.leroux.yannick.freeteuse;
+package bzh.leroux.yannick.freeteuse.sniffers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
-class Simulator extends FreeboxSniffer
+import bzh.leroux.yannick.freeteuse.Freebox;
+
+public class Simulator extends FreeboxSniffer
 {
   private BroadcastReceiver mReceiver;
   private Context           mContext;
 
   // ---------------------------------------------------
-  Simulator (Context  context,
-             Listener listener)
+  public Simulator (Context context,
+                    Listener listener)
   {
     super (listener);
 
@@ -39,9 +41,8 @@ class Simulator extends FreeboxSniffer
       public void onReceive (Context context,
                              Intent  intent)
       {
-        Freebox freebox = new Freebox (mContext,
-                                       intent.getStringExtra ("ip"),
-                                      35830);
+        Freebox freebox = new Freebox (intent.getStringExtra ("ip"),
+                                       35830);
 
         onFreeboxDetected (freebox);
       }
@@ -49,7 +50,7 @@ class Simulator extends FreeboxSniffer
   }
 
   // ---------------------------------------------------
-  void start ()
+  public void start ()
   {
     IntentFilter filter = new IntentFilter ();
 
@@ -59,7 +60,7 @@ class Simulator extends FreeboxSniffer
   }
 
   // ---------------------------------------------------
-  void stop ()
+  public void stop ()
   {
     mContext.unregisterReceiver (mReceiver);
   }

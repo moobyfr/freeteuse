@@ -28,7 +28,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
+
+import java.io.UnsupportedEncodingException;
 
 public class MainActivity extends    Activity
                           implements Home.Listener,
@@ -41,9 +44,11 @@ public class MainActivity extends    Activity
   private MultiClicker mMultiClicker;
   private Wifi         mWifi;
   private View         mProgressBar;
-  private ScreenFitter mScreenFitter;
   private Home         mHome;
   private View         mStatusView;
+
+  @SuppressWarnings({"FieldCanBeLocal", "unused"})
+  private ScreenFitter mScreenFitter;
 
   // ---------------------------------------------------
   @Override
@@ -100,33 +105,47 @@ public class MainActivity extends    Activity
   }
 
   // ---------------------------------------------------
+  public void onKeyboardClick (View keyboard)
+  {
+    InputMethodManager im = (InputMethodManager) getSystemService (Context.INPUT_METHOD_SERVICE);
+
+    if (im != null)
+    {
+      im.toggleSoftInput (0,
+                          0);
+    }
+  }
+
+  // ---------------------------------------------------
   public void onClick (View view)
   {
     if (mMultiClicker.stopped ())
     {
       String[] tags = ((String) view.getTag ()).split (":");
 
-      if (mActiveFreebox != null)
+      if (tags.length > 0)
       {
+        if (mActiveFreebox != null)
+        {
+          if (tags[0].equals ("onClick"))
+          {
+            mActiveFreebox.pressRcuKey (tags[1],
+                                        tags[2],
+                                        true);
+          }
+          else if (tags[0].equals ("onMultiClick"))
+          {
+            mMultiClicker.start (tags[1]);
+          }
+        }
+
         if (tags[0].equals ("onClick"))
         {
-          mActiveFreebox.pressRcuKey (tags[1],
-                                      tags[2],
-                                      true);
+          mHome.onClick (tags[2]);
         }
-        else if (tags[0].equals ("onMultiClick"))
-        {
-          mMultiClicker.start (tags[1]);
-        }
-      }
-
-      if (tags[0].equals ("onClick"))
-      {
-        mHome.onClick (tags[2]);
       }
     }
   }
-
 
   // ---------------------------------------------------
   public void onPreviousFreebox (View view)
@@ -177,25 +196,67 @@ public class MainActivity extends    Activity
   @Override
   public boolean dispatchKeyEvent (KeyEvent event)
   {
-    switch (event.getKeyCode ())
+    if (mMultiClicker.stopped () && (mActiveFreebox != null))
     {
-      case KeyEvent.KEYCODE_VOLUME_UP:
-      case KeyEvent.KEYCODE_VOLUME_DOWN:
-        if (mActiveFreebox != null)
+      int action = event.getAction ();
+
+      switch (event.getKeyCode ())
+      {
+        case KeyEvent.KEYCODE_VOLUME_UP:
+        case KeyEvent.KEYCODE_VOLUME_DOWN:
+        case KeyEvent.KEYCODE_DEL:
         {
-          if (event.getAction () == KeyEvent.ACTION_DOWN)
+          if (action == KeyEvent.ACTION_DOWN)
           {
             if (event.getRepeatCount () == 0)
             {
-              mActiveFreebox.onVolumePressed (event.getKeyCode ());
+              mActiveFreebox.onSpecialKeyPressed (event.getKeyCode ());
             }
           }
-          else if (event.getAction () == KeyEvent.ACTION_UP)
+          else if (action == KeyEvent.ACTION_UP)
           {
-            mActiveFreebox.onVolumeReleased (event.getKeyCode ());
+            mActiveFreebox.onSpecialKeyReleased (event.getKeyCode ());
+          }
+          return true;
+        }
+
+        default:
+        {
+          if ((action == KeyEvent.ACTION_DOWN) || (action == KeyEvent.ACTION_MULTIPLE))
+          {
+            String unicode = event.getCharacters ();
+
+            if (event.getUnicodeChar () != 0)
+            {
+              unicode = String.format ("%c", event.getUnicodeChar ());
+            }
+
+            if (unicode != null)
+            {
+              try
+              {
+                byte[] bytes = unicode.getBytes ("UTF-16LE");
+                int    utf16 = 0;
+
+                for (int b = 0; b < bytes.length; b++)
+                {
+                  utf16 += (bytes[b] & 0xFF) << b*8;
+                }
+
+                mActiveFreebox.pressRcuKey (0x03,
+                                            utf16,
+                                            true);
+
+              }
+              catch (UnsupportedEncodingException e)
+              {
+                Log.e (Freeteuse.TAG, String.valueOf (e));
+              }
+              return true;
+            }
           }
         }
-        return true;
+      }
     }
 
     return super.dispatchKeyEvent (event);
@@ -295,16 +356,19 @@ public class MainActivity extends    Activity
         {
           String[] tags = tag.split (":");
 
-          switch (tags[0])
+          if (tags.length > 0)
           {
-            case "onClick":
-            case "onMultiClick":
-              child.setOnClickListener (this);
-              break;
+            switch (tags[0])
+            {
+              case "onClick":
+              case "onMultiClick":
+                child.setOnClickListener (this);
+                break;
 
-            case "onTouch":
-              child.setOnTouchListener (this);
-              break;
+              case "onTouch":
+                child.setOnTouchListener (this);
+                break;
+            }
           }
         }
       }
