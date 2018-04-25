@@ -158,6 +158,7 @@ public class DnsServiceSniffer extends    FreeboxSniffer
         InetAddress                   ipAddress  = InetAddress.getLocalHost ();
         int                           ipVersion  = getIpVersion (ipAddress);
         Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces ();
+        JmDNS                         jmdns      = null;
 
         for (NetworkInterface iface : Collections.list (interfaces))
         {
@@ -167,23 +168,25 @@ public class DnsServiceSniffer extends    FreeboxSniffer
                               iface.isUp ()?1:0,
                               iface.supportsMulticast ()?1:0));
 
-          if (!iface.isLoopback () && iface.isUp () && iface.supportsMulticast ())
+          if (jmdns == null)
           {
-            for (InetAddress address : Collections.list (iface.getInetAddresses ()))
+            if (!iface.isLoopback () && iface.isUp () && iface.supportsMulticast ())
             {
-              if (getIpVersion (address) == ipVersion)
+              for (InetAddress address : Collections.list (iface.getInetAddresses ()))
               {
-                JmDNS jmdns = JmDNS.create (address,
-                                            "FreeTeuse:"
-                                                    + iface.getDisplayName ()
-                                                    + address);
-
-                Log ("(2) " + address);
-                return jmdns;
+                if (getIpVersion (address) == ipVersion)
+                {
+                  jmdns = JmDNS.create (address,
+                                        "FreeTeuse:"
+                                                + iface.getDisplayName ()
+                                                + address);
+                  Log ("(2) " + address);
+                }
               }
             }
           }
         }
+        return jmdns;
       }
       else
       {
