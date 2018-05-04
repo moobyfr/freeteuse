@@ -46,6 +46,7 @@ public class MainActivity extends    Activity
   private View         mProgressBar;
   private Home         mHome;
   private View         mStatusView;
+  private boolean      mConnected;
 
   @SuppressWarnings({"FieldCanBeLocal", "unused"})
   private ScreenFitter mScreenFitter;
@@ -308,7 +309,7 @@ public class MainActivity extends    Activity
   @Override
   public void onFreeboxDetected (Freebox freebox)
   {
-    if (mActiveFreebox == null)
+    if (mConnected == false)
     {
       connectFreebox (freebox);
     }
@@ -329,10 +330,12 @@ public class MainActivity extends    Activity
 
     if (status.equals ("connected"))
     {
+      mConnected = true;
       view.setVisibility (View.INVISIBLE);
     }
     else
     {
+      mConnected = false;
       view.setVisibility (View.VISIBLE);
     }
   }
