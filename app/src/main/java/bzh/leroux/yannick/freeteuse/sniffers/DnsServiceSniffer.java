@@ -80,7 +80,7 @@ public class DnsServiceSniffer extends    FreeboxSniffer
           @Override
           public void run ()
           {
-            JmDNS jmdns;
+            List<JmDNS> sniffers;
 
             if (mMulticastLock != null)
             {
@@ -88,12 +88,7 @@ public class DnsServiceSniffer extends    FreeboxSniffer
               mMulticastLock.acquire ();
             }
 
-            jmdns = getJmDns ();
-            if (jmdns != null)
-            {
-              jmdns.addServiceListener ("_hid._udp.local.",
-                                        DnsServiceSniffer.this);
-            }
+            sniffers = getSnifferList ();
 
             try
             {
@@ -103,11 +98,13 @@ public class DnsServiceSniffer extends    FreeboxSniffer
             {
             }
 
-            if (jmdns != null)
+            if (sniffers != null)
             {
               try
               {
-                jmdns.close ();
+                for (JmDNS sniffer : sniffers) {
+                  sniffer.close ();
+                }
               }
               catch (IOException ignore)
               {
@@ -149,16 +146,17 @@ public class DnsServiceSniffer extends    FreeboxSniffer
   }
 
   // ---------------------------------------------------
-  private JmDNS getJmDns ()
+  private List<JmDNS> getSnifferList ()
   {
     try
     {
+      ArrayList<JmDNS> jmdnsList = new ArrayList<> ();
+
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD)
       {
         InetAddress                   ipAddress  = InetAddress.getLocalHost ();
         int                           ipVersion  = getIpVersion (ipAddress);
         Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces ();
-        JmDNS                         jmdns      = null;
 
         for (NetworkInterface iface : Collections.list (interfaces))
         {
@@ -168,30 +166,36 @@ public class DnsServiceSniffer extends    FreeboxSniffer
                               iface.isUp ()?1:0,
                               iface.supportsMulticast ()?1:0));
 
-          if (jmdns == null)
+          if (!iface.isLoopback () && iface.isUp () && iface.supportsMulticast ())
           {
-            if (!iface.isLoopback () && iface.isUp () && iface.supportsMulticast ())
+            for (InetAddress address : Collections.list (iface.getInetAddresses ()))
             {
-              for (InetAddress address : Collections.list (iface.getInetAddresses ()))
+              if (getIpVersion (address) == ipVersion)
               {
-                if (getIpVersion (address) == ipVersion)
-                {
-                  jmdns = JmDNS.create (address,
-                                        "FreeTeuse:"
-                                                + iface.getDisplayName ()
-                                                + address);
-                  Log ("(2) " + address);
-                }
+                JmDNS jmdns;
+
+                jmdns = JmDNS.create (address,
+                                      "FreeTeuse:"
+                                              + iface.getDisplayName ()
+                                              + address);
+
+                jmdns.addServiceListener ("_hid._udp.local.",
+                                          DnsServiceSniffer.this);
+                Log ("(2) " + address);
+
+                jmdnsList.add (jmdns);
               }
             }
           }
         }
-        return jmdns;
       }
       else
       {
-        return JmDNS.create ("FreeTeuse:");
+        JmDNS jmdns = JmDNS.create ("FreeTeuse:");
+
+        jmdnsList.add (jmdns);
       }
+      return jmdnsList;
     }
     catch (IOException e)
     {
