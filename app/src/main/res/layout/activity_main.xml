@@ -20,13 +20,13 @@
             android:orientation="horizontal">
 
             <ImageButton
-                android:id="@+id/Kav"
+                android:id="@+id/Ktv"
                 android:layout_width="@dimen/key_size"
                 android:layout_height="@dimen/key_size"
                 android:background="@color/RevolutionBgGrey"
                 android:scaleType="fitXY"
-                android:src="@drawable/xav"
-                android:tag="onClick:0x01:0x63"
+                android:src="@drawable/xtv"
+                android:tag="onMultiClick:Kfree+3000+Kright+Kright+Kright+Kright+Kright+Kright+Kleft+Kleft+Kleft+Kleft+Kok"
                 tools:ignore="ContentDescription" />
 
             <TextView
