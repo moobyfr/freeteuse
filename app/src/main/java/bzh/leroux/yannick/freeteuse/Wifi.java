@@ -69,6 +69,8 @@ class Wifi extends BroadcastReceiver
 
           if (ssid != null)
           {
+            ssid = ssid.replace ("\"", "");
+
             if ((ssid.equals("FreeWifi") || ssid.equals("FreeWifi_secure")))
             {
               displayAlert("Le réseau " + ssid + " ne permet pas l'utilisation de la télécommande.",
