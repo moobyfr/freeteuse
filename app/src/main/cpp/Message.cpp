@@ -21,7 +21,7 @@
 // ---------------------------------------------------
 Message::Message (const char *klass)
 {
-  _klass = NULL;
+  _klass = nullptr;
 
   if (klass)
   {

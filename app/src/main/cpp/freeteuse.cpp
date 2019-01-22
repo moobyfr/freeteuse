@@ -32,6 +32,22 @@ Java_bzh_leroux_yannick_freeteuse_Freebox_jniCreateRcu (JNIEnv  __unused *env,
 extern "C"
 JNIEXPORT void
 JNICALL
+Java_bzh_leroux_yannick_freeteuse_Freebox_jniDestroyRcu (JNIEnv  __unused *env,
+                                                         jobject __unused  j_freebox,
+                                                         jlong             jrcu)
+{
+  Rcu *rcu = (Rcu *) jrcu;
+
+  if (rcu)
+  {
+    delete rcu;
+  }
+}
+
+// ---------------------------------------------------
+extern "C"
+JNIEXPORT void
+JNICALL
 Java_bzh_leroux_yannick_freeteuse_Freebox_jniConnectRcu (JNIEnv           *env,
                                                          jobject __unused  jfreebox,
                                                          jlong             jrcu,
@@ -63,7 +79,7 @@ Java_bzh_leroux_yannick_freeteuse_Freebox_jniDisconnectRcu (JNIEnv  __unused *en
 
   if (rcu)
   {
-    delete rcu;
+    rcu->Disconnect ();
   }
 }
 
@@ -124,5 +140,5 @@ Java_bzh_leroux_yannick_freeteuse_Freebox_jniReadRcuStatus (JNIEnv           *en
     return jstatus;
   }
 
-  return NULL;
+  return nullptr;
 }

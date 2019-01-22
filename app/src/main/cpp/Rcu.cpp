@@ -33,7 +33,7 @@
 #pragma ide   diagnostic ignored "OCUnusedMacroInspection"
 #pragma clang diagnostic ignored "-Wunused-parameter"
 
-Rcu *Rcu::_current_rcu = NULL;
+Rcu *Rcu::_current_rcu = nullptr;
 
 // ---------------------------------------------------
 static const uint8_t rcu_report_descriptor[] =
@@ -84,11 +84,11 @@ static const uint8_t rcu_report_descriptor[] =
 // ---------------------------------------------------
 static const struct foils_hid_device_descriptor descriptors[] =
 {
-  { "RCU",     // name
-    0x0100,    // version
+  { "RCU",       // name
+    0x0100,      // version
     (void*) rcu_report_descriptor, sizeof (rcu_report_descriptor), // report descriptor
-    NULL, 0,  // physical descriptor
-    NULL, 0   // strings descriptor
+    nullptr, 0,  // physical descriptor
+    nullptr, 0   // strings descriptor
   }
 };
 
@@ -105,9 +105,12 @@ const struct foils_hid_handler Rcu::handler =
 void Rcu::OnStatus (struct foils_hid       *client,
                     enum   foils_hid_state  state)
 {
-  Status *status = new Status (state);
+  if (_current_rcu)
+  {
+    Status *status = new Status(state);
 
-  _current_rcu->_status_pipe->Write (status);
+    _current_rcu->_status_pipe->Write(status);
+  }
 }
 
 // ---------------------------------------------------
@@ -182,7 +185,7 @@ void Rcu::OnKeyRelease (struct ela_event_source *source,
                 source);
 
     delete (rcu->_pending_release);
-    rcu->_pending_release = NULL;
+    rcu->_pending_release = nullptr;
   }
 }
 
@@ -229,7 +232,7 @@ void Rcu::SendKeyRelease (uint8_t  report_id,
 // ---------------------------------------------------
 const char *Rcu::ReadStatus ()
 {
-  const char *result  = NULL;
+  const char *result  = nullptr;
   Message    *message = _status_pipe->Read ();
 
   if (message)
@@ -275,27 +278,6 @@ const char *Rcu::ReadStatus ()
 // ---------------------------------------------------
 Rcu::Rcu ()
 {
-  _current_rcu = this;
-
-  _pending_release     = NULL;
-  _key_press_trigger   = NULL;
-  _key_release_trigger = NULL;
-
-  _looper = ela_create (NULL);
-
-  _hid_client = (foils_hid *) malloc (sizeof (foils_hid));
-
-  {
-    int err = foils_hid_init (_hid_client,
-                              _looper,
-                              &handler,
-                              descriptors,
-                              1);
-    if (err)
-    {
-      LOGE ("Rcu::Rcu: %s", strerror (err));
-    }
-  }
 }
 
 // ---------------------------------------------------
@@ -310,7 +292,7 @@ int Rcu::GetFamilly (const char *address)
   hints.ai_family = PF_UNSPEC;
   hints.ai_flags  = AI_NUMERICHOST;
 
-  error = getaddrinfo (address, NULL, &hints, &res);
+  error = getaddrinfo (address, nullptr, &hints, &res);
   if (error)
   {
     LOGE ("Rcu::GetFamilly: %s", gai_strerror (error));
@@ -335,8 +317,12 @@ void Rcu::Connect (const char *address,
   if (   (familly != AF_UNSPEC)
       && inet_pton (familly, address, &addr))
   {
+    _current_rcu = this;
+
     _looper_pipe = new Pipe ();
     _status_pipe = new Pipe ();
+
+    _looper = ela_create (nullptr);
 
     // Key press
     {
@@ -368,6 +354,20 @@ void Rcu::Connect (const char *address,
 
     // hid connection
     {
+      _hid_client = (foils_hid *) malloc (sizeof (foils_hid));
+
+      {
+        int err = foils_hid_init (_hid_client,
+                                  _looper,
+                                  &handler,
+                                  descriptors,
+                                  1);
+        if (err)
+        {
+          LOGE ("Rcu::Rcu: %s", strerror (err));
+        }
+      }
+
       if (familly == AF_INET)
       {
         LOGI ("IPv4");
@@ -388,42 +388,57 @@ void Rcu::Connect (const char *address,
     }
 
     pthread_create (&_looper_thread,
-                    NULL,
+                    nullptr,
                     (void *(*) (void *)) ela_run,
                     _looper);
   }
 }
 
 // ---------------------------------------------------
-Rcu::~Rcu ()
+void Rcu::Disconnect ()
 {
   if (_key_press_trigger)
   {
     _looper_pipe->Write (new Message ("CLOSE_PIPE"));
-    pthread_join (_looper_thread, NULL);
+    pthread_join (_looper_thread, nullptr);
     delete _looper_pipe;
+    _looper_pipe = nullptr;
 
     _status_pipe->Write (new Message ("CLOSE_PIPE"));
-    delete _status_pipe;
 
     ela_remove      (_looper, _key_release_trigger);
     ela_source_free (_looper, _key_release_trigger);
+    _key_release_trigger = nullptr;
 
     ela_remove      (_looper, _key_press_trigger);
     ela_source_free (_looper, _key_press_trigger);
+    _key_press_trigger = nullptr;
   }
 
   foils_hid_deinit (_hid_client);
   free (_hid_client);
+  _hid_client = nullptr;
 
   ela_close (_looper);
+  _looper = nullptr;
 
   if (_pending_release)
   {
     delete (_pending_release);
+    _pending_release = nullptr;
   }
 
-  _current_rcu = NULL;
+  _current_rcu = nullptr;
+}
+
+
+// ---------------------------------------------------
+Rcu::~Rcu ()
+{
+  if (_status_pipe)
+  {
+    delete _status_pipe;
+  }
 }
 
 #pragma clang diagnostic pop

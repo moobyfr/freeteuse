@@ -198,6 +198,9 @@ public class Freebox
     try
     {
       mStatusLooper.join ();
+
+      jniDestroyRcu (mRcu);
+      mRcu = 0;
     }
     catch (InterruptedException e)
     {
@@ -299,9 +302,13 @@ public class Freebox
 
   // ---------------------------------------------------
   private native long   jniCreateRcu     ();
+  private native void   jniDestroyRcu    (long rcu);
+
   private native void   jniConnectRcu    (long rcu, String address, int port);
   private native void   jniDisconnectRcu (long rcu);
+
   private native void   jniPressRcuKey   (long rcu, int report_id, int key_code, boolean with_key_release);
   private native void   jniReleaseRcuKey (long rcu, int report_id, int key_code);
+
   private native String jniReadRcuStatus (long rcu);
 }

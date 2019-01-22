@@ -21,7 +21,7 @@
 class Message
 {
   public:
-    Message (const char *klass = NULL);
+    Message (const char *klass = nullptr);
 
     virtual ~Message ();
 

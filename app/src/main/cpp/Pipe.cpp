@@ -54,7 +54,7 @@ Message *Pipe::Read ()
   if (read (_read_fd, &message, sizeof (Message *)) == -1)
   {
     LOGE ("Pipe::Read: %s", strerror (errno));
-    return NULL;
+    return nullptr;
   }
 
   return message;

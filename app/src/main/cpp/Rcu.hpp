@@ -36,6 +36,8 @@ class Rcu
     void Connect (const char *address,
                   uint16_t    port);
 
+    void Disconnect ();
+
     void SendKeyPress (uint8_t  report_id,
                        uint32_t code,
                        bool     with_release);
@@ -56,13 +58,13 @@ class Rcu
     static Rcu *_current_rcu;
 
     pthread_t                _looper_thread;
-    struct ela_el           *_looper;
-    struct foils_hid        *_hid_client;
-    Key                     *_pending_release;
-    Pipe                    *_looper_pipe;
-    Pipe                    *_status_pipe;
-    struct ela_event_source *_key_press_trigger;
-    struct ela_event_source *_key_release_trigger;
+    struct ela_el           *_looper              = nullptr;
+    struct foils_hid        *_hid_client          = nullptr;
+    Key                     *_pending_release     = nullptr;
+    Pipe                    *_looper_pipe         = nullptr;
+    Pipe                    *_status_pipe         = nullptr;
+    struct ela_event_source *_key_press_trigger   = nullptr;
+    struct ela_event_source *_key_release_trigger = nullptr;
 
   private:
     int GetFamilly (const char *address);
