@@ -332,11 +332,13 @@ public class MainActivity extends    Activity
     {
       mConnected = true;
       view.setVisibility (View.INVISIBLE);
+      mWifi.pause ();
     }
     else
     {
       mConnected = false;
       view.setVisibility (View.VISIBLE);
+      mWifi.resume ();
     }
   }
 

@@ -59,30 +59,33 @@ class Wifi extends BroadcastReceiver
 
       if ((networkInfo != null) && networkInfo.isConnected ())
       {
-        Context     appContext = context.getApplicationContext ();
-        WifiManager wifiMgr    = (WifiManager) appContext.getSystemService (Context.WIFI_SERVICE);
-
-        if (wifiMgr != null)
+        if (networkInfo.getType () == ConnectivityManager.TYPE_WIFI)
         {
-          WifiInfo connectionInfo = wifiMgr.getConnectionInfo ();
-          String   ssid           = connectionInfo.getSSID ();
+          Context     appContext = context.getApplicationContext ();
+          WifiManager wifiMgr    = (WifiManager) appContext.getSystemService (Context.WIFI_SERVICE);
 
-          if (ssid != null)
+          if (wifiMgr != null)
           {
-            ssid = ssid.replace ("\"", "");
+            WifiInfo connectionInfo = wifiMgr.getConnectionInfo ();
+            String   ssid           = connectionInfo.getSSID ();
 
-            if ((ssid.equals("FreeWifi") || ssid.equals("FreeWifi_secure")))
+            if (ssid != null)
             {
-              displayAlert("Le réseau " + ssid + " ne permet pas l'utilisation de la télécommande.",
-                           "Changer de réseau");
+              ssid = ssid.replace ("\"", "");
+
+              if ((ssid.equals ("FreeWifi") || ssid.equals ("FreeWifi_secure")))
+              {
+                displayAlert ("Le réseau " + ssid + " ne permet pas l'utilisation de la télécommande.",
+                              "Changer de réseau");
+              }
+              return;
             }
-            return;
           }
         }
       }
 
-      displayAlert ("La télécommande n'est pas utilisable sans connexion réseau",
-                    "Se connecter au réseau");
+      displayAlert ("La télécommande n'est pas utilisable sans connexion WIFI.",
+                    "Se connecter au WIFI");
     }
   }
 
@@ -120,6 +123,25 @@ class Wifi extends BroadcastReceiver
     {
       mAlert.dismiss ();
       mAlert = null;
+    }
+  }
+
+
+  // ---------------------------------------------------
+  void pause ()
+  {
+    if (mAlert != null)
+    {
+      mAlert.hide ();
+    }
+  }
+
+  // ---------------------------------------------------
+  void resume ()
+  {
+    if (mAlert != null)
+    {
+      mAlert.show ();
     }
   }
 
