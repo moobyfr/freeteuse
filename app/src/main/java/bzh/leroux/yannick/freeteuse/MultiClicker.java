@@ -44,8 +44,8 @@ class MultiClicker implements Runnable
   // ---------------------------------------------------
   void start (String sequence)
   {
-    String       table[] = sequence.split ("\\+");
-    List<String> list    = new ArrayList<> (Arrays.asList (table));
+    String[]     table = sequence.split ("\\+");
+    List<String> list  = new ArrayList<> (Arrays.asList (table));
 
     mIterator = list.iterator ();
 
@@ -62,7 +62,7 @@ class MultiClicker implements Runnable
 
       try
       {
-        Long delay = Long.parseLong (current, 10);
+        long delay = Long.parseLong (current, 10);
 
         mHandler.postDelayed (this, delay);
       }

@@ -24,6 +24,7 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 #include <fcntl.h>
+#include <string.h>
 
 #include "Log.hpp"
 #include "Rcu.hpp"

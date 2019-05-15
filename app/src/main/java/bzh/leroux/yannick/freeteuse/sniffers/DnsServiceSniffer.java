@@ -20,7 +20,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.net.wifi.WifiManager;
-import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
 
@@ -150,51 +149,42 @@ public class DnsServiceSniffer extends    FreeboxSniffer
   {
     try
     {
-      ArrayList<JmDNS> jmdnsList = new ArrayList<> ();
+      ArrayList<JmDNS>              jmdnsList  = new ArrayList<> ();
+      InetAddress                   ipAddress  = InetAddress.getLocalHost ();
+      int                           ipVersion  = getIpVersion (ipAddress);
+      Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces ();
 
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD)
+      for (NetworkInterface iface : Collections.list (interfaces))
       {
-        InetAddress                   ipAddress  = InetAddress.getLocalHost ();
-        int                           ipVersion  = getIpVersion (ipAddress);
-        Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces ();
+        Log (String.format (Locale.FRENCH, "(1) %s <%d/%d/%d>",
+                            iface.toString (),
+                            !iface.isLoopback ()?1:0,
+                            iface.isUp ()?1:0,
+                            iface.supportsMulticast ()?1:0));
 
-        for (NetworkInterface iface : Collections.list (interfaces))
+        if (!iface.isLoopback () && iface.isUp () && iface.supportsMulticast ())
         {
-          Log (String.format (Locale.FRENCH, "(1) %s <%d/%d/%d>",
-                              iface.toString (),
-                              !iface.isLoopback ()?1:0,
-                              iface.isUp ()?1:0,
-                              iface.supportsMulticast ()?1:0));
-
-          if (!iface.isLoopback () && iface.isUp () && iface.supportsMulticast ())
+          for (InetAddress address : Collections.list (iface.getInetAddresses ()))
           {
-            for (InetAddress address : Collections.list (iface.getInetAddresses ()))
+            if (getIpVersion (address) == ipVersion)
             {
-              if (getIpVersion (address) == ipVersion)
-              {
-                JmDNS jmdns;
+              JmDNS jmdns;
 
-                jmdns = JmDNS.create (address,
-                                      "FreeTeuse:"
-                                              + iface.getDisplayName ()
-                                              + address);
+              jmdns = JmDNS.create (address,
+                                    "FreeTeuse:"
+                                            + iface.getDisplayName ()
+                                            + address);
 
-                jmdns.addServiceListener ("_hid._udp.local.",
-                                          DnsServiceSniffer.this);
-                Log ("(2) " + address);
+              jmdns.addServiceListener ("_hid._udp.local.",
+                                        DnsServiceSniffer.this);
+              Log ("(2) " + address);
 
-                jmdnsList.add (jmdns);
-              }
+              jmdnsList.add (jmdns);
             }
           }
         }
       }
-      else
-      {
-        JmDNS jmdns = JmDNS.create ("FreeTeuse:");
 
-        jmdnsList.add (jmdns);
-      }
       return jmdnsList;
     }
     catch (IOException e)

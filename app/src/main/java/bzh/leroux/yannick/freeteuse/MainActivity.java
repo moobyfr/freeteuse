@@ -31,7 +31,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 public class MainActivity extends    Activity
                           implements Home.Listener,
@@ -234,25 +234,18 @@ public class MainActivity extends    Activity
 
             if (unicode != null)
             {
-              try
+              byte[] bytes = unicode.getBytes (StandardCharsets.UTF_16LE);
+              int    utf16 = 0;
+
+              for (int b = 0; b < bytes.length; b++)
               {
-                byte[] bytes = unicode.getBytes ("UTF-16LE");
-                int    utf16 = 0;
-
-                for (int b = 0; b < bytes.length; b++)
-                {
-                  utf16 += (bytes[b] & 0xFF) << b*8;
-                }
-
-                mActiveFreebox.pressRcuKey (0x03,
-                                            utf16,
-                                            true);
-
+                utf16 += (bytes[b] & 0xFF) << b*8;
               }
-              catch (UnsupportedEncodingException e)
-              {
-                Log.e (Freeteuse.TAG, String.valueOf (e));
-              }
+
+              mActiveFreebox.pressRcuKey (0x03,
+                                          utf16,
+                                          true);
+
               return true;
             }
           }
@@ -412,7 +405,6 @@ public class MainActivity extends    Activity
   // ---------------------------------------------------
   static
   {
-    System.loadLibrary ("freebxsdk");
     System.loadLibrary ("freeteuse");
   }
 }

@@ -14,12 +14,24 @@ add_library (freeteuse SHARED
              )
 
 # -- freebxsdk --------------------
-add_library (freebxsdk SHARED IMPORTED)
+add_library (ela       SHARED IMPORTED)
+add_library (rudp      SHARED IMPORTED)
+add_library (foils_hid STATIC IMPORTED)
 
-set_target_properties (freebxsdk
-                       PROPERTIES IMPORTED_LOCATION
-                       ${CMAKE_SOURCE_DIR}/src/main/cpp/prebuilds/lib/${ANDROID_ABI}/libfreebxsdk.so
-                       )
+set_target_properties (ela
+        PROPERTIES IMPORTED_LOCATION
+        ${CMAKE_SOURCE_DIR}/src/main/cpp/prebuilds/lib/${ANDROID_ABI}/libela.so
+        )
+
+set_target_properties (rudp
+        PROPERTIES IMPORTED_LOCATION
+        ${CMAKE_SOURCE_DIR}/src/main/cpp/prebuilds/lib/${ANDROID_ABI}/librudp.so
+        )
+
+set_target_properties (foils_hid
+        PROPERTIES IMPORTED_LOCATION
+        ${CMAKE_SOURCE_DIR}/src/main/cpp/prebuilds/lib/${ANDROID_ABI}/libfoils_hid.a
+        )
 
 # --------------------------------
 include_directories (src/main/cpp
@@ -43,9 +55,11 @@ find_library (# Sets the name of the path variable.
 # --------------------------------
 target_link_libraries (# Specifies the target library.
                        freeteuse
-                       freebxsdk
+                       ela
+                       rudp
+                       foils_hid
 
-                       # Links the target library to the log library
+        # Links the target library to the log library
                        # included in the NDK.
                        ${log-lib}
                        )

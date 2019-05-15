@@ -15,6 +15,8 @@
 //   along with Freeteuse.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <unistd.h>
+#include <string.h>
+#include <errno.h>
 #include "Pipe.hpp"
 #include "Log.hpp"
 
@@ -41,7 +43,7 @@ Pipe::~Pipe ()
 }
 
 // ---------------------------------------------------
-ssize_t Pipe::GetReadEnd ()
+int Pipe::GetReadEnd ()
 {
   return _read_fd;
 }

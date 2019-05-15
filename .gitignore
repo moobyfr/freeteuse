@@ -4,5 +4,6 @@ build/
 .externalNativeBuild/
 local.properties
 output.json
+*.apk
 *.swp
 *.iml
