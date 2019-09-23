@@ -302,7 +302,7 @@ public class MainActivity extends    Activity
   @Override
   public void onFreeboxDetected (Freebox freebox)
   {
-    if (mConnected == false)
+    if (!mConnected)
     {
       connectFreebox (freebox);
     }

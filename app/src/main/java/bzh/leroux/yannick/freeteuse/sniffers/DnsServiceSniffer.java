@@ -222,7 +222,14 @@ public class DnsServiceSniffer extends    FreeboxSniffer
       @Override
       public void run ()
       {
-        final Freebox freebox = new Freebox (serviceInfo);
+        Freebox freebox;
+        String  address = serviceInfo.getHostAddress ();
+        int     port    = serviceInfo.getPort ();
+
+        address = address.replaceAll ("[\\[\\]]", "");
+
+        freebox  = new Freebox (address,
+                                port);
 
         onFreeboxDetected (freebox);
       }

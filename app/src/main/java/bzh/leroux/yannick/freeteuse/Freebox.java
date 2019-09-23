@@ -23,8 +23,6 @@ import android.view.KeyEvent;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import javax.jmdns.ServiceInfo;
-
 public class Freebox
 {
   public interface Listener
@@ -57,23 +55,14 @@ public class Freebox
   }
 
   // ---------------------------------------------------
-  public Freebox (ServiceInfo serviceInfo)
-  {
-    mReachable = true;
-
-    mAddress = serviceInfo.getHostAddress ();
-    mAddress = mAddress.replaceAll ("[\\[\\]]", "");
-    mPort    = serviceInfo.getPort ();
-    Log.d (Freeteuse.TAG, mAddress);
-  }
-
-  // ---------------------------------------------------
   public Freebox (String address,
-                  int port)
+                  int    port)
   {
     mReachable = true;
     mAddress   = address;
     mPort      = port;
+
+    Log.d (Freeteuse.TAG, mAddress);
   }
 
   // ---------------------------------------------------
@@ -193,18 +182,17 @@ public class Freebox
   // ---------------------------------------------------
   void disconnect ()
   {
-    jniDisconnectRcu (mRcu);
+    if (mStatusLooper != null) {
+      jniDisconnectRcu (mRcu);
 
-    try
-    {
-      mStatusLooper.join ();
+      try {
+        mStatusLooper.join ();
 
-      jniDestroyRcu (mRcu);
-      mRcu = 0;
-    }
-    catch (InterruptedException e)
-    {
-      e.printStackTrace ();
+        jniDestroyRcu (mRcu);
+        mRcu = 0;
+      } catch (InterruptedException e) {
+        e.printStackTrace ();
+      }
     }
   }
 

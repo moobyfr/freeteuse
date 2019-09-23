@@ -31,6 +31,7 @@ import java.util.List;
 
 import bzh.leroux.yannick.freeteuse.sniffers.DnsServiceSniffer;
 import bzh.leroux.yannick.freeteuse.sniffers.FreeboxSniffer;
+import bzh.leroux.yannick.freeteuse.sniffers.BonjourSniffer;
 import bzh.leroux.yannick.freeteuse.sniffers.Simulator;
 
 class Home implements FreeboxSniffer.Listener
@@ -42,6 +43,7 @@ class Home implements FreeboxSniffer.Listener
   }
 
   private DnsServiceSniffer mDnsServiceSniffer;
+  private BonjourSniffer    mNeoSniffer;
   private Simulator         mSimulator;
   private Context           mContext;
   private SharedPreferences mPreferences;
@@ -125,6 +127,10 @@ class Home implements FreeboxSniffer.Listener
     mDnsServiceSniffer = new DnsServiceSniffer (mContext, this);
     mDnsServiceSniffer.start ();
 
+    mNeoSniffer = new BonjourSniffer (mContext, this);
+    mNeoSniffer.start ("_hid._udp");
+    //mNeoSniffer.start ("_services._dns-sd._udp");
+
     mSimulator = new Simulator (mContext, this);
     mSimulator.start ();
   }
@@ -133,7 +139,8 @@ class Home implements FreeboxSniffer.Listener
   void concealBoxes ()
   {
     mDnsServiceSniffer.stop ();
-    mSimulator.stop ();
+    mNeoSniffer.stop        ();
+    mSimulator.stop         ();
 
     save ();
 
