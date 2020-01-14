@@ -20,22 +20,22 @@ add_library (foils_hid STATIC IMPORTED)
 
 set_target_properties (ela
         PROPERTIES IMPORTED_LOCATION
-        ${CMAKE_SOURCE_DIR}/src/main/cpp/prebuilds/lib/${ANDROID_ABI}/libela.so
+        ${CMAKE_SOURCE_DIR}/src/main/cpp/prebuilts/lib/${ANDROID_ABI}/libela.so
         )
 
 set_target_properties (rudp
         PROPERTIES IMPORTED_LOCATION
-        ${CMAKE_SOURCE_DIR}/src/main/cpp/prebuilds/lib/${ANDROID_ABI}/librudp.so
+        ${CMAKE_SOURCE_DIR}/src/main/cpp/prebuilts/lib/${ANDROID_ABI}/librudp.so
         )
 
 set_target_properties (foils_hid
         PROPERTIES IMPORTED_LOCATION
-        ${CMAKE_SOURCE_DIR}/src/main/cpp/prebuilds/lib/${ANDROID_ABI}/libfoils_hid.a
+        ${CMAKE_SOURCE_DIR}/src/main/cpp/prebuilts/lib/${ANDROID_ABI}/libfoils_hid.a
         )
 
 # --------------------------------
 include_directories (src/main/cpp
-                     src/main/cpp/prebuilds/include
+                     src/main/cpp/prebuilts/include
                      )
 
 # --------------------------------

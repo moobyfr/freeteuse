@@ -14,9 +14,9 @@
 //   You should have received a copy of the GNU General Public License
 //   along with Freeteuse.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <stdio.h>
+#include <cstdio>
 #include <unistd.h>
-#include <stdlib.h>
+#include <cstdlib>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/socket.h>
@@ -24,7 +24,7 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 #include <fcntl.h>
-#include <string.h>
+#include <cstring>
 
 #include "Log.hpp"
 #include "Rcu.hpp"
@@ -436,10 +436,7 @@ void Rcu::Disconnect ()
 // ---------------------------------------------------
 Rcu::~Rcu ()
 {
-  if (_status_pipe)
-  {
-    delete _status_pipe;
-  }
+  delete _status_pipe;
 }
 
 #pragma clang diagnostic pop

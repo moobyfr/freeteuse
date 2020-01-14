@@ -14,7 +14,7 @@
 //   You should have received a copy of the GNU General Public License
 //   along with Freeteuse.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <string.h>
+#include <cstring>
 #include <malloc.h>
 #include "Message.hpp"
 

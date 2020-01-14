@@ -21,7 +21,7 @@
 // ---------------------------------------------------
 extern "C"
 JNIEXPORT jlong
-  JNICALL
+JNICALL
 Java_bzh_leroux_yannick_freeteuse_Freebox_jniCreateRcu (JNIEnv  __unused *env,
                                                         jobject __unused  j_freebox)
 {
@@ -38,10 +38,7 @@ Java_bzh_leroux_yannick_freeteuse_Freebox_jniDestroyRcu (JNIEnv  __unused *env,
 {
   Rcu *rcu = (Rcu *) jrcu;
 
-  if (rcu)
-  {
-    delete rcu;
-  }
+  delete rcu;
 }
 
 // ---------------------------------------------------
@@ -58,7 +55,7 @@ Java_bzh_leroux_yannick_freeteuse_Freebox_jniConnectRcu (JNIEnv           *env,
 
   if (rcu)
   {
-    const char *caddress = env->GetStringUTFChars (jaddress, 0);
+    const char *caddress = env->GetStringUTFChars (jaddress, nullptr);
 
     rcu->Connect (caddress,
                   (uint16_t) port);

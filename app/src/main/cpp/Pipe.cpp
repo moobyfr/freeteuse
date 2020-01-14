@@ -15,8 +15,8 @@
 //   along with Freeteuse.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <unistd.h>
-#include <string.h>
-#include <errno.h>
+#include <cstring>
+#include <cerrno>
 #include "Pipe.hpp"
 #include "Log.hpp"
 

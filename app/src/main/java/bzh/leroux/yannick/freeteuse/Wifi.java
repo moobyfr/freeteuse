@@ -90,8 +90,8 @@ class Wifi extends BroadcastReceiver
   }
 
   // ---------------------------------------------------
-  void displayAlert (String description,
-                     String action)
+  private void displayAlert (String description,
+                             String action)
   {
     hideAlert ();
 

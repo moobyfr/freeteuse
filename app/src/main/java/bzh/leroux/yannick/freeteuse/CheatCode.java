@@ -34,7 +34,7 @@ public class CheatCode
   // ---------------------------------------------------
   public boolean discovered (String tag)
   {
-    if (mIterator.hasNext () == false)
+    if (!mIterator.hasNext ())
     {
       mIterator = mSecret.iterator ();
     }

@@ -16,9 +16,7 @@
 
 package bzh.leroux.yannick.freeteuse;
 
-import android.os.Build;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Display;
 import android.view.View;
 
@@ -65,14 +63,7 @@ class ScreenFitter
       scale = metrics.widthPixels * screenPortion / view.getWidth ();
     }
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-    {
-      view.setScaleX (scale);
-      view.setScaleY (scale);
-    }
-    else
-    {
-      Log.e (Freeteuse.TAG, "view.setScale not availlable on this device.");
-    }
+    view.setScaleX (scale);
+    view.setScaleY (scale);
   }
 }

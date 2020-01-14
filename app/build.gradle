@@ -1,16 +1,16 @@
 apply plugin: 'com.android.application'
 
 def versionMajor = 1
-def versionMinor = 8
-def versionPatch = 7
+def versionMinor = 9
+def versionPatch = 0
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 28
 
     defaultConfig {
         applicationId    "bzh.leroux.yannick.freeteuse"
         minSdkVersion    21
-        targetSdkVersion 26
+        targetSdkVersion 28
         versionCode = versionMajor * 10000 + versionMinor * 100 + versionPatch
         versionName = "${versionMajor}.${versionMinor}.${versionPatch}"
         externalNativeBuild {
@@ -42,7 +42,7 @@ android {
 
     sourceSets {
         main {
-            jniLibs.srcDirs 'src/main/cpp/prebuilds/lib'
+            jniLibs.srcDirs 'src/main/cpp/prebuilts/lib'
         }
     }
 }

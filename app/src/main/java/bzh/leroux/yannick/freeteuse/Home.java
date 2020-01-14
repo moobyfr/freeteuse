@@ -72,8 +72,7 @@ class Home implements FreeboxSniffer.Listener
     {
       Freebox focus = null;
 
-      Log.d (Freeteuse.TAG,
-             String.valueOf (freeboxPool).replace ("},", "},\n"));
+      Log.d (Freeteuse.TAG, freeboxPool.replace ("},", "},\n"));
 
       try
       {
@@ -106,6 +105,7 @@ class Home implements FreeboxSniffer.Listener
       }
     }
 
+    //noinspection ConstantConditions
     if (BuildConfig.BUILD_TYPE.equals ("debug"))
     {
       CharSequence text = String.valueOf (mBoxes.size ());

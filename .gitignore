@@ -1,6 +1,7 @@
 .gradle/
 .idea/
 build/
+.cxx/
 .externalNativeBuild/
 local.properties
 output.json
