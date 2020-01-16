@@ -32,7 +32,8 @@ public class Simulator extends FreeboxSniffer
   public Simulator (Context context,
                     Listener listener)
   {
-    super (listener);
+    super ("Simulator",
+            listener);
 
     mContext  = context;
     mReceiver = new BroadcastReceiver ()
@@ -41,7 +42,8 @@ public class Simulator extends FreeboxSniffer
       public void onReceive (Context context,
                              Intent  intent)
       {
-        Freebox freebox = new Freebox (intent.getStringExtra ("ip"),
+        Freebox freebox = new Freebox (context,
+                                       intent.getStringExtra ("ip"),
                                        35830);
 
         onFreeboxDetected (freebox);

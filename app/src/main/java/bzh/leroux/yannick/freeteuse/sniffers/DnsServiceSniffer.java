@@ -16,32 +16,25 @@
 
 package bzh.leroux.yannick.freeteuse.sniffers;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.net.wifi.WifiManager;
 import android.os.Handler;
-import android.util.Log;
 
 import java.io.IOException;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.Locale;
 
 import javax.jmdns.JmDNS;
 import javax.jmdns.ServiceEvent;
 import javax.jmdns.ServiceInfo;
 import javax.jmdns.ServiceListener;
 
-import bzh.leroux.yannick.freeteuse.CheatCode;
 import bzh.leroux.yannick.freeteuse.Freebox;
-import bzh.leroux.yannick.freeteuse.Freeteuse;
 
 public class DnsServiceSniffer extends    FreeboxSniffer
                                implements ServiceListener
@@ -50,19 +43,15 @@ public class DnsServiceSniffer extends    FreeboxSniffer
   private WifiManager.MulticastLock mMulticastLock;
   private Handler                   mListenerHandler;
   private Context                   mContext;
-  private AlertDialog               mAlert;
-  private List<String>              mLogs;
-  private CheatCode                 mCheatCode;
 
   // ---------------------------------------------------
-  public DnsServiceSniffer (Context context,
+  public DnsServiceSniffer (Context  context,
                             Listener listener)
   {
-    super (listener);
+    super ("DnsServiceSniffer",
+            listener);
 
-    mContext   = context;
-    mLogs      = new ArrayList<> ();
-    mCheatCode = new CheatCode ();
+    mContext = context;
 
     {
       Context     appContext = context.getApplicationContext ();
@@ -129,7 +118,6 @@ public class DnsServiceSniffer extends    FreeboxSniffer
   // ---------------------------------------------------
   public void stop ()
   {
-    hideAlert ();
     mThread.interrupt ();
   }
 
@@ -156,12 +144,6 @@ public class DnsServiceSniffer extends    FreeboxSniffer
 
       for (NetworkInterface iface : Collections.list (interfaces))
       {
-        Log (String.format (Locale.FRENCH, "(1) %s <%d/%d/%d>",
-                            iface.toString (),
-                            !iface.isLoopback ()?1:0,
-                            iface.isUp ()?1:0,
-                            iface.supportsMulticast ()?1:0));
-
         if (!iface.isLoopback () && iface.isUp () && iface.supportsMulticast ())
         {
           for (InetAddress address : Collections.list (iface.getInetAddresses ()))
@@ -177,8 +159,6 @@ public class DnsServiceSniffer extends    FreeboxSniffer
 
               jmdns.addServiceListener ("_hid._udp.local.",
                                         DnsServiceSniffer.this);
-              Log ("(2) " + address);
-
               jmdnsList.add (jmdns);
             }
           }
@@ -199,16 +179,12 @@ public class DnsServiceSniffer extends    FreeboxSniffer
   @Override
   public void serviceAdded (ServiceEvent event)
   {
-    ServiceInfo info = event.getInfo ();
-
-    Log ("(3) " + info.getName ());
   }
 
   // ---------------------------------------------------
   @Override
   public void serviceRemoved (ServiceEvent event)
   {
-    Log ("(4) " + event.getInfo ());
   }
 
   // ---------------------------------------------------
@@ -228,65 +204,12 @@ public class DnsServiceSniffer extends    FreeboxSniffer
 
         address = address.replaceAll ("[\\[\\]]", "");
 
-        freebox  = new Freebox (address,
+        freebox  = new Freebox (mContext,
+                                address,
                                 port);
 
         onFreeboxDetected (freebox);
       }
     });
-
-    Log ("(5) " + Arrays.toString (serviceInfo.getHostAddresses ())
-            + ":" + serviceInfo.getPort ());
-  }
-
-  // ---------------------------------------------------
-  private void Log (String log)
-  {
-    Log.d (Freeteuse.TAG, log);
-    mLogs.add (log);
-  }
-
-  // ---------------------------------------------------
-  public void onClick (String tag)
-  {
-    hideAlert ();
-
-    if (mCheatCode.discovered (tag))
-    {
-      StringBuilder       description = new StringBuilder ();
-      AlertDialog.Builder builder     = new AlertDialog.Builder (mContext);
-
-      builder.setTitle ("LOG");
-
-      for (String log: mLogs)
-      {
-        description.append (log);
-        description.append ("\n");
-      }
-
-      builder.setMessage (description);
-
-      builder.setPositiveButton ("Fermer", new DialogInterface.OnClickListener()
-      {
-        public void onClick (DialogInterface dialog,
-                             int              which)
-        {
-          hideAlert ();
-        }
-      });
-
-      mAlert = builder.create ();
-      mAlert.show ();
-    }
-  }
-
-  // ---------------------------------------------------
-  private void hideAlert ()
-  {
-    if (mAlert != null)
-    {
-      mAlert.dismiss ();
-      mAlert = null;
-    }
   }
 }

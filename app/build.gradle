@@ -2,14 +2,14 @@ apply plugin: 'com.android.application'
 
 def versionMajor = 1
 def versionMinor = 9
-def versionPatch = 0
+def versionPatch = 3
 
 android {
     compileSdkVersion 28
 
     defaultConfig {
         applicationId    "bzh.leroux.yannick.freeteuse"
-        minSdkVersion    21
+        minSdkVersion    23
         targetSdkVersion 28
         versionCode = versionMajor * 10000 + versionMinor * 100 + versionPatch
         versionName = "${versionMajor}.${versionMinor}.${versionPatch}"

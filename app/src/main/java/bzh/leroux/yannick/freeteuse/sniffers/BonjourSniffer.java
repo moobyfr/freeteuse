@@ -10,7 +10,7 @@ import bzh.leroux.yannick.freeteuse.Freebox;
 import bzh.leroux.yannick.freeteuse.Freeteuse;
 
 
-public class BonjourSniffer
+public class BonjourSniffer extends FreeboxSniffer
 {
   private static final String TAG = Freeteuse.TAG + "BonjourSniffer";
   private Context    mContext;
@@ -19,15 +19,16 @@ public class BonjourSniffer
   private NsdManager.DiscoveryListener mDiscoveryListener;
   private NsdManager.ResolveListener   mResolveListener;
 
-  private Handler                 mHandler;
-  private FreeboxSniffer.Listener mListener;
+  private Handler mHandler;
 
   public BonjourSniffer (Context                 context,
                          FreeboxSniffer.Listener listener)
   {
+    super ("BonjourSniffer",
+            listener);
+
     mContext  = context;
     mHandler  = new Handler ();
-    mListener = listener;
   }
 
   public void start (String serviceType)
@@ -80,13 +81,11 @@ public class BonjourSniffer
           @Override
           public void run ()
           {
-            if (mListener != null)
-            {
-              Freebox freebox = new Freebox (hostName,
-                                             port);
+            Freebox freebox = new Freebox (mContext,
+                                           hostName,
+                                           port);
 
-              mListener.onFreeboxDetected (freebox);
-            }
+            onFreeboxDetected (freebox);
           }
         });
       }

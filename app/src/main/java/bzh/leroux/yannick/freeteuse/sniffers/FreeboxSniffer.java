@@ -22,20 +22,39 @@ public class FreeboxSniffer
 {
   public interface Listener
   {
-    void onFreeboxDetected (Freebox freebox);
+    void onFreeboxDetected (Freebox        freebox,
+                            FreeboxSniffer sniffer);
   }
 
   private Listener mListener;
+  private String   mName;
 
   // ---------------------------------------------------
-  FreeboxSniffer (Listener listener)
+  FreeboxSniffer (String   name,
+                  Listener listener)
   {
+    mName     = name;
     mListener = listener;
+  }
+
+  // ---------------------------------------------------
+  public String getName () {
+    return mName;
+  }
+
+  // ---------------------------------------------------
+  @SuppressWarnings("NullableProblems")
+  @Override
+  public String toString () {
+    return mName;
   }
 
   // ---------------------------------------------------
   void onFreeboxDetected (Freebox freebox)
   {
-    mListener.onFreeboxDetected (freebox);
+    if (mListener != null) {
+      mListener.onFreeboxDetected (freebox,
+              this);
+    }
   }
 }

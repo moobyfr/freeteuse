@@ -43,13 +43,14 @@ class Home implements FreeboxSniffer.Listener
   }
 
   private DnsServiceSniffer mDnsServiceSniffer;
-  private BonjourSniffer    mNeoSniffer;
+  private BonjourSniffer    mBonjourSniffer;
   private Simulator         mSimulator;
   private Context           mContext;
   private SharedPreferences mPreferences;
   private List<Freebox>     mBoxes;
   private Listener          mListener;
   private Painter           mPainter;
+  private Logger            mLogger;
 
   // ---------------------------------------------------
   Home (Context           context,
@@ -80,7 +81,8 @@ class Home implements FreeboxSniffer.Listener
 
         for (int i = 0; i < array.length (); i++)
         {
-          Freebox freebox = new Freebox (array.getJSONObject (i));
+          Freebox freebox = new Freebox (mContext,
+                                         array.getJSONObject (i));
 
           if (freebox.isConsistent ())
           {
@@ -120,6 +122,10 @@ class Home implements FreeboxSniffer.Listener
   // ---------------------------------------------------
   void discloseBoxes ()
   {
+    mLogger = new Logger (mContext,
+                          "0x59",
+                          "Home");
+
     mBoxes.clear ();
 
     recoverSavedBoxes ();
@@ -127,9 +133,9 @@ class Home implements FreeboxSniffer.Listener
     mDnsServiceSniffer = new DnsServiceSniffer (mContext, this);
     mDnsServiceSniffer.start ();
 
-    mNeoSniffer = new BonjourSniffer (mContext, this);
-    mNeoSniffer.start ("_hid._udp");
-    //mNeoSniffer.start ("_services._dns-sd._udp");
+    mBonjourSniffer = new BonjourSniffer (mContext, this);
+    mBonjourSniffer.start ("_hid._udp");
+    //mBonjourSniffer.start ("_services._dns-sd._udp");
 
     mSimulator = new Simulator (mContext, this);
     mSimulator.start ();
@@ -139,7 +145,7 @@ class Home implements FreeboxSniffer.Listener
   void concealBoxes ()
   {
     mDnsServiceSniffer.stop ();
-    mNeoSniffer.stop        ();
+    mBonjourSniffer.stop    ();
     mSimulator.stop         ();
 
     save ();
@@ -170,12 +176,15 @@ class Home implements FreeboxSniffer.Listener
 
   // ---------------------------------------------------
   @Override
-  public void onFreeboxDetected (Freebox freebox)
+  public void onFreeboxDetected (Freebox        freebox,
+                                 FreeboxSniffer sniffer)
   {
     for (Freebox box : mBoxes)
     {
       if (freebox.equals (box))
       {
+        mLogger.Log ("- " + sniffer + "/" + freebox);
+
         box.detected ();
         mListener.onFreeboxDetected (box);
         return;
@@ -259,11 +268,5 @@ class Home implements FreeboxSniffer.Listener
     }
 
     return previous;
-  }
-
-  // ---------------------------------------------------
-  void onClick (String tag)
-  {
-    mDnsServiceSniffer.onClick (tag);
   }
 }

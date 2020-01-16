@@ -101,6 +101,7 @@ public class MainActivity extends    Activity
     mWifi.stop ();
 
     disconnectFreebox ();
+    Logger.stop ();
 
     super.onPause ();
   }
@@ -142,7 +143,7 @@ public class MainActivity extends    Activity
 
         if (tags[0].equals ("onClick"))
         {
-          mHome.onClick (tags[2]);
+          Logger.onClick (tags[2]);
         }
       }
     }

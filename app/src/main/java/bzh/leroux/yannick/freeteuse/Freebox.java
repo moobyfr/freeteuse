@@ -16,6 +16,7 @@
 
 package bzh.leroux.yannick.freeteuse;
 
+import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -39,7 +40,8 @@ public class Freebox
   private Thread  mStatusLooper;
 
   // ---------------------------------------------------
-  Freebox (JSONObject json)
+  Freebox (Context context,
+           JSONObject json)
   {
     try
     {
@@ -55,14 +57,22 @@ public class Freebox
   }
 
   // ---------------------------------------------------
-  public Freebox (String address,
-                  int    port)
+  public Freebox (Context context,
+                  String  address,
+                  int     port)
   {
     mReachable = true;
     mAddress   = address;
     mPort      = port;
 
     Log.d (Freeteuse.TAG, mAddress);
+  }
+
+  // ---------------------------------------------------
+  @SuppressWarnings("NullableProblems")
+  @Override
+  public String toString () {
+    return mAddress + ":" + mPort;
   }
 
   // ---------------------------------------------------

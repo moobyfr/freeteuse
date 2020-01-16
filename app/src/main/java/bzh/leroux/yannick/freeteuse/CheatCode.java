@@ -20,19 +20,20 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-public class CheatCode
+class CheatCode
 {
-  private final List<String> mSecret = Arrays.asList ("0x63", "0x18f", "0x63", "0x62");
-  private Iterator<String>   mIterator;
+  private List<String>     mSecret;
+  private Iterator<String> mIterator;
 
   // ---------------------------------------------------
-  public CheatCode ()
+  CheatCode (String keySelector)
   {
+    mSecret   = Arrays.asList ("0x221", "0x18f", "0x221", keySelector);
     mIterator = mSecret.iterator ();
   }
 
   // ---------------------------------------------------
-  public boolean discovered (String tag)
+  boolean discovered (String tag)
   {
     if (!mIterator.hasNext ())
     {
