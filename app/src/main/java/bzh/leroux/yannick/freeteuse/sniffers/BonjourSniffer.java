@@ -17,9 +17,35 @@ public class BonjourSniffer extends FreeboxSniffer
   private NsdManager mNsdManager;
 
   private NsdManager.DiscoveryListener mDiscoveryListener;
-  private NsdManager.ResolveListener   mResolveListener;
 
   private Handler mHandler;
+
+  private class bonjourResolveListener implements NsdManager.ResolveListener
+  {
+      @Override
+      public void onResolveFailed (NsdServiceInfo serviceInfo, int errorCode)
+      {
+        Log.d (TAG, "Resolve failed");
+      }
+
+      @Override
+      public void onServiceResolved (final NsdServiceInfo serviceInfo) {
+        Log.d (TAG, "Service resolved :" + serviceInfo);
+        final String hostName = serviceInfo.getHost ().getHostAddress ();
+        final int port = serviceInfo.getPort ();
+
+        mHandler.post (new Runnable () {
+          @Override
+          public void run () {
+            Freebox freebox = new Freebox (mContext,
+                                           hostName,
+                                           port);
+
+            onFreeboxDetected (freebox);
+          }
+        });
+      }
+  }
 
   public BonjourSniffer (Context                 context,
                          FreeboxSniffer.Listener listener)
@@ -33,7 +59,6 @@ public class BonjourSniffer extends FreeboxSniffer
 
   public void start (String serviceType)
   {
-    initializeResolveListener   ();
     initializeDiscoveryListener (serviceType);
 
     mNsdManager = (NsdManager) mContext.getSystemService (Context.NSD_SERVICE);
@@ -57,39 +82,6 @@ public class BonjourSniffer extends FreeboxSniffer
       {
       }
     }
-  }
-
-  private void initializeResolveListener ()
-  {
-    mResolveListener = new NsdManager.ResolveListener ()
-    {
-      @Override
-      public void onResolveFailed (NsdServiceInfo serviceInfo, int errorCode)
-      {
-        Log.d (TAG, "Resolve failed");
-      }
-
-      @Override
-      public void onServiceResolved (final NsdServiceInfo serviceInfo)
-      {
-        Log.d (TAG, "Service resolved :" + serviceInfo);
-        final String hostName = serviceInfo.getHost ().getHostName ();
-        final int    port     = serviceInfo.getPort ();
-
-        mHandler.post (new Runnable ()
-        {
-          @Override
-          public void run ()
-          {
-            Freebox freebox = new Freebox (mContext,
-                                           hostName,
-                                           port);
-
-            onFreeboxDetected (freebox);
-          }
-        });
-      }
-    };
   }
 
   private void initializeDiscoveryListener (final String serviceType)
@@ -127,7 +119,7 @@ public class BonjourSniffer extends FreeboxSniffer
         if (serviceInfo.getServiceType ().equals (serviceType + "."))
         {
           mNsdManager.resolveService (serviceInfo,
-                                      mResolveListener);
+                                      new bonjourResolveListener ());
         }
       }
 
