@@ -18,7 +18,6 @@ package bzh.leroux.yannick.freeteuse.sniffers;
 
 import android.content.Context;
 import android.net.wifi.WifiManager;
-import android.os.Handler;
 
 import java.io.IOException;
 import java.net.Inet6Address;
@@ -41,8 +40,6 @@ public class DnsServiceSniffer extends    FreeboxSniffer
 {
   private Thread                    mThread;
   private WifiManager.MulticastLock mMulticastLock;
-  private Handler                   mListenerHandler;
-  private Context                   mContext;
 
   // ---------------------------------------------------
   public DnsServiceSniffer (Context  context,
@@ -51,8 +48,6 @@ public class DnsServiceSniffer extends    FreeboxSniffer
     super ("DnsServiceSniffer",
             listener);
 
-    mContext = context;
-
     {
       Context     appContext = context.getApplicationContext ();
       WifiManager wifiMgr    = (WifiManager) appContext.getSystemService (Context.WIFI_SERVICE);
@@ -60,8 +55,6 @@ public class DnsServiceSniffer extends    FreeboxSniffer
       if (wifiMgr != null)
       {
         mMulticastLock = wifiMgr.createMulticastLock (context.getPackageName ());
-
-        mListenerHandler = new Handler ();
 
         mThread = new Thread (new Runnable ()
         {
@@ -191,25 +184,18 @@ public class DnsServiceSniffer extends    FreeboxSniffer
   @Override
   public void serviceResolved (ServiceEvent event)
   {
-    final ServiceInfo serviceInfo = event.getInfo ();
+    ServiceInfo serviceInfo = event.getInfo ();
+    String      address     = serviceInfo.getHostAddress ();
+    int         port        = serviceInfo.getPort ();
+    Freebox     freebox;
 
-    mListenerHandler.post (new Runnable ()
-    {
-      @Override
-      public void run ()
-      {
-        Freebox freebox;
-        String  address = serviceInfo.getHostAddress ();
-        int     port    = serviceInfo.getPort ();
+    address = address.replaceAll ("[\\[\\]]", "");
 
-        address = address.replaceAll ("[\\[\\]]", "");
+    freebox  = new Freebox (address,
+                            port,
+                            null);
 
-        freebox  = new Freebox (mContext,
-                                address,
-                                port);
+    onFreeboxDetected (freebox);
 
-        onFreeboxDetected (freebox);
-      }
-    });
   }
 }

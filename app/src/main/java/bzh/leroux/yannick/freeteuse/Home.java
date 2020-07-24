@@ -81,8 +81,7 @@ class Home implements FreeboxSniffer.Listener
 
         for (int i = 0; i < array.length (); i++)
         {
-          Freebox freebox = new Freebox (mContext,
-                                         array.getJSONObject (i));
+          Freebox freebox = new Freebox (array.getJSONObject (i));
 
           if (freebox.isConsistent ())
           {
@@ -133,9 +132,9 @@ class Home implements FreeboxSniffer.Listener
     mDnsServiceSniffer = new DnsServiceSniffer (mContext, this);
     mDnsServiceSniffer.start ();
 
-    mBonjourSniffer = new BonjourSniffer (mContext, this);
+    mBonjourSniffer = new BonjourSniffer (mContext, this, 24322);
     mBonjourSniffer.start ("_hid._udp");
-    //mBonjourSniffer.start ("_services._dns-sd._udp");
+    mBonjourSniffer.start ("_device-info._tcp");
 
     mSimulator = new Simulator (mContext, this);
     mSimulator.start ();
@@ -179,6 +178,8 @@ class Home implements FreeboxSniffer.Listener
   public void onFreeboxDetected (Freebox        freebox,
                                  FreeboxSniffer sniffer)
   {
+    mLogger.Log ("<< " + freebox.getDescription () + " >>");
+
     for (Freebox box : mBoxes)
     {
       if (freebox.equals (box))
