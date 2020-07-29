@@ -71,8 +71,11 @@ public class BonjourSniffer extends FreeboxSniffer
 
     @Override
     public void onServiceResolved (final NsdServiceInfo serviceInfo) {
+      String serviceName = serviceInfo.getServiceName ();
+
       Log.d (TAG, "Service resolved :" + serviceInfo);
 
+      if ((serviceName != null) && serviceName.contains ("Freebox Player"))
       {
         Freebox freebox;
         int     port = serviceInfo.getPort ();
