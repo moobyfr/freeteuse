@@ -47,6 +47,11 @@ public class FreeboxSniffer
   }
 
   // ---------------------------------------------------
+  protected void stop () {
+    mHandler.removeCallbacksAndMessages (null);
+  }
+
+  // ---------------------------------------------------
   @SuppressWarnings("NullableProblems")
   @Override
   public String toString () {

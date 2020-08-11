@@ -144,6 +144,8 @@ public class BonjourSniffer extends FreeboxSniffer
       {
       }
     }
+
+    super.stop ();
   }
 
   // ---------------------------------------------------

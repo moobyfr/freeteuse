@@ -112,6 +112,7 @@ public class DnsServiceSniffer extends    FreeboxSniffer
   public void stop ()
   {
     mThread.interrupt ();
+    super.stop ();
   }
 
   // ---------------------------------------------------

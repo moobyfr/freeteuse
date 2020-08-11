@@ -65,5 +65,6 @@ public class Simulator extends FreeboxSniffer
   public void stop ()
   {
     mContext.unregisterReceiver (mReceiver);
+    super.stop ();
   }
 }
