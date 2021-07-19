@@ -447,7 +447,7 @@
                 android:background="@color/RevolutionBgGrey"
                 android:scaleType="fitXY"
                 android:src="@drawable/xdeezer"
-                android:tag="onMultiClick:Kfree+3000+Kright+Kright+Kright+Kright+Kright+Kright+Kleft+Kleft+Kdown+Kok"
+                android:tag="onMultiClick:Kfree+3000+Kright+Kright+Kright+Kright+Kright+Kright+Kleft+Kleft+Kup+Kup+Kup+Kok"
                 tools:ignore="ContentDescription"/>
 
             <ImageButton
@@ -457,7 +457,7 @@
                 android:background="@color/RevolutionBgGrey"
                 android:scaleType="fitXY"
                 android:src="@drawable/xradio"
-                android:tag="onMultiClick:Kfree+3000+Kright+Kright+Kright+Kright+Kright+Kright+Kleft+Kleft+Kup+Kup+Kup+Kok"
+                android:tag="onMultiClick:Kfree+3000+Kright+Kright+Kright+Kright+Kright+Kright+Kleft+Kleft+Kup+Kup+Kup+Kup+Kok"
                 tools:ignore="ContentDescription"/>
 
             <ImageButton
