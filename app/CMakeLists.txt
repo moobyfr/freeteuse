@@ -14,13 +14,25 @@ add_library (freeteuse SHARED
              )
 
 # -- freebxsdk --------------------
-add_library (ela       SHARED IMPORTED)
-add_library (rudp      SHARED IMPORTED)
-add_library (foils_hid STATIC IMPORTED)
+add_library (ela         SHARED IMPORTED)
+add_library (event_core  SHARED IMPORTED)
+add_library (event_extra SHARED IMPORTED)
+add_library (rudp        SHARED IMPORTED)
+add_library (foils_hid   STATIC IMPORTED)
 
 set_target_properties (ela
         PROPERTIES IMPORTED_LOCATION
         ${CMAKE_SOURCE_DIR}/src/main/cpp/prebuilts/lib/${ANDROID_ABI}/libela.so
+        )
+
+set_target_properties (event_core
+        PROPERTIES IMPORTED_LOCATION
+        ${CMAKE_SOURCE_DIR}/src/main/cpp/prebuilts/lib/${ANDROID_ABI}/libevent_core-2.2.so
+        )
+
+set_target_properties (event_extra
+        PROPERTIES IMPORTED_LOCATION
+        ${CMAKE_SOURCE_DIR}/src/main/cpp/prebuilts/lib/${ANDROID_ABI}/libevent_extra-2.2.so
         )
 
 set_target_properties (rudp
@@ -56,6 +68,8 @@ find_library (# Sets the name of the path variable.
 target_link_libraries (# Specifies the target library.
                        freeteuse
                        ela
+                       event_core
+                       event_extra
                        rudp
                        foils_hid
 

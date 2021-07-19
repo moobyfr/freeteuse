@@ -53,11 +53,7 @@ android {
         }
     }
 
-    sourceSets {
-        main {
-            jniLibs.srcDirs 'src/main/cpp/prebuilts/lib'
-        }
-    }
+    ndkVersion '22.1.7171670'
 
     productFlavors.each { flavor ->
         if (getGradle().getStartParameter().getTaskRequests().toString().toLowerCase().contains(flavor.name)) {
