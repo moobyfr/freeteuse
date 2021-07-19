@@ -28,9 +28,9 @@ public class FreeboxSniffer
                             FreeboxSniffer sniffer);
   }
 
-  private Handler  mHandler;
-  private Listener mListener;
-  private String   mName;
+  private final Handler  mHandler;
+  private final Listener mListener;
+  private final String   mName;
 
   // ---------------------------------------------------
   FreeboxSniffer (String   name,

@@ -42,15 +42,15 @@ class Home implements FreeboxSniffer.Listener
     void onFreeboxDetected (Freebox freebox);
   }
 
-  private DnsServiceSniffer mDnsServiceSniffer;
-  private BonjourSniffer    mBonjourSniffer;
-  private Simulator         mSimulator;
-  private Context           mContext;
-  private SharedPreferences mPreferences;
-  private List<Freebox>     mBoxes;
-  private Listener          mListener;
-  private Painter           mPainter;
-  private Logger            mLogger;
+  private DnsServiceSniffer       mDnsServiceSniffer;
+  private BonjourSniffer          mBonjourSniffer;
+  private Simulator               mSimulator;
+  private final Context           mContext;
+  private final SharedPreferences mPreferences;
+  private final List<Freebox>     mBoxes;
+  private final Listener          mListener;
+  private final Painter           mPainter;
+  private Logger                  mLogger;
 
   // ---------------------------------------------------
   Home (Context           context,

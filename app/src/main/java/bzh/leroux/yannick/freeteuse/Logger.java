@@ -10,13 +10,13 @@ import java.util.List;
 
 public class Logger {
 
-  private static List<Logger> mLoggers = new ArrayList<> ();
-  private static AlertDialog  mAlert;
+  private static final List<Logger> mLoggers = new ArrayList<> ();
+  private static AlertDialog        mAlert;
 
-  private List<String> mLogs;
-  private Context      mContext;
-  private String       mName;
-  private CheatCode    mCheatCode;
+  private final List<String> mLogs;
+  private final Context      mContext;
+  private final String       mName;
+  private final CheatCode    mCheatCode;
 
   // ---------------------------------------------------
   Logger (Context context,

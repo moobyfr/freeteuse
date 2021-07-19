@@ -25,8 +25,8 @@ import bzh.leroux.yannick.freeteuse.Freebox;
 
 public class Simulator extends FreeboxSniffer
 {
-  private BroadcastReceiver mReceiver;
-  private Context           mContext;
+  private final BroadcastReceiver mReceiver;
+  private final Context           mContext;
 
   // ---------------------------------------------------
   public Simulator (Context context,

@@ -30,8 +30,8 @@ class MultiClicker implements Runnable
     void onMultiClickStep (String key_name);
   }
 
-  private Listener         mListener;
-  private Handler          mHandler;
+  private final Listener   mListener;
+  private final Handler    mHandler;
   private Iterator<String> mIterator;
 
   // ---------------------------------------------------

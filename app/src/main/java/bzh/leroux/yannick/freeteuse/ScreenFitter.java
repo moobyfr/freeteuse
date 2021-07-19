@@ -22,7 +22,7 @@ import android.view.View;
 
 class ScreenFitter
 {
-  private Display mDisplay;
+  private final Display mDisplay;
 
   // ---------------------------------------------------
   ScreenFitter (final View view,

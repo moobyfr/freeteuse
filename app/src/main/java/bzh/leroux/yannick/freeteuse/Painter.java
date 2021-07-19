@@ -27,8 +27,8 @@ class Painter
 {
   private final List<String> mColors = Arrays.asList ("yellow", "green", "blue", "red");
 
-  private Context                    mContext;
-  private Hashtable<String, Integer> mColorTable;
+  private final Context                    mContext;
+  private final Hashtable<String, Integer> mColorTable;
 
   // ---------------------------------------------------
   Painter (Context context)

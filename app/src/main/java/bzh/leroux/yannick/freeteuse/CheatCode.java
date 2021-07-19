@@ -22,8 +22,8 @@ import java.util.List;
 
 class CheatCode
 {
-  private List<String>     mSecret;
-  private Iterator<String> mIterator;
+  private final List<String> mSecret;
+  private Iterator<String>   mIterator;
 
   // ---------------------------------------------------
   CheatCode (String keySelector)

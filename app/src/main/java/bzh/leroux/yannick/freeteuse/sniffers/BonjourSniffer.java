@@ -17,17 +17,17 @@ public class BonjourSniffer extends FreeboxSniffer
 {
   private static final String TAG = Freeteuse.TAG + "BonjourSniffer";
 
-  private ResolverQueue                      mResolverQueue;
-  private NsdManager                         mNsdManager;
-  private List<NsdManager.DiscoveryListener> mDiscoveryListeners;
-  private int                                mDefaultPort;
+  private ResolverQueue                            mResolverQueue;
+  private final NsdManager                         mNsdManager;
+  private final List<NsdManager.DiscoveryListener> mDiscoveryListeners;
+  private final int                                mDefaultPort;
 
   // ---------------------------------------------------
   private class ResolverQueue
   {
-    private Queue<NsdServiceInfo> mQueue;
-    private boolean               mInProgress;
-    private NsdManager            mNsdManager;
+    private final Queue<NsdServiceInfo> mQueue;
+    private boolean                     mInProgress;
+    private final NsdManager            mNsdManager;
 
     ResolverQueue (NsdManager manager)
     {

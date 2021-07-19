@@ -30,8 +30,8 @@ import android.provider.Settings;
 
 class Wifi extends BroadcastReceiver
 {
-  private Context     mContext;
-  private AlertDialog mAlert;
+  private final Context mContext;
+  private AlertDialog   mAlert;
 
   // ---------------------------------------------------
   Wifi (Context context)
