@@ -38,13 +38,13 @@ Key::~Key ()
 }
 
 // ---------------------------------------------------
-bool Key::Is (const uint32_t command)
+bool Key::Is (const uint32_t command) const
 {
   return (_command == command);
 }
 
 // ---------------------------------------------------
-void Key::Dump (const char *text)
+void Key::Dump (const char *text) const
 {
   LOGI ("%s ==> [%x:%x]", text, _report, _code);
 }
@@ -69,7 +69,7 @@ void Key::Release (struct foils_hid *hid_client)
 
 // ---------------------------------------------------
 void Key::ReportSend (struct foils_hid *hid_client,
-                      uint32_t          code)
+                      uint32_t          code) const
 {
 #if 1
   foils_hid_input_report_send (hid_client,

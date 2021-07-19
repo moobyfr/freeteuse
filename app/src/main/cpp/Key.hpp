@@ -30,9 +30,9 @@ class Key : public Message
 
     virtual ~Key ();
 
-    bool Is (const uint32_t command);
+    bool Is (const uint32_t command) const;
 
-    void Dump (const char *text);
+    void Dump (const char *text) const;
 
     void Press (struct foils_hid *hid_client);
 
@@ -46,5 +46,5 @@ class Key : public Message
     uint32_t _code;
 
     void ReportSend (struct foils_hid *hid_client,
-                     uint32_t          code);
+                     uint32_t          code) const;
 };
